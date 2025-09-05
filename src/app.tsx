@@ -1,5 +1,11 @@
-const App = () => {
-	return <div>Hello World</div>;
-};
+import { Button } from './components/ui/button'
 
-export default App;
+const App = () => {
+  return (
+    <div>
+      <Button>dfsfad</Button>
+    </div>
+  )
+}
+
+export default App
