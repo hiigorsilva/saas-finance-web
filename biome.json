@@ -13,8 +13,9 @@
       "**/dist/**",
       "**/build/**",
       "**/.next/**",
-      "**/routeTree.gen.ts"
-    ]
+      "**/src/routeTree.gen.ts"
+    ],
+    "includes": ["**/*", "!**/routeTree.gen.ts"]
   },
   "formatter": {
     "enabled": true,
