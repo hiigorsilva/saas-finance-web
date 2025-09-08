@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Container } from '@/components/layout/container'
+import { LoginForm } from '../-components/login-form'
 
 export const Route = createFileRoute('/(auth)/login')({
   component: LoginPage,
@@ -7,10 +7,27 @@ export const Route = createFileRoute('/(auth)/login')({
 
 function LoginPage() {
   return (
-    <div>
-      <Container>
-        <h1>Página de Login</h1>
-      </Container>
-    </div>
+    <section className="flex-auto grid grid-cols-1 md:grid-cols-2">
+      {/* FORM REGISTER */}
+      <div className="flex flex-col justify-center items-center p-5 lg:p-0">
+        <div className="max-w-[28rem] w-full flex flex-col gap-8">
+          <div className="flex flex-col items-center sm:items-start gap-3">
+            <h1 className="font-semibold text-2xl sm:text-3xl text-center sm:text-start text-foreground leading-none tracking-tight">
+              Entre na sua conta
+            </h1>
+            <p className="text-base text-center sm:text-start text-muted-foreground text-pretty">
+              Bem vindo(a) de volta a sua dashboard financeira.
+            </p>
+          </div>
+
+          <LoginForm />
+        </div>
+      </div>
+
+      {/* IMAGE COVER */}
+      <div className="hidden md:flex relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-yellow-200 to-yellow-400 to-120%"></div>
+      </div>
+    </section>
   )
 }
