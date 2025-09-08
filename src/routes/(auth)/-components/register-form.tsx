@@ -1,8 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Link } from '@tanstack/react-router'
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon, UserIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -157,6 +157,17 @@ export function RegisterForm() {
           Criar conta
         </Button>
       </form>
+
+      <div className="flex justify-center items-center gap-2">
+        <span className="text-sm text-muted-foreground">Já tem uma conta?</span>
+
+        <Link
+          to="/login"
+          className="text-sm text-foreground transition hover:text-muted-foreground underline"
+        >
+          Fazer login
+        </Link>
+      </div>
     </Form>
   )
 }

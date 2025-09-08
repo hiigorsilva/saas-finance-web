@@ -134,6 +134,18 @@ export function LoginForm() {
           Entrar
         </Button>
       </form>
+
+      <div className="flex justify-center items-center gap-2">
+        <span className="text-sm text-muted-foreground">
+          Não tem uma conta?
+        </span>
+        <Link
+          to="/register"
+          className="text-sm text-foreground transition hover:text-muted-foreground underline"
+        >
+          Criar conta
+        </Link>
+      </div>
     </Form>
   )
 }
