@@ -134,7 +134,6 @@ export function WorkspaceSwitcher() {
                 <CommandItem
                   key={workspace.id}
                   value={workspace.id}
-                  defaultValue={workspaceActive}
                   onSelect={currentWorkspace => {
                     setWorkspaceActive(
                       currentWorkspace === workspaceActive
