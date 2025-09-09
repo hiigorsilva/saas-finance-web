@@ -9,109 +9,90 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as homeIndexRouteImport } from './routes/(home)/index'
-import { Route as authRegisterRouteRouteImport } from './routes/(auth)/register/route'
-import { Route as authLoginRouteRouteImport } from './routes/(auth)/login/route'
-import { Route as appWorkspaceRouteRouteImport } from './routes/(app)/workspace/route'
+import { Route as publicPricingRouteRouteImport } from './routes/(public)/pricing/route'
+import { Route as publicAuthRegisterRouteRouteImport } from './routes/(public)/_auth/register/route'
+import { Route as publicAuthLoginRouteRouteImport } from './routes/(public)/_auth/login/route'
 
-const homeIndexRoute = homeIndexRouteImport.update({
-  id: '/(home)/',
-  path: '/',
+const publicPricingRouteRoute = publicPricingRouteRouteImport.update({
+  id: '/(public)/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authRegisterRouteRoute = authRegisterRouteRouteImport.update({
-  id: '/(auth)/register',
+const publicAuthRegisterRouteRoute = publicAuthRegisterRouteRouteImport.update({
+  id: '/(public)/_auth/register',
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authLoginRouteRoute = authLoginRouteRouteImport.update({
-  id: '/(auth)/login',
+const publicAuthLoginRouteRoute = publicAuthLoginRouteRouteImport.update({
+  id: '/(public)/_auth/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const appWorkspaceRouteRoute = appWorkspaceRouteRouteImport.update({
-  id: '/(app)/workspace',
-  path: '/workspace',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/workspace': typeof appWorkspaceRouteRoute
-  '/login': typeof authLoginRouteRoute
-  '/register': typeof authRegisterRouteRoute
-  '/': typeof homeIndexRoute
+  '/pricing': typeof publicPricingRouteRoute
+  '/login': typeof publicAuthLoginRouteRoute
+  '/register': typeof publicAuthRegisterRouteRoute
 }
 export interface FileRoutesByTo {
-  '/workspace': typeof appWorkspaceRouteRoute
-  '/login': typeof authLoginRouteRoute
-  '/register': typeof authRegisterRouteRoute
-  '/': typeof homeIndexRoute
+  '/pricing': typeof publicPricingRouteRoute
+  '/login': typeof publicAuthLoginRouteRoute
+  '/register': typeof publicAuthRegisterRouteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/(app)/workspace': typeof appWorkspaceRouteRoute
-  '/(auth)/login': typeof authLoginRouteRoute
-  '/(auth)/register': typeof authRegisterRouteRoute
-  '/(home)/': typeof homeIndexRoute
+  '/(public)/pricing': typeof publicPricingRouteRoute
+  '/(public)/_auth/login': typeof publicAuthLoginRouteRoute
+  '/(public)/_auth/register': typeof publicAuthRegisterRouteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/workspace' | '/login' | '/register' | '/'
+  fullPaths: '/pricing' | '/login' | '/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/workspace' | '/login' | '/register' | '/'
+  to: '/pricing' | '/login' | '/register'
   id:
     | '__root__'
-    | '/(app)/workspace'
-    | '/(auth)/login'
-    | '/(auth)/register'
-    | '/(home)/'
+    | '/(public)/pricing'
+    | '/(public)/_auth/login'
+    | '/(public)/_auth/register'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  appWorkspaceRouteRoute: typeof appWorkspaceRouteRoute
-  authLoginRouteRoute: typeof authLoginRouteRoute
-  authRegisterRouteRoute: typeof authRegisterRouteRoute
-  homeIndexRoute: typeof homeIndexRoute
+  publicPricingRouteRoute: typeof publicPricingRouteRoute
+  publicAuthLoginRouteRoute: typeof publicAuthLoginRouteRoute
+  publicAuthRegisterRouteRoute: typeof publicAuthRegisterRouteRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/(home)/': {
-      id: '/(home)/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof homeIndexRouteImport
+    '/(public)/pricing': {
+      id: '/(public)/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof publicPricingRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(auth)/register': {
-      id: '/(auth)/register'
+    '/(public)/_auth/register': {
+      id: '/(public)/_auth/register'
       path: '/register'
       fullPath: '/register'
-      preLoaderRoute: typeof authRegisterRouteRouteImport
+      preLoaderRoute: typeof publicAuthRegisterRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(auth)/login': {
-      id: '/(auth)/login'
+    '/(public)/_auth/login': {
+      id: '/(public)/_auth/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof authLoginRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(app)/workspace': {
-      id: '/(app)/workspace'
-      path: '/workspace'
-      fullPath: '/workspace'
-      preLoaderRoute: typeof appWorkspaceRouteRouteImport
+      preLoaderRoute: typeof publicAuthLoginRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  appWorkspaceRouteRoute: appWorkspaceRouteRoute,
-  authLoginRouteRoute: authLoginRouteRoute,
-  authRegisterRouteRoute: authRegisterRouteRoute,
-  homeIndexRoute: homeIndexRoute,
+  publicPricingRouteRoute: publicPricingRouteRoute,
+  publicAuthLoginRouteRoute: publicAuthLoginRouteRoute,
+  publicAuthRegisterRouteRoute: publicAuthRegisterRouteRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
