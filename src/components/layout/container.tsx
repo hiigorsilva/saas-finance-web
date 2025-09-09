@@ -10,7 +10,10 @@ export const Container = ({
 }: ContainerProps) => {
   return (
     <div
-      className={cn('flex flex-col flex-1 max-w-7xl w-full mx-auto', className)}
+      className={cn(
+        'flex flex-col flex-auto max-w-7xl w-full mx-auto',
+        className
+      )}
       {...props}
     >
       {children}
