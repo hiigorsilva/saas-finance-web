@@ -1,4 +1,6 @@
+import { useNavigate } from '@tanstack/react-router'
 import {
+  ChevronRightIcon,
   ChevronsUpDownIcon,
   FolderOpenIcon,
   LockIcon,
@@ -30,19 +32,19 @@ export type WORKSPACE_TYPE = Array<{
 
 const workspaces: WORKSPACE_TYPE = [
   {
-    id: String(Date.now()),
+    id: String(3 * 2),
     title: 'Buncker',
     description: 'Controle pessoal',
     type: 'PRIVATE',
   },
   {
-    id: String(Date.now() + 5),
+    id: String(2 * 2),
     title: 'Nossa Casa',
     description: 'Controle pessoal',
     type: 'SHARED',
   },
   {
-    id: String(Date.now() * 2),
+    id: String(1 * 2),
     title: 'Viagem para Gramado',
     description: 'Central de despesas da viagem',
     type: 'SHARED',
@@ -62,17 +64,33 @@ const result = {
 
 export function WorkspaceSwitcher() {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState('')
+
+  const workspaceIndex = workspaces.length > 0 ? workspaces[0].id : ''
+  const [workspaceActive, setWorkspaceActive] = React.useState(workspaceIndex)
+
+  const route = useNavigate()
+
+  const handleRedirectToWorkspaceSelected = (currentWorkspace: string) => {
+    route({
+      to: `/${currentWorkspace}`,
+    })
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger className="min-w-40 w-fit min-h-10 h-fit">
+      <PopoverTrigger
+        className="min-w-40 w-fit min-h-10 h-fit"
+        defaultValue={workspaceActive}
+        asChild
+      >
         <Button
           variant="outline"
-          className="flex justify-between items-center gap-3 w-full"
+          className="flex justify-between items-center gap-3"
         >
-          {value
-            ? result.body.data.find(workspace => workspace.id === value)?.title
+          {workspaceActive
+            ? result.body.data.find(
+                workspace => workspace.id === workspaceActive
+              )?.title
             : 'Selecionar Workspace'}
           <ChevronsUpDownIcon
             className="size-4 shrink-0 text-foreground"
@@ -81,7 +99,7 @@ export function WorkspaceSwitcher() {
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent align="start" className="min-w-80 w-fit">
+      <PopoverContent align="start" className="min-w-96 w-fit">
         <Command>
           <CommandInput placeholder="Buscar..." />
 
@@ -116,44 +134,57 @@ export function WorkspaceSwitcher() {
                 <CommandItem
                   key={workspace.id}
                   value={workspace.id}
+                  defaultValue={workspaceActive}
                   onSelect={currentWorkspace => {
-                    setValue(currentWorkspace === value ? '' : currentWorkspace)
+                    setWorkspaceActive(
+                      currentWorkspace === workspaceActive
+                        ? workspaceActive
+                        : currentWorkspace
+                    )
+                    handleRedirectToWorkspaceSelected(currentWorkspace)
                     setOpen(false)
                   }}
-                  className="bg-transparent"
+                  className="justify-between bg-transparent"
                 >
-                  <div className="bg-primary/10 border border-primary/25 p-2 rounded-lg">
-                    {workspace.type === 'PRIVATE' && (
-                      <UserIcon
-                        className="size-6 shrink-0 text-primary"
-                        strokeWidth={1}
-                      />
-                    )}
-                    {workspace.type === 'SHARED' && (
-                      <UsersIcon
-                        className="size-6 shrink-0 text-primary"
-                        strokeWidth={1}
-                      />
-                    )}
+                  <div className="flex justify-start items-center gap-2">
+                    <div className="bg-primary/10 border border-primary/25 p-2 rounded-lg">
+                      {workspace.type === 'PRIVATE' && (
+                        <UserIcon
+                          className="size-6 shrink-0 text-primary"
+                          strokeWidth={1}
+                        />
+                      )}
+                      {workspace.type === 'SHARED' && (
+                        <UsersIcon
+                          className="size-6 shrink-0 text-primary"
+                          strokeWidth={1}
+                        />
+                      )}
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <h3 className="font-semibold text-foreground leading-none tracking-tight">
+                        {workspace.title}
+                      </h3>
+                      <div className="text-xs text-muted-foreground leading-none tracking-tight">
+                        {workspace.type === 'PRIVATE' && (
+                          <div className="flex justify-start items-start gap-1">
+                            <LockIcon
+                              className="size-3 shrink-0 text-muted-foreground"
+                              strokeWidth={1}
+                            />
+                            <span>Somente você</span>
+                          </div>
+                        )}
+                        {workspace.type === 'SHARED' && 'X usuários'}
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="flex flex-col gap-1">
-                    <h3 className="font-semibold text-foreground leading-none tracking-tight">
-                      {workspace.title}
-                    </h3>
-                    <span className="text-xs text-muted-foreground leading-none tracking-tight">
-                      {workspace.type === 'PRIVATE' && (
-                        <div className="flex justify-start items-start gap-1">
-                          <LockIcon
-                            className="size-3 shrink-0 text-muted-foreground"
-                            strokeWidth={1}
-                          />
-                          <span>Somente você</span>
-                        </div>
-                      )}
-                      {workspace.type === 'SHARED' && 'X usuários'}
-                    </span>
-                  </div>
+                  <ChevronRightIcon
+                    className="size-4 shrink-0 text-card-foreground/25"
+                    strokeWidth={1}
+                  />
                 </CommandItem>
               ))}
             </CommandGroup>
