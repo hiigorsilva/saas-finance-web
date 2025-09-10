@@ -13,7 +13,7 @@ import { WorkspaceNotificationItem } from './workspace-notification-item'
 export function WorkspaceNotification() {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon">
           <BellIcon className="size-5 shrink-0 text-muted-foreground" />
         </Button>
