@@ -4,6 +4,13 @@ import { Button } from '@/components/ui/button'
 
 export const Route = createFileRoute('/(private)/app/$workspaceId/')({
   component: DashboardPage,
+  head: () => ({
+    meta: [
+      {
+        title: 'Dashboard | Luna',
+      },
+    ],
+  }),
 })
 
 function DashboardPage() {

@@ -2,21 +2,21 @@ type WORKSPACE_TYPE = 'PRIVATE' | 'SHARED'
 
 const workspaces = [
   {
-    id: new Date().toISOString(),
+    id: 'buncker_id',
     name: 'Buncker',
     description:
       'Controle pessoal das minhas finanças, contemplando receitas, despesas e investimentos.',
     type: 'PRIVATE' as WORKSPACE_TYPE,
   },
   {
-    id: new Date().toISOString(),
+    id: 'nossa_casa',
     name: 'Nossa Casa',
     description: 'Gerenciamento e planejamento das finanças de casa.',
     type: 'SHARED' as WORKSPACE_TYPE,
   },
   {
-    id: new Date().toISOString(),
-    name: 'Viagem com os Buscapé',
+    id: 'viagem_buscape',
+    name: 'Viagem Buscapé',
     description: 'Controle de gastos da viagem de férias da família Buscapé.',
     type: 'SHARED' as WORKSPACE_TYPE,
   },

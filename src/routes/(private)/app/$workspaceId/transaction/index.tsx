@@ -6,6 +6,13 @@ export const Route = createFileRoute(
   '/(private)/app/$workspaceId/transaction/'
 )({
   component: TransactionPage,
+  head: () => ({
+    meta: [
+      {
+        title: 'Transações | Luna',
+      },
+    ],
+  }),
 })
 
 function TransactionPage() {
