@@ -37,7 +37,7 @@ export function WorkspaceSwitcher() {
 
   const handleRedirectToDashboard = (currentWorkspace: string) => {
     route({
-      to: `/${currentWorkspace}`,
+      to: `/app/${currentWorkspace}`,
     })
   }
 
