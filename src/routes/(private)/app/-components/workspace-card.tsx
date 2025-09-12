@@ -3,6 +3,7 @@ import { EllipsisIcon, FolderOpenIcon, UserIcon, UsersIcon } from 'lucide-react'
 import type { ComponentProps } from 'react'
 import { Button } from '@/components/ui/button'
 import type { WORKSPACE_TYPE } from '@/data/requests/workspaces'
+import { WorkspaceCardMenu } from './workspace-card-menu'
 
 type WorkspaceCardProps = ComponentProps<'a'> & {
   workspace: {
@@ -37,16 +38,18 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
 
         {/* ACTIONS */}
         <div>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={e => handleOpenWorkspaceMenu(e)}
-          >
-            <EllipsisIcon
-              className="size-5 shrink-0 text-foreground"
-              strokeWidth={1.5}
-            />
-          </Button>
+          <WorkspaceCardMenu workspace={workspace}>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={e => handleOpenWorkspaceMenu(e)}
+            >
+              <EllipsisIcon
+                className="size-5 shrink-0 text-foreground"
+                strokeWidth={1.5}
+              />
+            </Button>
+          </WorkspaceCardMenu>
         </div>
       </div>
 
