@@ -11,19 +11,19 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import {
-  type WorkspaceSearchFormType,
-  workspaceSearchFormSchema,
-} from '@/schemas/workspace-search-form'
+  type WorkspaceSearchFilterType,
+  workspaceSearchFilterSchema,
+} from '@/schemas/workspace-search-form-filter'
 
-export function WorkspaceSearchForm() {
-  const form = useForm<WorkspaceSearchFormType>({
-    resolver: zodResolver(workspaceSearchFormSchema),
+export function WorkspaceSearchFilterForm() {
+  const form = useForm<WorkspaceSearchFilterType>({
+    resolver: zodResolver(workspaceSearchFilterSchema),
     defaultValues: {
       searchWorkspace: '',
     },
   })
 
-  const onSubmit = (data: WorkspaceSearchFormType) => {
+  const onSubmit = (data: WorkspaceSearchFilterType) => {
     console.log('SEARCH', data)
   }
 
