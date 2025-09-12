@@ -12,7 +12,6 @@ type HeaderProps = {
 
 export function Header({ hiddenLinks = false, workspaceId }: HeaderProps) {
   const { pathname } = useLocation()
-  console.log('PATHNAME', pathname)
 
   return (
     <header className="w-h-full border-b py-4">

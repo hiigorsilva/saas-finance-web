@@ -1,4 +1,4 @@
-type WORKSPACE_TYPE = 'PRIVATE' | 'SHARED'
+export type WORKSPACE_TYPE = 'PRIVATE' | 'SHARED'
 
 const workspaces = [
   {
