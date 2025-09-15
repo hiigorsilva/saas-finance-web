@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
 import { workspaceResponse } from '@/data/requests/workspaces'
+import { AddWorkspaceButton } from './add-workspace-button'
 
 export function WorkspaceSwitcher() {
   const [open, setOpen] = React.useState(false)
@@ -148,12 +149,14 @@ export function WorkspaceSwitcher() {
 
           <Separator className="mt-2 mb-4" />
 
-          <Button className="w-full" variant="gradient">
-            <PlusIcon className="size-5 shrink-0 text-foreground" />
-            <span className="font-semibold text-foreground">
-              Novo Workspace
-            </span>
-          </Button>
+          <AddWorkspaceButton>
+            <Button className="w-full" variant="gradient">
+              <PlusIcon className="size-5 shrink-0 text-foreground" />
+              <span className="font-semibold text-foreground">
+                Novo Workspace
+              </span>
+            </Button>
+          </AddWorkspaceButton>
         </Command>
       </PopoverContent>
     </Popover>

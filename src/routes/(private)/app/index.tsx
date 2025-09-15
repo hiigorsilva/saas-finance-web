@@ -5,6 +5,7 @@ import { TitlePage } from '@/components/layout/title-page'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { workspaceResponse } from '@/data/requests/workspaces'
+import { AddWorkspaceButton } from './-components/add-workspace-button'
 import { Header } from './-components/header'
 import { WorkspaceCard } from './-components/workspace-card'
 import { WorkspaceListEmpty } from './-components/workspace-list-empty'
@@ -39,19 +40,21 @@ function WorkspacesPage() {
             <WorkspaceSearchFilterForm />
           </div>
 
-          <Button
-            variant="gradient"
-            className="drop-shadow-md hover:drop-shadow-none"
-          >
-            <PlusIcon
-              className="size-5 shrink-0 text-foreground"
-              strokeWidth={1.5}
-            />
+          <AddWorkspaceButton>
+            <Button
+              variant="gradient"
+              className="drop-shadow-md hover:drop-shadow-none"
+            >
+              <PlusIcon
+                className="size-5 shrink-0 text-foreground"
+                strokeWidth={1.5}
+              />
 
-            <span className="text-sm text-foreground">
-              Criar novo Workspace
-            </span>
-          </Button>
+              <span className="text-sm text-foreground">
+                Criar novo Workspace
+              </span>
+            </Button>
+          </AddWorkspaceButton>
         </div>
 
         <Separator />
