@@ -13,7 +13,7 @@
       "**/dist/**",
       "**/build/**",
       "**/.next/**",
-      "**/src/routeTree.gen.ts"
+      "**/routeTree.gen.ts"
     ]
   },
   "formatter": {
