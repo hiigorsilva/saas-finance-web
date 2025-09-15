@@ -8,7 +8,6 @@ import {
 import type { WORKSPACE_TYPE } from '@/data/requests/workspaces'
 import { WorkspaceCardMenuDashboardOption } from './workspace-card-menu-dashboard-option'
 import { WorkspaceCardMenuDetailsOption } from './workspace-card-menu-details-option'
-import { WorkspaceCardMenuInviteMemberOption } from './workspace-card-menu-invite-member-option'
 
 type WorkspaceCardMenuProps = ComponentProps<'div'> & {
   workspace: {
@@ -30,10 +29,6 @@ export function WorkspaceCardMenu({
       <DropdownMenuContent className="max-w-80 w-full">
         <DropdownMenuItem asChild>
           <WorkspaceCardMenuDashboardOption workspace={workspace} />
-        </DropdownMenuItem>
-
-        <DropdownMenuItem asChild>
-          <WorkspaceCardMenuInviteMemberOption workspace={workspace} />
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
