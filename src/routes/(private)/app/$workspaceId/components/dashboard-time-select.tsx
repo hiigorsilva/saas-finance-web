@@ -1,4 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 import {
   Select,
   SelectContent,
@@ -31,9 +32,41 @@ export function DashboardTimeSelect({ search }: DashboardTimeSelectProps) {
     return value.replace(/^"+|"+$/g, '')
   }
 
-  // SELECTED DATE
-  const selectedMonth = cleanSearchValue(search.month, monthFormatted)
-  const selectedYear = cleanSearchValue(search.year, yearFormatted)
+  const initialMonth = cleanSearchValue(search.month, monthFormatted)
+  const initialYear = cleanSearchValue(search.year, yearFormatted)
+
+  // Estado interno para o mês e ano selecionados, iniciados do search params
+  const [selectedMonth, setSelectedMonth] = useState(initialMonth)
+  const [selectedYear, setSelectedYear] = useState(initialYear)
+
+  // Atualizar o estado quando o search mudar (ex: navegação externa)
+  useEffect(() => {
+    setSelectedMonth(initialMonth)
+    setSelectedYear(initialYear)
+  }, [initialMonth, initialYear])
+
+  useEffect(() => {
+    if (
+      Number(selectedYear) === currentYear &&
+      Number(selectedMonth) > currentMonth
+    ) {
+      // Ajusta mês para o mês atual se estiver no futuro
+      setSelectedMonth(monthFormatted)
+      // Também atualiza a URL para refletir essa mudança
+      router({
+        to: '.',
+        search: { month: monthFormatted, year: selectedYear },
+        replace: true,
+      })
+    }
+  }, [
+    selectedYear,
+    currentMonth,
+    currentYear,
+    monthFormatted,
+    router,
+    selectedMonth,
+  ])
 
   const yearsOptions = Array.from({ length: 10 }).map((_, index) => {
     const year = currentYear - index
@@ -44,6 +77,7 @@ export function DashboardTimeSelect({ search }: DashboardTimeSelectProps) {
   })
 
   const handleMonthChange = (monthSelected: string) => {
+    setSelectedMonth(monthSelected)
     router({
       to: '.',
       search: { month: monthSelected, year: selectedYear },
@@ -52,6 +86,7 @@ export function DashboardTimeSelect({ search }: DashboardTimeSelectProps) {
   }
 
   const handleYearChange = (yearSelected: string) => {
+    setSelectedYear(yearSelected)
     router({
       to: '.',
       search: { month: selectedMonth, year: yearSelected },
@@ -63,7 +98,7 @@ export function DashboardTimeSelect({ search }: DashboardTimeSelectProps) {
     <div className="flex items-center gap-2">
       {/* SELECT MONTH */}
       <Select value={selectedMonth} onValueChange={handleMonthChange}>
-        <SelectTrigger>
+        <SelectTrigger className="min-w-32 w-fit">
           <SelectValue placeholder="Selecione o mês" />
         </SelectTrigger>
 
@@ -88,7 +123,7 @@ export function DashboardTimeSelect({ search }: DashboardTimeSelectProps) {
 
       {/* SELECT YEAR */}
       <Select value={selectedYear} onValueChange={handleYearChange}>
-        <SelectTrigger>
+        <SelectTrigger className="min-w-24 w-fit">
           <SelectValue placeholder="Selecione o ano" />
         </SelectTrigger>
 
