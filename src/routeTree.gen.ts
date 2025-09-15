@@ -11,17 +11,16 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as privateHomeIndexRouteImport } from './routes/(private)/_home/index'
-import { Route as privateAppWorkspaceIdDetailsIndexRouteImport } from './routes/(private)/app/$workspaceId/details/index'
-import { Route as privateAppWorkspaceIdIndexRouteImport } from './routes/(private)/app/$workspaceId/index'
-import { Route as privateAppWorkspaceIdInviteMemberIndexRouteImport } from './routes/(private)/app/$workspaceId/invite-member/index'
-import { Route as privateAppWorkspaceIdLayoutRouteImport } from './routes/(private)/app/$workspaceId/layout'
-import { Route as privateAppWorkspaceIdTransactionIndexRouteImport } from './routes/(private)/app/$workspaceId/transaction/index'
-import { Route as privateAppIndexRouteImport } from './routes/(private)/app/index'
 import { Route as publicAuthLayoutRouteImport } from './routes/(public)/_auth/layout'
-import { Route as publicAuthLoginIndexRouteImport } from './routes/(public)/_auth/login/index'
-import { Route as publicAuthRegisterIndexRouteImport } from './routes/(public)/_auth/register/index'
 import { Route as publicPricingIndexRouteImport } from './routes/(public)/pricing/index'
+import { Route as privateAppIndexRouteImport } from './routes/(private)/app/index'
+import { Route as privateHomeIndexRouteImport } from './routes/(private)/_home/index'
+import { Route as privateAppWorkspaceIdLayoutRouteImport } from './routes/(private)/app/$workspaceId/layout'
+import { Route as publicAuthRegisterIndexRouteImport } from './routes/(public)/_auth/register/index'
+import { Route as publicAuthLoginIndexRouteImport } from './routes/(public)/_auth/login/index'
+import { Route as privateAppWorkspaceIdIndexRouteImport } from './routes/(private)/app/$workspaceId/index'
+import { Route as privateAppWorkspaceIdTransactionIndexRouteImport } from './routes/(private)/app/$workspaceId/transaction/index'
+import { Route as privateAppWorkspaceIdDetailsIndexRouteImport } from './routes/(private)/app/$workspaceId/details/index'
 
 const publicRouteImport = createFileRoute('/(public)')()
 
@@ -76,12 +75,6 @@ const privateAppWorkspaceIdTransactionIndexRoute =
     path: '/transaction/',
     getParentRoute: () => privateAppWorkspaceIdLayoutRoute,
   } as any)
-const privateAppWorkspaceIdInviteMemberIndexRoute =
-  privateAppWorkspaceIdInviteMemberIndexRouteImport.update({
-    id: '/invite-member/',
-    path: '/invite-member/',
-    getParentRoute: () => privateAppWorkspaceIdLayoutRoute,
-  } as any)
 const privateAppWorkspaceIdDetailsIndexRoute =
   privateAppWorkspaceIdDetailsIndexRouteImport.update({
     id: '/details/',
@@ -98,7 +91,6 @@ export interface FileRoutesByFullPath {
   '/login': typeof publicAuthLoginIndexRoute
   '/register': typeof publicAuthRegisterIndexRoute
   '/app/$workspaceId/details': typeof privateAppWorkspaceIdDetailsIndexRoute
-  '/app/$workspaceId/invite-member': typeof privateAppWorkspaceIdInviteMemberIndexRoute
   '/app/$workspaceId/transaction': typeof privateAppWorkspaceIdTransactionIndexRoute
 }
 export interface FileRoutesByTo {
@@ -109,7 +101,6 @@ export interface FileRoutesByTo {
   '/login': typeof publicAuthLoginIndexRoute
   '/register': typeof publicAuthRegisterIndexRoute
   '/app/$workspaceId/details': typeof privateAppWorkspaceIdDetailsIndexRoute
-  '/app/$workspaceId/invite-member': typeof privateAppWorkspaceIdInviteMemberIndexRoute
   '/app/$workspaceId/transaction': typeof privateAppWorkspaceIdTransactionIndexRoute
 }
 export interface FileRoutesById {
@@ -124,7 +115,6 @@ export interface FileRoutesById {
   '/(public)/_auth/login/': typeof publicAuthLoginIndexRoute
   '/(public)/_auth/register/': typeof publicAuthRegisterIndexRoute
   '/(private)/app/$workspaceId/details/': typeof privateAppWorkspaceIdDetailsIndexRoute
-  '/(private)/app/$workspaceId/invite-member/': typeof privateAppWorkspaceIdInviteMemberIndexRoute
   '/(private)/app/$workspaceId/transaction/': typeof privateAppWorkspaceIdTransactionIndexRoute
 }
 export interface FileRouteTypes {
@@ -138,7 +128,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/app/$workspaceId/details'
-    | '/app/$workspaceId/invite-member'
     | '/app/$workspaceId/transaction'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -149,7 +138,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/app/$workspaceId/details'
-    | '/app/$workspaceId/invite-member'
     | '/app/$workspaceId/transaction'
   id:
     | '__root__'
@@ -163,7 +151,6 @@ export interface FileRouteTypes {
     | '/(public)/_auth/login/'
     | '/(public)/_auth/register/'
     | '/(private)/app/$workspaceId/details/'
-    | '/(private)/app/$workspaceId/invite-member/'
     | '/(private)/app/$workspaceId/transaction/'
   fileRoutesById: FileRoutesById
 }
@@ -246,13 +233,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof privateAppWorkspaceIdTransactionIndexRouteImport
       parentRoute: typeof privateAppWorkspaceIdLayoutRoute
     }
-    '/(private)/app/$workspaceId/invite-member/': {
-      id: '/(private)/app/$workspaceId/invite-member/'
-      path: '/invite-member'
-      fullPath: '/app/$workspaceId/invite-member'
-      preLoaderRoute: typeof privateAppWorkspaceIdInviteMemberIndexRouteImport
-      parentRoute: typeof privateAppWorkspaceIdLayoutRoute
-    }
     '/(private)/app/$workspaceId/details/': {
       id: '/(private)/app/$workspaceId/details/'
       path: '/details'
@@ -292,7 +272,6 @@ const publicRouteWithChildren =
 interface privateAppWorkspaceIdLayoutRouteChildren {
   privateAppWorkspaceIdIndexRoute: typeof privateAppWorkspaceIdIndexRoute
   privateAppWorkspaceIdDetailsIndexRoute: typeof privateAppWorkspaceIdDetailsIndexRoute
-  privateAppWorkspaceIdInviteMemberIndexRoute: typeof privateAppWorkspaceIdInviteMemberIndexRoute
   privateAppWorkspaceIdTransactionIndexRoute: typeof privateAppWorkspaceIdTransactionIndexRoute
 }
 
@@ -301,15 +280,13 @@ const privateAppWorkspaceIdLayoutRouteChildren: privateAppWorkspaceIdLayoutRoute
     privateAppWorkspaceIdIndexRoute: privateAppWorkspaceIdIndexRoute,
     privateAppWorkspaceIdDetailsIndexRoute:
       privateAppWorkspaceIdDetailsIndexRoute,
-    privateAppWorkspaceIdInviteMemberIndexRoute:
-      privateAppWorkspaceIdInviteMemberIndexRoute,
     privateAppWorkspaceIdTransactionIndexRoute:
       privateAppWorkspaceIdTransactionIndexRoute,
   }
 
 const privateAppWorkspaceIdLayoutRouteWithChildren =
   privateAppWorkspaceIdLayoutRoute._addFileChildren(
-    privateAppWorkspaceIdLayoutRouteChildren
+    privateAppWorkspaceIdLayoutRouteChildren,
   )
 
 const rootRouteChildren: RootRouteChildren = {
