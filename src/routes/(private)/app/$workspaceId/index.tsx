@@ -1,9 +1,15 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
+import { ChevronLeftIcon } from 'lucide-react'
 import { Container } from '@/components/layout/container'
-import { Button } from '@/components/ui/button'
+import { TitleIconPage } from '@/components/layout/title-icon-page'
+import { TitlePage } from '@/components/layout/title-page'
+
+import { monthSelectSchema } from '@/schemas/dashboard-select-time'
+import { DashboardTimeSelect } from './components/dashboard-time-select'
 
 export const Route = createFileRoute('/(private)/app/$workspaceId/')({
   component: DashboardPage,
+  validateSearch: monthSelectSchema,
   head: () => ({
     meta: [
       {
@@ -14,23 +20,31 @@ export const Route = createFileRoute('/(private)/app/$workspaceId/')({
 })
 
 function DashboardPage() {
-  const { workspaceId } = Route.useParams()
+  const router = Route.useNavigate()
+  const match = Route.useMatch()
+
+  const handleNavigateBack = () => {
+    router({
+      to: '/app',
+    })
+  }
 
   return (
     <Container className="space-y-6">
-      <h1>Página de Dashboard</h1>
-      <Button className="w-fit" variant="gradient" asChild>
-        <Link
-          to="/app/$workspaceId/transaction"
-          params={{ workspaceId: workspaceId }}
-        >
-          Ir para Transações
-        </Link>
-      </Button>
+      <div className="flex justify-between items-center gap-6 mt-6">
+        {/* TITLE */}
+        <div className="flex items-center gap-2">
+          <TitleIconPage handleNavigateBack={handleNavigateBack}>
+            <ChevronLeftIcon />
+          </TitleIconPage>
+          <TitlePage>Dashboard</TitlePage>
+        </div>
 
-      <Button className="w-fit" variant="outline" asChild>
-        <Link to="..">Voltar para Meus Workspaces</Link>
-      </Button>
+        {/* DATE FILTER */}
+        <div className="flex items-center gap-4">
+          <DashboardTimeSelect search={match.search} />
+        </div>
+      </div>
     </Container>
   )
 }
