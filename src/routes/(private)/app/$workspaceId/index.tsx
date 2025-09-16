@@ -3,9 +3,12 @@ import { ChevronLeftIcon } from 'lucide-react'
 import { Container } from '@/components/layout/container'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
-
 import { monthSelectSchema } from '@/schemas/dashboard-select-time'
-import { DashboardTimeSelect } from './components/dashboard-time-select'
+import { DashBoardCardBalance } from './-components/dashboard-card-balance'
+import { DashBoardCardExpense } from './-components/dashboard-card-expense'
+import { DashBoardCardIncome } from './-components/dashboard-card-income'
+import { DashBoardCardInvestiment } from './-components/dashboard-card-investiment'
+import { DashboardTimeSelect } from './-components/dashboard-time-select'
 
 export const Route = createFileRoute('/(private)/app/$workspaceId/')({
   component: DashboardPage,
@@ -30,8 +33,9 @@ function DashboardPage() {
   }
 
   return (
-    <Container className="space-y-6">
-      <div className="flex justify-between items-center gap-6 mt-6">
+    <Container className="gap-6 py-6">
+      {/* HEADER */}
+      <div className="flex justify-between items-center gap-6">
         {/* TITLE */}
         <div className="flex items-center gap-2">
           <TitleIconPage handleNavigateBack={handleNavigateBack}>
@@ -44,6 +48,22 @@ function DashboardPage() {
         <div className="flex items-center gap-4">
           <DashboardTimeSelect search={match.search} />
         </div>
+      </div>
+
+      <div className="w-full flex-auto grid grid-cols-3 gap-6">
+        {/* LEFTSIDE */}
+        <div className="flex flex-col gap-3 col-span-2 col-start-1">
+          <DashBoardCardBalance />
+
+          <div className="grid grid-cols-3 gap-3">
+            <DashBoardCardIncome />
+            <DashBoardCardExpense />
+            <DashBoardCardInvestiment />
+          </div>
+        </div>
+
+        {/* RIGHTSIDE */}
+        <div className="col-span-1 col-start-3 p-6">RIGHT</div>
       </div>
     </Container>
   )
