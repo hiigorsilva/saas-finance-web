@@ -7,10 +7,12 @@ import { monthSelectSchema } from '@/schemas/dashboard-select-time'
 import { DashBoardCardBalance } from './-components/dashboard-card-balance'
 import { DashBoardCardChart } from './-components/dashboard-card-chat'
 import { DashBoardCardExpense } from './-components/dashboard-card-expense'
+import { DashboardCardExpenseByCategory } from './-components/dashboard-card-expense-by-category'
 import { DashBoardCardIncome } from './-components/dashboard-card-income'
 import { DashBoardCardInvestiment } from './-components/dashboard-card-investiment'
 import { DashBoardCardLastTransactions } from './-components/dashboard-card-last-transactions'
 import { DashboardCardLatePayment } from './-components/dashboard-card-late-payment'
+import { DashboardCardWeekPayment } from './-components/dashboard-card-week-payment'
 import { DashboardTimeSelect } from './-components/dashboard-time-select'
 
 export const Route = createFileRoute('/(private)/app/$workspaceId/')({
@@ -72,8 +74,10 @@ function DashboardPage() {
         </div>
 
         {/* RIGHTSIDE */}
-        <div className="col-span-1 col-start-3">
+        <div className="flex flex-col gap-3 col-span-1 col-start-3">
           <DashboardCardLatePayment />
+          <DashboardCardWeekPayment />
+          <DashboardCardExpenseByCategory />
         </div>
       </div>
     </Container>
