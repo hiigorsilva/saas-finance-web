@@ -16,7 +16,7 @@ export function DashBoardCardChart() {
       </CardHeader>
       <CardContent className="flex justify-center items-center gap-6">
         {/* CAPTIONS */}
-        <div className="flex flex-col gap-4">
+        <div className="max-w-3xs w-full flex flex-col gap-4">
           {/* INCOME */}
           <div className="flex justify-between items-center gap-2">
             <DashboardCardIcon className="bg-green-500/10 border border-green-500/25">
