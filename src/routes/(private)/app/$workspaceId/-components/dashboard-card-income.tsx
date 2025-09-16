@@ -11,7 +11,10 @@ export function DashBoardCardIncome() {
         {/* LABEL */}
         <div className="flex justify-start items-center gap-2">
           <DashboardCardIcon className="bg-green-500/10 border border-green-500/25">
-            <TrendingUpIcon className="size-5 shrink-0 text-green-500" />
+            <TrendingUpIcon
+              className="size-5 shrink-0 text-green-500"
+              strokeWidth={2}
+            />
           </DashboardCardIcon>
 
           <h2 className="font-normal text-sm text-muted-foreground leading-none tracking-tight">

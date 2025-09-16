@@ -18,7 +18,7 @@ export function DashBoardCardBalance() {
               <DashboardCardIcon>
                 <DollarSignIcon
                   className="size-5 shrink-0 text-primary"
-                  strokeWidth={1}
+                  strokeWidth={2}
                 />
               </DashboardCardIcon>
 

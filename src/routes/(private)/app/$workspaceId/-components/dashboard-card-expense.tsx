@@ -13,7 +13,7 @@ export function DashBoardCardExpense() {
           <DashboardCardIcon className="bg-red-500/10 border border-red-500/25">
             <TrendingDownIcon
               className="size-5 shrink-0 text-red-500"
-              strokeWidth={1}
+              strokeWidth={2}
             />
           </DashboardCardIcon>
 

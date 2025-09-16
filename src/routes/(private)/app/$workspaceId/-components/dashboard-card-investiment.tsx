@@ -1,4 +1,4 @@
-import { ArrowUpIcon, TrendingUpIcon } from 'lucide-react'
+import { ArrowUpIcon, PiggyBankIcon } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { currencyFormat } from '@/utils/currency-format'
 import { percentFormat } from '@/utils/percent-format'
@@ -11,7 +11,7 @@ export function DashBoardCardInvestiment() {
         {/* LABEL */}
         <div className="flex justify-start items-center gap-2">
           <DashboardCardIcon className="bg-blue-500/10 border border-blue-500/25">
-            <TrendingUpIcon className="size-5 shrink-0 text-blue-500" />
+            <PiggyBankIcon className="size-5 shrink-0 text-blue-500" />
           </DashboardCardIcon>
 
           <h2 className="font-normal text-sm text-muted-foreground leading-none tracking-tight">

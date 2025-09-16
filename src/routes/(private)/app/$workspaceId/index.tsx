@@ -5,6 +5,7 @@ import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
 import { monthSelectSchema } from '@/schemas/dashboard-select-time'
 import { DashBoardCardBalance } from './-components/dashboard-card-balance'
+import { DashBoardCardChart } from './-components/dashboard-card-chat'
 import { DashBoardCardExpense } from './-components/dashboard-card-expense'
 import { DashBoardCardIncome } from './-components/dashboard-card-income'
 import { DashBoardCardInvestiment } from './-components/dashboard-card-investiment'
@@ -52,14 +53,19 @@ function DashboardPage() {
 
       <div className="w-full flex-auto grid grid-cols-3 gap-6">
         {/* LEFTSIDE */}
-        <div className="flex flex-col gap-3 col-span-2 col-start-1">
-          <DashBoardCardBalance />
+        <div className="flex flex-col gap-6 col-span-2 col-start-1">
+          {/* CARDS */}
+          <div className="flex flex-col gap-3">
+            <DashBoardCardBalance />
 
-          <div className="grid grid-cols-3 gap-3">
-            <DashBoardCardIncome />
-            <DashBoardCardExpense />
-            <DashBoardCardInvestiment />
+            <div className="grid grid-cols-3 gap-3">
+              <DashBoardCardIncome />
+              <DashBoardCardExpense />
+              <DashBoardCardInvestiment />
+            </div>
           </div>
+
+          <DashBoardCardChart />
         </div>
 
         {/* RIGHTSIDE */}
