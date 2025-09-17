@@ -98,7 +98,7 @@ export function DashboardTimeSelect({ search }: DashboardTimeSelectProps) {
     <div className="flex items-center gap-2">
       {/* SELECT MONTH */}
       <Select value={selectedMonth} onValueChange={handleMonthChange}>
-        <SelectTrigger className="min-w-32 w-fit">
+        <SelectTrigger className="font-semibold min-w-32 w-fit">
           <SelectValue placeholder="Selecione o mês" />
         </SelectTrigger>
 
@@ -123,7 +123,7 @@ export function DashboardTimeSelect({ search }: DashboardTimeSelectProps) {
 
       {/* SELECT YEAR */}
       <Select value={selectedYear} onValueChange={handleYearChange}>
-        <SelectTrigger className="min-w-24 w-fit">
+        <SelectTrigger className="font-semibold min-w-24 w-fit">
           <SelectValue placeholder="Selecione o ano" />
         </SelectTrigger>
 
