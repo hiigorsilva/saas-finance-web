@@ -4,7 +4,11 @@ import { currencyFormat } from '@/utils/currency-format'
 import { percentFormat } from '@/utils/percent-format'
 import { DashboardCardIcon } from './dashboard-card-icon'
 
-export function DashBoardCardIncome() {
+type DashBoardCardIncomeProps = {
+  showAmount: boolean
+}
+
+export function DashBoardCardIncome({ showAmount }: DashBoardCardIncomeProps) {
   return (
     <Card>
       <CardContent className="flex flex-col gap-2">
@@ -25,7 +29,8 @@ export function DashBoardCardIncome() {
         {/* AMOUNT */}
         <div className="flex flex-col gap-2">
           <strong className="inline-block font-semibold text-xl text-foreground leading-none tracking-tight">
-            {currencyFormat(7700)}
+            {!showAmount && currencyFormat(7700)}
+            {showAmount && 'R$ ******'}
           </strong>
 
           <div className="flex justify-start items-center gap-2">

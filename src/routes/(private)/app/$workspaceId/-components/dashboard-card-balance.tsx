@@ -1,4 +1,10 @@
-import { ArrowUpIcon, DollarSignIcon, EyeIcon, PlusIcon } from 'lucide-react'
+import {
+  ArrowUpIcon,
+  DollarSignIcon,
+  EyeIcon,
+  EyeOffIcon,
+  PlusIcon,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { currencyFormat } from '@/utils/currency-format'
@@ -6,7 +12,19 @@ import { percentFormat } from '@/utils/percent-format'
 import { AddWorkspaceButton } from '../../-components/add-workspace-button'
 import { DashboardCardIcon } from './dashboard-card-icon'
 
-export function DashBoardCardBalance() {
+type DashBoardCardBalanceProps = {
+  showAmount: boolean
+  showAmountSwitch: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export function DashBoardCardBalance({
+  showAmount,
+  showAmountSwitch,
+}: DashBoardCardBalanceProps) {
+  const handleShowAmountSwitch = () => {
+    showAmountSwitch(prevState => !prevState)
+  }
+
   return (
     <Card>
       <CardContent className="flex justify-between items-center gap-6">
@@ -27,18 +45,32 @@ export function DashBoardCardBalance() {
               </h2>
             </div>
 
-            <Button variant="ghost" size="icon">
-              <EyeIcon
-                className="size-5 shrink-0 text-foreground"
-                strokeWidth={1}
-              />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleShowAmountSwitch}
+            >
+              {!showAmount && (
+                <EyeIcon
+                  className="size-5 shrink-0 text-foreground"
+                  strokeWidth={2}
+                />
+              )}
+
+              {showAmount && (
+                <EyeOffIcon
+                  className="size-5 shrink-0 text-foreground"
+                  strokeWidth={2}
+                />
+              )}
             </Button>
           </div>
 
           {/* AMOUNT */}
           <div className="flex flex-col gap-2">
             <strong className="inline-block font-semibold text-xl text-foreground leading-none tracking-tight">
-              {currencyFormat(5200)}
+              {!showAmount && currencyFormat(5200)}
+              {showAmount && 'R$ ******'}
             </strong>
 
             <div className="flex justify-start items-center gap-2">

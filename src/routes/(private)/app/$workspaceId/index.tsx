@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ChevronLeftIcon } from 'lucide-react'
+import { useState } from 'react'
 import { Container } from '@/components/layout/container'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
@@ -31,6 +32,8 @@ function DashboardPage() {
   const router = Route.useNavigate()
   const match = Route.useMatch()
 
+  const [showAmount, setShowAmount] = useState(false)
+
   const handleNavigateBack = () => {
     router({
       to: '/app',
@@ -60,12 +63,15 @@ function DashboardPage() {
         <div className="flex flex-col gap-6 col-span-2 col-start-1">
           {/* CARDS */}
           <div className="flex flex-col gap-3">
-            <DashBoardCardBalance />
+            <DashBoardCardBalance
+              showAmountSwitch={setShowAmount}
+              showAmount={showAmount}
+            />
 
             <div className="grid grid-cols-3 gap-3">
-              <DashBoardCardIncome />
-              <DashBoardCardExpense />
-              <DashBoardCardInvestiment />
+              <DashBoardCardIncome showAmount={showAmount} />
+              <DashBoardCardExpense showAmount={showAmount} />
+              <DashBoardCardInvestiment showAmount={showAmount} />
             </div>
           </div>
 
