@@ -3,7 +3,8 @@ export function percentFormat(value: number | string) {
 
   return Intl.NumberFormat('pt-BR', {
     style: 'percent',
-    minimumFractionDigits: 2,
     maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
+    minimumIntegerDigits: 1,
   }).format(parseValue)
 }
