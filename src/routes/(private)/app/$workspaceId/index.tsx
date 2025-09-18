@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Container } from '@/components/layout/container'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
+import { transactionResponse } from '@/data/requests/transactions'
 import { monthSelectSchema } from '@/schemas/dashboard-select-time'
 import { DashBoardCardBalance } from './-components/dashboard-card-balance'
 import { DashBoardCardChart } from './-components/dashboard-card-chat'
@@ -33,6 +34,8 @@ function DashboardPage() {
   const match = Route.useMatch()
 
   const [showAmount, setShowAmount] = useState(false)
+
+  const { data } = transactionResponse.body
 
   const handleNavigateBack = () => {
     router({
@@ -76,7 +79,7 @@ function DashboardPage() {
           </div>
 
           <DashBoardCardChart />
-          <DashBoardCardLastTransactions />
+          <DashBoardCardLastTransactions transactions={data} />
         </div>
 
         {/* RIGHTSIDE */}

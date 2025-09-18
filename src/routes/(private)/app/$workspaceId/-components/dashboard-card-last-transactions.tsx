@@ -1,5 +1,8 @@
 import { useNavigate } from '@tanstack/react-router'
-import { BanknoteIcon } from 'lucide-react'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+import { BanknoteIcon, BarcodeIcon, CreditCardIcon } from 'lucide-react'
+import { PixIcon } from '@/assets/icons/pix'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -11,10 +14,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import type { TransactionType } from '@/data/requests/transactions'
 import { currencyFormat } from '@/utils/currency-format'
 import { DashboardCardIcon } from './dashboard-card-icon'
 
-export function DashBoardCardLastTransactions() {
+type DashBoardCardLastTransactionsProps = {
+  transactions: TransactionType[]
+}
+
+export function DashBoardCardLastTransactions({
+  transactions,
+}: DashBoardCardLastTransactionsProps) {
   const router = useNavigate()
 
   const handleGoToTransactionsPage = () => {
@@ -22,6 +32,87 @@ export function DashBoardCardLastTransactions() {
       to: '/app/$workspaceId/transaction',
       params: { workspaceId: 'buncker_id' },
     })
+  }
+
+  const handleTransactionTypeColor = (transactionType: string) => {
+    switch (transactionType) {
+      case 'INCOME':
+        return 'text-green-500'
+
+      case 'EXPENSE':
+        return 'text-red-500'
+
+      case 'INVESTIMENT':
+        return 'text-blue-500'
+
+      default:
+        return 'text-foreground'
+    }
+  }
+
+  const handleTransactionTypeTranslate = (transactionType: string) => {
+    switch (transactionType) {
+      case 'INCOME':
+        return 'Receita'
+
+      case 'EXPENSE':
+        return 'Despesa'
+
+      case 'INVESTIMENT':
+        return 'Investimento'
+
+      default:
+        return 'Outro'
+    }
+  }
+
+  const handleSetIconByPaymentMethod = (transactionType: string) => {
+    switch (transactionType) {
+      case 'CREDIT_CARD':
+        return (
+          <CreditCardIcon
+            className="size-5 shrink-0 text-primary"
+            strokeWidth={1.5}
+          />
+        )
+
+      case 'DEBIT_CARD':
+        return (
+          <CreditCardIcon
+            className="size-5 shrink-0 text-primary"
+            strokeWidth={1.5}
+          />
+        )
+
+      case 'BANK_SLIP':
+        return (
+          <BarcodeIcon
+            className="size-5 shrink-0 text-primary"
+            strokeWidth={1.5}
+          />
+        )
+
+      case 'CASH':
+        return (
+          <BanknoteIcon
+            className="size-5 shrink-0 text-primary"
+            strokeWidth={1.5}
+          />
+        )
+
+      case 'PIX':
+        return (
+          <PixIcon className="size-5 shrink-0 text-primary" strokeWidth={1.5} />
+        )
+
+      default:
+        return (
+          <BanknoteIcon
+            className="size-5 shrink-0 text-primary"
+            strokeWidth={1.5}
+          />
+        )
+    }
   }
 
   return (
@@ -49,27 +140,45 @@ export function DashBoardCardLastTransactions() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell className="font-semibold">
-                <div className="w-full flex items-center gap-3">
-                  <DashboardCardIcon>
-                    <BanknoteIcon className="size-5 shrink-0 text-primary" />
-                  </DashboardCardIcon>
+            {transactions.map(transaction => (
+              <TableRow key={transaction.id} className="border-none">
+                <TableCell className="font-semibold">
+                  <div className="w-full flex items-start gap-3">
+                    <DashboardCardIcon>
+                      {handleSetIconByPaymentMethod(transaction.paymentMethod)}
+                    </DashboardCardIcon>
 
-                  <div className="flex flex-col">
-                    <h3 className="font-semibold text-base text-foreground">
-                      Assinatura Netflix
-                    </h3>
-                    <span className="font-normal text-sm text-muted-foreground">
-                      30 Nov de 2024
-                    </span>
+                    <div className="flex flex-col gap-1">
+                      <h3 className="font-semibold text-base text-foreground leading-none">
+                        {transaction.name}
+                      </h3>
+                      <span className="font-normal text-sm text-muted-foreground">
+                        {format(transaction.paymentDate, 'PP', {
+                          locale: ptBR,
+                        })}
+                      </span>
+                    </div>
+
+                    <div className="w-fit h-fit flex justify-center items-center border rounded-full px-2 py-0.5">
+                      <span
+                        className={`inline-block font-normal text-xs ${handleTransactionTypeColor(transaction.type)} capitalize leading-none`}
+                      >
+                        {handleTransactionTypeTranslate(
+                          transaction.type
+                        ).toLowerCase()}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </TableCell>
-              <TableCell className="font-semibold text-right">
-                {currencyFormat(29)}
-              </TableCell>
-            </TableRow>
+                </TableCell>
+
+                <TableCell
+                  className={`font-semibold ${handleTransactionTypeColor(transaction.type)} text-right`}
+                >
+                  {transaction.type === 'INCOME' ? '+' : '-'}
+                  {currencyFormat(transaction.amount)}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </CardContent>
