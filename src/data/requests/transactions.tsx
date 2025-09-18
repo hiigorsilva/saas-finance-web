@@ -1,3 +1,5 @@
+import { TRANSACTION_CATEGORY_TYPE } from '../labels/transaction-category'
+
 export type TransactionType = {
   id: string
   workspaceId: string
@@ -32,7 +34,7 @@ const transaction = [
     name: 'Combustível',
     description: 'Enchi o tanque do carro',
     type: 'EXPENSE' as TransactionType['type'],
-    category: 'Transaporte',
+    category: TRANSACTION_CATEGORY_TYPE.TRANSPORTATION,
     amount: '147.10',
     paymentDate: '2025-09-10T05:47:32',
     paymentMethod: 'CASH' as TransactionType['paymentMethod'],
@@ -51,7 +53,7 @@ const transaction = [
     name: 'Café da manhã em lanchonete',
     description: '4 Pão de queijo com 1 copo de café',
     type: 'EXPENSE' as TransactionType['type'],
-    category: 'Alimentação',
+    category: TRANSACTION_CATEGORY_TYPE.FOOD,
     amount: '147.10',
     paymentDate: '2025-09-24T07:31:40',
     paymentMethod: 'PIX' as TransactionType['paymentMethod'],
@@ -71,7 +73,7 @@ const transaction = [
     description: 'Criação de 2 Landing Pages',
     type: 'INCOME' as TransactionType['type'],
     paymentMethod: 'BANK_SLIP' as TransactionType['paymentMethod'],
-    category: 'Salary',
+    category: TRANSACTION_CATEGORY_TYPE.SALARY,
     amount: '2780',
     paymentDate: '2025-09-04T19:07:02',
     isRecurring: false,
@@ -88,8 +90,8 @@ const transaction = [
     createdByUserId: 'user_id',
     name: 'Compra de Bitcoin',
     description: 'Comprei R$ 5 mil em Bitcoin',
-    type: 'INVESTIMENT' as TransactionType['type'],
-    category: 'Salary',
+    type: 'INVESTMENT' as TransactionType['type'],
+    category: TRANSACTION_CATEGORY_TYPE.INVESTMENT,
     amount: '2780',
     paymentDate: '2025-09-04T19:07:02',
     paymentMethod: 'CREDIT_CARD' as TransactionType['paymentMethod'],
