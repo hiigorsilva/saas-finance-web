@@ -1,4 +1,4 @@
-import { Link, useLocation } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { Container } from '@/components/layout/container'
 import { navigateMenuLinks } from '../-data/navigate-menu-links'
 import { ProfileDropdownMenu } from './profile-dropdown-menu'
@@ -11,8 +11,6 @@ type HeaderProps = {
 }
 
 export function Header({ hiddenLinks = false, workspaceId }: HeaderProps) {
-  const { pathname } = useLocation()
-
   return (
     <header className="w-h-full border-b py-4">
       <Container>
@@ -24,9 +22,9 @@ export function Header({ hiddenLinks = false, workspaceId }: HeaderProps) {
               {navigateMenuLinks.map(link => (
                 <li key={link.title}>
                   <Link
-                    className={`inline-flex font-semibold text-base ${link.href === pathname ? 'text-foreground' : 'text-muted-foreground'} p-2`}
                     to={link.href}
                     params={{ workspaceId: workspaceId ?? '' }}
+                    className="inline-flex font-semibold text-base text-foreground p-2"
                   >
                     {link.title}
                   </Link>
