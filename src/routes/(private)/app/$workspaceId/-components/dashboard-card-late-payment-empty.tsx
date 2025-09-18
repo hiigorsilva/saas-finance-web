@@ -8,7 +8,7 @@ export function LatePaymentTransactionEmpty({
   children,
 }: LatePaymentTransactionEmpty) {
   return (
-    <TableRow>
+    <TableRow className="hover:bg-background">
       <TableCell>
         <div className="flex flex-col justify-center items-center gap-2">
           <CheckCircle2Icon
