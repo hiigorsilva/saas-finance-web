@@ -4,10 +4,8 @@ import { useState } from 'react'
 import { Container } from '@/components/layout/container'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
-import {
-  type TransactionType,
-  transactionResponse,
-} from '@/data/requests/transactions'
+import type { ExpenseByCategoryType } from '@/data/requests/expense-by-category'
+import type { TransactionType } from '@/data/requests/transactions'
 import { monthSelectSchema } from '@/schemas/dashboard-select-time'
 import { DashBoardCardBalance } from './-components/dashboard-card-balance'
 import { DashBoardCardChart } from './-components/dashboard-card-chat'
@@ -38,9 +36,11 @@ function DashboardPage() {
 
   const [showAmount, setShowAmount] = useState(false)
 
-  const { data } = transactionResponse.body
+  // const { data: transactions } = transactionResponse.body
+  const transactions = [] as TransactionType[]
   const latePayments = [] as TransactionType[]
   const weekPayments = [] as TransactionType[]
+  const expenseByCategory = [] as ExpenseByCategoryType[]
 
   const handleNavigateBack = () => {
     router({
@@ -84,14 +84,16 @@ function DashboardPage() {
           </div>
 
           <DashBoardCardChart />
-          <DashBoardCardLastTransactions transactions={data} />
+          <DashBoardCardLastTransactions transactions={transactions} />
         </div>
 
         {/* RIGHTSIDE */}
-        <div className="flex flex-col gap-3 col-span-1 col-start-3">
+        <div className="flex flex-col justify-between gap-3 col-span-1 col-start-3">
           <DashboardCardLatePayment latePayments={latePayments} />
           <DashboardCardWeekPayment weekPayments={weekPayments} />
-          <DashboardCardExpenseByCategory />
+          <DashboardCardExpenseByCategory
+            expenseByCategory={expenseByCategory}
+          />
         </div>
       </div>
     </Container>
