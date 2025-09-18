@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input'
 import {
   type TransactionSearchFilterType,
   transactionSearchFilterSchema,
-} from '@/schemas/transaction.search-filter-form'
+} from '@/schemas/transaction-search-filter-form'
 
 export function TransactionSearchFilterForm() {
   const form = useForm<TransactionSearchFilterType>({

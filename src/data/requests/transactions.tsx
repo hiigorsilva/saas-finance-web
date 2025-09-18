@@ -85,7 +85,7 @@ const transaction = [
     updatedAt: '2025-09-04T19:07:02',
   },
   {
-    id: 'transaction_id_3',
+    id: 'transaction_id_4',
     workspaceId: 'buncker_id',
     createdByUserId: 'user_id',
     name: 'Compra de Bitcoin',
@@ -110,7 +110,7 @@ export const transactionResponse = {
   body: {
     data: transaction,
     totalCount: transaction.length,
-    totalPages: 1,
+    totalPages: 3,
     currentPage: 1,
     limit: 10,
   },

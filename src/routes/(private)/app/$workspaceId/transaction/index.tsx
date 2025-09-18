@@ -5,6 +5,8 @@ import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
 import { Button } from '@/components/ui/button'
 import { transactionResponse } from '@/data/requests/transactions'
+import { listTransactionSchema } from '@/schemas/pagination'
+import { Pagination } from '../../-components/pagination'
 import { TransactionSearchFilterForm } from './-components/search-filter-form'
 import { TransactionTable } from './-components/transaction-table'
 
@@ -12,6 +14,7 @@ export const Route = createFileRoute(
   '/(private)/app/$workspaceId/transaction/'
 )({
   component: TransactionPage,
+  validateSearch: listTransactionSchema,
   head: () => ({
     meta: [
       {
@@ -25,7 +28,13 @@ function TransactionPage() {
   const { workspaceId } = Route.useParams()
   const router = Route.useNavigate()
 
-  const { data: transactions } = transactionResponse.body
+  const {
+    data: transactions,
+    currentPage,
+    limit,
+    totalCount,
+    totalPages,
+  } = transactionResponse.body
 
   const handleNavigateBack = () => {
     router({
@@ -57,7 +66,18 @@ function TransactionPage() {
       </div>
 
       {/* TRANSACTION TABLE */}
-      <TransactionTable transactions={transactions} />
+      <div className="flex flex-auto flex-col gap-6">
+        <TransactionTable transactions={transactions} />
+      </div>
+
+      {transactions && (
+        <Pagination
+          currentPage={currentPage}
+          limit={limit}
+          totalCount={totalCount}
+          totalPages={totalPages}
+        />
+      )}
     </Container>
   )
 }
