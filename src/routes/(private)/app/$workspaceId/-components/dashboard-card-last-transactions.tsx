@@ -1,6 +1,4 @@
 import { useNavigate } from '@tanstack/react-router'
-import { format } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
 import { BanknoteIcon, BarcodeIcon, CreditCardIcon } from 'lucide-react'
 import { PixIcon } from '@/assets/icons/pix'
 import { Button } from '@/components/ui/button'
@@ -16,6 +14,7 @@ import {
 } from '@/components/ui/table'
 import type { TransactionType } from '@/data/requests/transactions'
 import { currencyFormat } from '@/utils/currency-format'
+import { dateFormat } from '@/utils/date-format'
 import { DashboardCardIcon } from './dashboard-card-icon'
 
 type DashBoardCardLastTransactionsProps = {
@@ -153,9 +152,7 @@ export function DashBoardCardLastTransactions({
                         {transaction.name}
                       </h3>
                       <span className="font-normal text-sm text-muted-foreground">
-                        {format(transaction.paymentDate, 'PP', {
-                          locale: ptBR,
-                        })}
+                        {dateFormat(transaction.paymentDate)}
                       </span>
                     </div>
 
