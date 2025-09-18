@@ -19,14 +19,14 @@ export function DashboardCardWeekPayment({
   weekPayments,
 }: DashboardCardWeekPaymentProps) {
   return (
-    <Card>
+    <Card className="flex flex-col flex-auto">
       <CardHeader className="gap-6">
         <div className="flex justify-between items-center">
           <CardTitle className="text-center">Pagamentos da semana</CardTitle>
         </div>
         <Separator />
       </CardHeader>
-      <CardContent className="flex justify-center items-center gap-6">
+      <CardContent className="flex flex-auto justify-center items-center gap-6">
         <Table>
           <TableHeader className="sr-only">
             <TableRow>
@@ -34,7 +34,9 @@ export function DashboardCardWeekPayment({
               <TableHead className="text-right">Status</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody
+            className={`${weekPayments.length === 0 && 'flex flex-auto flex-col justify-center items-center'}`}
+          >
             {weekPayments.length > 0 && (
               <DashboardCardWeekPaymentRow weekPayments={weekPayments} />
             )}

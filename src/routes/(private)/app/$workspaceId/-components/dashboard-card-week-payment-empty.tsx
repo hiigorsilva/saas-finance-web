@@ -8,7 +8,7 @@ export function DashboardCardWeekPaymentEmpty({
   children,
 }: DashboardCardWeekPaymentEmptyProps) {
   return (
-    <TableRow>
+    <TableRow className="hover:bg-background">
       <TableCell className="font-semibold">
         <div className="flex flex-col justify-center items-center gap-2">
           <CheckCircle2Icon
