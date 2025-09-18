@@ -3,9 +3,9 @@ import type { TransactionType } from '@/data/requests/transactions'
 import { currencyFormat } from '@/utils/currency-format'
 import { dateFormat } from '@/utils/date-format'
 import {
-  handleSetIconByPaymentMethod,
-  handleTransactionTypeColor,
-  handleTransactionTypeTranslate,
+  transactionIconByPaymentMethod,
+  transactionTypeColor,
+  transactionTypeTranslate,
 } from '../-utils/transactions'
 import { DashboardCardIcon } from './dashboard-card-icon'
 
@@ -21,7 +21,7 @@ export function DashBoardCardLastTransactionsRow({
       <TableCell className="font-semibold">
         <div className="w-full flex items-start gap-3">
           <DashboardCardIcon>
-            {handleSetIconByPaymentMethod(transaction.paymentMethod)}
+            {transactionIconByPaymentMethod(transaction.paymentMethod)}
           </DashboardCardIcon>
 
           <div className="flex flex-col gap-1">
@@ -35,16 +35,16 @@ export function DashBoardCardLastTransactionsRow({
 
           <div className="w-fit h-fit flex justify-center items-center border rounded-full px-2 py-0.5">
             <span
-              className={`inline-block font-normal text-xs ${handleTransactionTypeColor(transaction.type)} capitalize leading-none`}
+              className={`inline-block font-normal text-xs ${transactionTypeColor(transaction.type)} capitalize leading-none`}
             >
-              {handleTransactionTypeTranslate(transaction.type).toLowerCase()}
+              {transactionTypeTranslate(transaction.type).toLowerCase()}
             </span>
           </div>
         </div>
       </TableCell>
 
       <TableCell
-        className={`font-semibold ${handleTransactionTypeColor(transaction.type)} text-right`}
+        className={`font-semibold ${transactionTypeColor(transaction.type)} text-right`}
       >
         {transaction.type === 'INCOME' ? '+' : '-'}
         {currencyFormat(transaction.amount)}
