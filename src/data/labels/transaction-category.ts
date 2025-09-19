@@ -8,7 +8,7 @@ export const TRANSACTION_CATEGORY_TYPE = {
   FAMILY: 'FAMILY',
   WORK: 'WORK',
   HEALTH: 'HEALTH',
-  GIFTS: 'GIFTS',
+  UTILITY: 'UTILITY',
   SALARY: 'SALARY',
   INVESTMENT: 'INVESTMENT',
   OTHER: 'OTHER',
@@ -20,12 +20,75 @@ export const TRANSACTION_CATEGORY_LABELS = {
   [TRANSACTION_CATEGORY_TYPE.TRANSPORTATION]: 'Transaporte',
   [TRANSACTION_CATEGORY_TYPE.FOOD]: 'Alimentação',
   [TRANSACTION_CATEGORY_TYPE.GROCERIES]: 'Mercado',
-  [TRANSACTION_CATEGORY_TYPE.ENTERTAINMENT]: 'Entretenimento',
+  [TRANSACTION_CATEGORY_TYPE.ENTERTAINMENT]: 'Lazer',
   [TRANSACTION_CATEGORY_TYPE.FAMILY]: 'Família',
   [TRANSACTION_CATEGORY_TYPE.WORK]: 'Trabalho',
   [TRANSACTION_CATEGORY_TYPE.HEALTH]: 'Saúde',
-  [TRANSACTION_CATEGORY_TYPE.GIFTS]: 'Presente',
+  [TRANSACTION_CATEGORY_TYPE.UTILITY]: 'Utilidade',
   [TRANSACTION_CATEGORY_TYPE.SALARY]: 'Salário',
   [TRANSACTION_CATEGORY_TYPE.INVESTMENT]: 'Investimento',
   [TRANSACTION_CATEGORY_TYPE.OTHER]: 'Outros',
+}
+
+export const TRANSACTION_CATEGORY_TYPE_VALUES = Object.values(
+  TRANSACTION_CATEGORY_TYPE
+)
+
+export type TransactionCategoryValuesType =
+  (typeof TRANSACTION_CATEGORY_TYPE)[keyof typeof TRANSACTION_CATEGORY_TYPE]
+
+export const transactionCategoryItems = {
+  [TRANSACTION_CATEGORY_TYPE.FOOD]: {
+    title: TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.FOOD],
+    descrition: 'Gastos relacionados a comidas e bebidas em geral',
+  },
+  [TRANSACTION_CATEGORY_TYPE.HOUSING]: {
+    title: TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.HOUSING],
+    descrition: 'Despesas essenciais para manter sua residência',
+  },
+  [TRANSACTION_CATEGORY_TYPE.TRANSPORTATION]: {
+    title:
+      TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.TRANSPORTATION],
+    descrition: 'Gastos com locomoção e veículos, próprios ou não',
+  },
+  [TRANSACTION_CATEGORY_TYPE.UTILITY]: {
+    title: TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.UTILITY],
+    descrition: 'Serviços básicos e essenciais para o dia a dia',
+  },
+  [TRANSACTION_CATEGORY_TYPE.HEALTH]: {
+    title: TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.HEALTH],
+    descrition: 'Gastos relacionados ao bem-estar físico e mental',
+  },
+  [TRANSACTION_CATEGORY_TYPE.ENTERTAINMENT]: {
+    title: TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.ENTERTAINMENT],
+    descrition: 'Despesas com atividades de diversão e relaxamento',
+  },
+  [TRANSACTION_CATEGORY_TYPE.GROCERIES]: {
+    title: TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.SALARY],
+    descrition: 'Principal fonte de renda proveniente do trabalho',
+  },
+  [TRANSACTION_CATEGORY_TYPE.SALARY]: {
+    title: TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.GROCERIES],
+    descrition: 'Compras de mantimentos feitas para casa',
+  },
+  [TRANSACTION_CATEGORY_TYPE.WORK]: {
+    title: TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.WORK],
+    descrition: 'Aquisições e gastos para fins profissionais de trabalho',
+  },
+  [TRANSACTION_CATEGORY_TYPE.FAMILY]: {
+    title: TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.FAMILY],
+    descrition: 'Despesas realizadas em família',
+  },
+  [TRANSACTION_CATEGORY_TYPE.INVESTMENT]: {
+    title: TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.INVESTMENT],
+    descrition: 'Aplicações financeiras para o futuro',
+  },
+  [TRANSACTION_CATEGORY_TYPE.PERSONAL_CARE]: {
+    title: TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.PERSONAL_CARE],
+    descrition: 'Gastos com beleza e bem-estar pessoal',
+  },
+  [TRANSACTION_CATEGORY_TYPE.OTHER]: {
+    title: TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.OTHER],
+    descrition: 'Outros gastos não específicos ',
+  },
 }

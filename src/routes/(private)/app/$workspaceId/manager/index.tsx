@@ -5,14 +5,10 @@ import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import { TransactionTableEmpty } from '../transaction/-components/transaction-table-empty'
+import { TRANSACTION_CATEGORY_TYPE_VALUES } from '@/data/labels/transaction-category'
+import type { TransactionType } from '@/data/requests/transactions'
+import { ManagerCategoryCard } from './-components/manager-category-card'
+import { ManagerRecurringTransactionTable } from './-components/manager-recurring-transaction-table'
 
 export const Route = createFileRoute('/(private)/app/$workspaceId/manager/')({
   component: ManagerPage,
@@ -28,6 +24,8 @@ function ManagerPage() {
       params: { workspaceId: workspaceId },
     })
   }
+
+  const transactions = [] as TransactionType[]
 
   return (
     <Container className="gap-6 py-6">
@@ -49,12 +47,12 @@ function ManagerPage() {
                   className="size-4 shrink-0 text-foreground"
                   strokeWidth={2}
                 />
-                <h2 className="font-semibold text-lg text-foreground leading-none">
+                <h2 className="font-semibold text-lg text-foreground leading-none text-balance">
                   Lembretes de faturas recorrentes
                 </h2>
               </div>
 
-              <p className="font-normal text-base text-muted-foreground">
+              <p className="font-normal text-base text-muted-foreground text-balance">
                 Crie gastos com recorrências semanais, mensais e anuais para
                 nunca se esquecer de pagar.
               </p>
@@ -62,94 +60,64 @@ function ManagerPage() {
 
             {/* BUTTON ACTION */}
             <div className="flex flex-col gap-2">
-              <Button className="w-fit" variant="gradient">
+              <Button className="w-fit" variant="gradient" disabled>
                 <PlusIcon />
                 Criar lembrete
               </Button>
 
               <span className="font-normal text-sm text-muted-foreground">
-                Recorrências criadas: 3/10
+                Recorrências criadas: 0/10
               </span>
             </div>
           </div>
 
           {/* TABLE */}
-          <div className="col-span-2 col-start-2 border border-primary/25 rounded-md">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-primary/10">
-                  <TableHead className="min-w-32 w-full text-foreground">
-                    Nome
-                  </TableHead>
-                  <TableHead className="min-w-32 w-fit text-foreground">
-                    Status
-                  </TableHead>
-                  <TableHead className="min-w-32 w-fit text-foreground">
-                    Frequência
-                  </TableHead>
-                  <TableHead className="min-w-32 w-fit text-foreground">
-                    Vencimento
-                  </TableHead>
-                  <TableHead className="min-w-32 w-fit text-foreground">
-                    Valor
-                  </TableHead>
-                  <TableHead className="min-w-20 w-fit text-center text-foreground">
-                    Ações
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
+          <div className="col-span-2 col-start-2 border border-primary/25 rounded-md overflow-hidden">
+            <ManagerRecurringTransactionTable transactions={transactions} />
+          </div>
+        </Card>
 
-              <TableBody>
-                {/*
-                <TableRow className="bg-primary/[2%] border-primary/10">
-                  <TableCell>Netflix</TableCell>
-                  <TableCell>
-                    <div
-                      className={`w-fit h-fit flex justify-start items-center gap-1 ${transactionStatusBadgeColor('ACTIVE')} rounded-full border px-2 py-0.5`}
-                    >
-                      <div
-                        className={`size-1.5 rounded-full ${transactionStatusBulletColor('ACTIVE')}`}
-                      />
-                      <span className="inline-block font-normal text-sm tracking-tight leading-none">
-                        {transactionStatusTranslate('ACTIVE')}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>Mensal</TableCell>
-                  <TableCell>Dia 08</TableCell>
-                  <TableCell>{currencyFormat(29.4)}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="hover:border"
-                      >
-                        <PenIcon className="size-4 shrink-0 text-muted-foreground" />
-                      </Button>
+        <Card className="w-full flex-auto grid grid-cols-3 gap-6 py-6 px-6">
+          <div className="flex flex-col gap-4 col-span-1 col-start-1">
+            {/* TITLE */}
+            <div className="flex flex-col gap-3">
+              <div className="flex justify-start items-center gap-2">
+                <CalendarIcon
+                  className="size-4 shrink-0 text-foreground"
+                  strokeWidth={2}
+                />
+                <h2 className="font-semibold text-lg text-foreground text-balance leading-none">
+                  Categorias
+                </h2>
+              </div>
 
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="hover:border"
-                      >
-                        <Trash2 className="size-4 shrink-0 text-red-500" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-                */}
-              </TableBody>
-            </Table>
-            <div className="w-full flex flex-auto justify-center items-center py-6">
-              <TransactionTableEmpty>
-                Nenhuma transação recorrente registrada.{' '}
-                <span className="inline-block">
-                  Crie seu primeiro lembrete recorrente.
-                </span>
-              </TransactionTableEmpty>
+              <p className="font-normal text-base text-muted-foreground text-balance">
+                Crie categorias personalizadas para todos os seus tipos de
+                gastos.
+              </p>
+            </div>
+
+            {/* BUTTON ACTION */}
+            <div className="flex flex-col gap-2">
+              <Button className="w-fit" variant="gradient" disabled>
+                <PlusIcon />
+                Criar categoria
+              </Button>
+
+              <span className="font-normal text-sm text-muted-foreground">
+                Categorias criadas: 13/13
+              </span>
             </div>
           </div>
+
+          {/* GRID */}
+          <ul className="grid grid-cols-3 gap-2 col-span-2 col-start-2">
+            {TRANSACTION_CATEGORY_TYPE_VALUES.map(category => (
+              <li key={category}>
+                <ManagerCategoryCard category={category} />
+              </li>
+            ))}
+          </ul>
         </Card>
       </div>
     </Container>
