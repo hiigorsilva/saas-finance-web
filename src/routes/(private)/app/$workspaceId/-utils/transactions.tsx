@@ -9,6 +9,10 @@ import {
   TRANSACTION_PAYMENT_METHOD_TYPE,
 } from '@/data/labels/transaction-payment-method'
 import {
+  TRANSACTION_STATUS_LABELS,
+  TRANSACTION_STATUS_TYPE,
+} from '@/data/labels/transaction-status'
+import {
   TRANSACTION_TYPE,
   TRANSACTION_TYPE_LABELS,
 } from '@/data/labels/transaction-type'
@@ -211,5 +215,44 @@ export const transactionTypeBadgeColor = (transactionType: string) => {
 
     default:
       return 'text-foreground'
+  }
+}
+
+export const transactionStatusBadgeColor = (transactionStatus: string) => {
+  switch (transactionStatus) {
+    case TRANSACTION_STATUS_TYPE.ACTIVE:
+      return 'bg-green-500/10 border-green-500/25'
+
+    case TRANSACTION_STATUS_TYPE.INACTIVE:
+      return 'bg-zinc-400/10 border-zinc-400/25'
+
+    default:
+      return 'bg-transparent border-foreground/25'
+  }
+}
+
+export const transactionStatusBulletColor = (transactionStatus: string) => {
+  switch (transactionStatus) {
+    case TRANSACTION_STATUS_TYPE.ACTIVE:
+      return 'bg-green-500'
+
+    case TRANSACTION_STATUS_TYPE.INACTIVE:
+      return 'bg-zinc-400'
+
+    default:
+      return 'bg-foreground'
+  }
+}
+
+export const transactionStatusTranslate = (transactionStatus: string) => {
+  switch (transactionStatus) {
+    case TRANSACTION_STATUS_TYPE.ACTIVE:
+      return TRANSACTION_STATUS_LABELS[TRANSACTION_STATUS_TYPE.ACTIVE]
+
+    case TRANSACTION_STATUS_TYPE.INACTIVE:
+      return TRANSACTION_STATUS_LABELS[TRANSACTION_STATUS_TYPE.INACTIVE]
+
+    default:
+      return 'Outro'
   }
 }
