@@ -36,6 +36,8 @@ function TransactionPage() {
     totalPages,
   } = transactionResponse.body
 
+  // const transactions = [] as TransactionType[]
+
   const handleNavigateBack = () => {
     router({
       to: '/app/$workspaceId',

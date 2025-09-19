@@ -20,6 +20,7 @@ import { Route as publicAuthRegisterIndexRouteImport } from './routes/(public)/_
 import { Route as publicAuthLoginIndexRouteImport } from './routes/(public)/_auth/login/index'
 import { Route as privateAppWorkspaceIdIndexRouteImport } from './routes/(private)/app/$workspaceId/index'
 import { Route as privateAppWorkspaceIdTransactionIndexRouteImport } from './routes/(private)/app/$workspaceId/transaction/index'
+import { Route as privateAppWorkspaceIdManagerIndexRouteImport } from './routes/(private)/app/$workspaceId/manager/index'
 import { Route as privateAppWorkspaceIdDetailsIndexRouteImport } from './routes/(private)/app/$workspaceId/details/index'
 
 const publicRouteImport = createFileRoute('/(public)')()
@@ -75,6 +76,12 @@ const privateAppWorkspaceIdTransactionIndexRoute =
     path: '/transaction/',
     getParentRoute: () => privateAppWorkspaceIdLayoutRoute,
   } as any)
+const privateAppWorkspaceIdManagerIndexRoute =
+  privateAppWorkspaceIdManagerIndexRouteImport.update({
+    id: '/manager/',
+    path: '/manager/',
+    getParentRoute: () => privateAppWorkspaceIdLayoutRoute,
+  } as any)
 const privateAppWorkspaceIdDetailsIndexRoute =
   privateAppWorkspaceIdDetailsIndexRouteImport.update({
     id: '/details/',
@@ -91,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof publicAuthLoginIndexRoute
   '/register': typeof publicAuthRegisterIndexRoute
   '/app/$workspaceId/details': typeof privateAppWorkspaceIdDetailsIndexRoute
+  '/app/$workspaceId/manager': typeof privateAppWorkspaceIdManagerIndexRoute
   '/app/$workspaceId/transaction': typeof privateAppWorkspaceIdTransactionIndexRoute
 }
 export interface FileRoutesByTo {
@@ -101,6 +109,7 @@ export interface FileRoutesByTo {
   '/login': typeof publicAuthLoginIndexRoute
   '/register': typeof publicAuthRegisterIndexRoute
   '/app/$workspaceId/details': typeof privateAppWorkspaceIdDetailsIndexRoute
+  '/app/$workspaceId/manager': typeof privateAppWorkspaceIdManagerIndexRoute
   '/app/$workspaceId/transaction': typeof privateAppWorkspaceIdTransactionIndexRoute
 }
 export interface FileRoutesById {
@@ -115,6 +124,7 @@ export interface FileRoutesById {
   '/(public)/_auth/login/': typeof publicAuthLoginIndexRoute
   '/(public)/_auth/register/': typeof publicAuthRegisterIndexRoute
   '/(private)/app/$workspaceId/details/': typeof privateAppWorkspaceIdDetailsIndexRoute
+  '/(private)/app/$workspaceId/manager/': typeof privateAppWorkspaceIdManagerIndexRoute
   '/(private)/app/$workspaceId/transaction/': typeof privateAppWorkspaceIdTransactionIndexRoute
 }
 export interface FileRouteTypes {
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/app/$workspaceId/details'
+    | '/app/$workspaceId/manager'
     | '/app/$workspaceId/transaction'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/app/$workspaceId/details'
+    | '/app/$workspaceId/manager'
     | '/app/$workspaceId/transaction'
   id:
     | '__root__'
@@ -151,6 +163,7 @@ export interface FileRouteTypes {
     | '/(public)/_auth/login/'
     | '/(public)/_auth/register/'
     | '/(private)/app/$workspaceId/details/'
+    | '/(private)/app/$workspaceId/manager/'
     | '/(private)/app/$workspaceId/transaction/'
   fileRoutesById: FileRoutesById
 }
@@ -233,6 +246,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof privateAppWorkspaceIdTransactionIndexRouteImport
       parentRoute: typeof privateAppWorkspaceIdLayoutRoute
     }
+    '/(private)/app/$workspaceId/manager/': {
+      id: '/(private)/app/$workspaceId/manager/'
+      path: '/manager'
+      fullPath: '/app/$workspaceId/manager'
+      preLoaderRoute: typeof privateAppWorkspaceIdManagerIndexRouteImport
+      parentRoute: typeof privateAppWorkspaceIdLayoutRoute
+    }
     '/(private)/app/$workspaceId/details/': {
       id: '/(private)/app/$workspaceId/details/'
       path: '/details'
@@ -272,6 +292,7 @@ const publicRouteWithChildren =
 interface privateAppWorkspaceIdLayoutRouteChildren {
   privateAppWorkspaceIdIndexRoute: typeof privateAppWorkspaceIdIndexRoute
   privateAppWorkspaceIdDetailsIndexRoute: typeof privateAppWorkspaceIdDetailsIndexRoute
+  privateAppWorkspaceIdManagerIndexRoute: typeof privateAppWorkspaceIdManagerIndexRoute
   privateAppWorkspaceIdTransactionIndexRoute: typeof privateAppWorkspaceIdTransactionIndexRoute
 }
 
@@ -280,6 +301,8 @@ const privateAppWorkspaceIdLayoutRouteChildren: privateAppWorkspaceIdLayoutRoute
     privateAppWorkspaceIdIndexRoute: privateAppWorkspaceIdIndexRoute,
     privateAppWorkspaceIdDetailsIndexRoute:
       privateAppWorkspaceIdDetailsIndexRoute,
+    privateAppWorkspaceIdManagerIndexRoute:
+      privateAppWorkspaceIdManagerIndexRoute,
     privateAppWorkspaceIdTransactionIndexRoute:
       privateAppWorkspaceIdTransactionIndexRoute,
   }
