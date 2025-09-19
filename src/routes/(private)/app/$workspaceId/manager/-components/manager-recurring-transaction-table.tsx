@@ -55,7 +55,7 @@ export function ManagerRecurringTransactionTable({
             transactions.map(transaction => (
               <TableRow
                 key={transaction.id}
-                className="bg-primary/[2%] border-primary/10"
+                className="bg-primary/[1%] border-primary/10"
               >
                 <TableCell>Netflix</TableCell>
                 <TableCell>
@@ -98,7 +98,7 @@ export function ManagerRecurringTransactionTable({
       </Table>
 
       {transactions.length === 0 && (
-        <div className="w-full flex flex-auto justify-center items-center py-6">
+        <div className="w-full flex flex-auto justify-center items-center bg-primary/[1%] py-6">
           <TransactionTableEmpty>
             Nenhuma transação recorrente registrada.{' '}
             <span className="inline-block">
