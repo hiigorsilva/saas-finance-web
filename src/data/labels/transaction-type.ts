@@ -9,3 +9,8 @@ export const TRANSACTION_TYPE_LABELS = {
   [TRANSACTION_TYPE.EXPENSE]: 'Despesa',
   [TRANSACTION_TYPE.INVESTMENT]: 'Investimento',
 }
+
+export const TRANSACTION_TYPE_VALUES = Object.values(TRANSACTION_TYPE)
+
+export type TransactionTypeValuesType =
+  (typeof TRANSACTION_TYPE)[keyof typeof TRANSACTION_TYPE]

@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { currencyFormat } from '@/utils/currency-format'
 import { percentFormat } from '@/utils/percent-format'
-import { AddWorkspaceButton } from '../../-components/add-workspace-button'
+import { DashboardAddTransactionButton } from './dashboard-add-transaction-button'
 import { DashboardCardIcon } from './dashboard-card-icon'
 
 type DashBoardCardBalanceProps = {
@@ -86,12 +86,12 @@ export function DashBoardCardBalance({
         </div>
 
         {/* BUTTON */}
-        <AddWorkspaceButton>
+        <DashboardAddTransactionButton>
           <Button variant="gradient">
-            Adiconar Workspace
+            Criar nova Transação
             <PlusIcon className="size-4 shrink-0 text-foreground" />
           </Button>
-        </AddWorkspaceButton>
+        </DashboardAddTransactionButton>
       </CardContent>
     </Card>
   )

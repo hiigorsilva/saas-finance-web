@@ -23,18 +23,16 @@ export function WorkspaceNotification() {
         align="end"
         className="max-w-96 w-full px-3 overflow-y-hidden"
       >
-        <DropdownMenuLabel className="font-normal text-xs text-muted-foreground uppercase tracking-widest px-3 py-3">
+        <DropdownMenuLabel className="font-semibold text-xs text-muted-foreground uppercase tracking-widest px-3 py-3">
           Notificações
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
         <div className="max-h-[50dvh] h-fit overflow-y-auto">
           <DropdownMenuGroup className="flex flex-col gap-4 py-3">
-            <WorkspaceNotificationItem />
-            <WorkspaceNotificationItem />
-            <WorkspaceNotificationItem />
-            <WorkspaceNotificationItem />
-            <WorkspaceNotificationItem />
+            {/* 
+            <WorkspaceNotificationEmpty />
+            */}
             <WorkspaceNotificationItem />
           </DropdownMenuGroup>
         </div>
