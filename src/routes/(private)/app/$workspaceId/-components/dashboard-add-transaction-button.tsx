@@ -24,6 +24,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Popover,
   PopoverContent,
@@ -110,7 +111,7 @@ export function DashboardAddTransactionButton({
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-auto flex-col gap-10 overflow-y-auto"
+            className="flex flex-auto flex-col gap-10 px-1 overflow-y-auto"
           >
             {/* NAME */}
             <FormField
@@ -118,7 +119,7 @@ export function DashboardAddTransactionButton({
               name="name"
               render={({ field }) => (
                 <FormItem className="relative">
-                  <FormLabel className="font-normal">
+                  <FormLabel className="font-semibold">
                     Nome da Transação *
                   </FormLabel>
                   <FormControl>
@@ -145,7 +146,7 @@ export function DashboardAddTransactionButton({
 
                 return (
                   <FormItem className="relative">
-                    <FormLabel className="font-normal">Descrição</FormLabel>
+                    <FormLabel className="font-semibold">Descrição</FormLabel>
                     <FormControl>
                       <Textarea
                         className="max-w-full h-20 resize-none text-wrap pb-3"
@@ -176,7 +177,7 @@ export function DashboardAddTransactionButton({
                 name="type"
                 render={({ field }) => (
                   <FormItem className="relative w-full">
-                    <FormLabel className="font-normal">Tipo *</FormLabel>
+                    <FormLabel className="font-semibold">Tipo *</FormLabel>
                     <FormControl>
                       <Select
                         defaultValue={field.value}
@@ -209,7 +210,7 @@ export function DashboardAddTransactionButton({
                 name="category"
                 render={({ field }) => (
                   <FormItem className="relative w-full">
-                    <FormLabel className="font-normal">Categoria *</FormLabel>
+                    <FormLabel className="font-semibold">Categoria *</FormLabel>
                     <FormControl>
                       <Select
                         defaultValue={field.value}
@@ -244,7 +245,7 @@ export function DashboardAddTransactionButton({
                 name="amount"
                 render={({ field }) => (
                   <FormItem className="relative w-full">
-                    <FormLabel className="font-normal">Valor *</FormLabel>
+                    <FormLabel className="font-semibold">Valor *</FormLabel>
                     <FormControl>
                       <NumericFormat
                         customInput={Input}
@@ -268,7 +269,7 @@ export function DashboardAddTransactionButton({
                 name="paymentDate"
                 render={({ field }) => (
                   <FormItem className="relative w-full">
-                    <FormLabel className="font-normal">
+                    <FormLabel className="font-semibold">
                       Data de pagamento *
                     </FormLabel>
                     <FormControl>
@@ -314,7 +315,7 @@ export function DashboardAddTransactionButton({
                 name="paymentMethod"
                 render={({ field }) => (
                   <FormItem className="relative w-full">
-                    <FormLabel className="font-normal">Tipo *</FormLabel>
+                    <FormLabel className="font-semibold">Tipo *</FormLabel>
                     <FormControl>
                       <Select
                         defaultValue={TRANSACTION_PAYMENT_METHOD_TYPE_VALUES[0]}
@@ -349,12 +350,13 @@ export function DashboardAddTransactionButton({
                 name="isRecurring"
                 render={({ field }) => (
                   <FormItem className="relative w-full">
-                    <FormLabel className="font-normal">
+                    <FormLabel className="font-semibold">
                       É parcelado? *
                     </FormLabel>
                     <FormControl>
-                      <div className="flex justify-start items-center gap-2">
+                      <div className="relative w-full h-10 flex justify-start items-center gap-2 border rounded-md px-1">
                         <Checkbox
+                          className="sr-only"
                           id={field.name}
                           defaultChecked={field.value}
                           onCheckedChange={checked => {
@@ -362,6 +364,23 @@ export function DashboardAddTransactionButton({
                             setIsRecurring(prevState => !prevState)
                           }}
                         />
+
+                        <div
+                          className={`absolute ${isRecurring ? 'left-1' : 'right-1'} transition-all z-30 w-1/2 h-7 rounded-sm bg-primary/75`}
+                        />
+
+                        <Label
+                          htmlFor={field.name}
+                          className="relative z-50 w-full h-8 flex justify-center items-center px-4 cursor-pointer"
+                        >
+                          Sim
+                        </Label>
+                        <Label
+                          htmlFor={field.name}
+                          className="relative z-50 w-full h-8 flex justify-center items-center px-4 cursor-pointer"
+                        >
+                          Não
+                        </Label>
                       </div>
                     </FormControl>
                     <FormMessage className="absolute -bottom-5 left-0" />
