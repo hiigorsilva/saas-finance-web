@@ -11,3 +11,6 @@ export const TRANSACTION_TYPE_LABELS = {
 }
 
 export const TRANSACTION_TYPE_VALUES = Object.values(TRANSACTION_TYPE)
+
+export type TransactionTypeValuesType =
+  (typeof TRANSACTION_TYPE)[keyof typeof TRANSACTION_TYPE]
