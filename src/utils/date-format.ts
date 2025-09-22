@@ -8,3 +8,11 @@ export function dateFormat(date: Date | string) {
     locale: ptBR,
   })
 }
+
+export function dateFormatLong(date: Date | string) {
+  const parseDate = new Date(date)
+
+  return format(parseDate, 'PPP', {
+    locale: ptBR,
+  })
+}
