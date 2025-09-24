@@ -8,7 +8,7 @@ export const navigateProfileLinks = [
   {
     icon: <UserIcon className="size-4 shrink-0 text-primary" strokeWidth={2} />,
     title: 'Meu Perfil',
-    href: '/profile',
+    href: '/app/profile',
   },
   {
     icon: (
