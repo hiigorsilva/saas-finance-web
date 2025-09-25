@@ -5,6 +5,7 @@ import { TitlePage } from '@/components/layout/title-page'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { workspaceResponse } from '@/data/requests/workspaces'
+import { SkeletonHomePage } from '../-components/skeleton-home-page'
 import { AddWorkspaceButton } from './-components/add-workspace-button'
 import { Header } from './-components/header'
 import { WorkspaceCard } from './-components/workspace-card'
@@ -13,6 +14,7 @@ import { WorkspaceSearchFilterForm } from './-components/workspace-search-filter
 
 export const Route = createFileRoute('/(private)/app/')({
   component: WorkspacesPage,
+  loader: SkeletonHomePage,
   head: () => ({
     meta: [
       {
