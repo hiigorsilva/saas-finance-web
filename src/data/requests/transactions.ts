@@ -1,4 +1,6 @@
 import { TRANSACTION_CATEGORY_TYPE } from '../labels/transaction-category'
+import type { TransactionPaymentMethodValuesType } from '../labels/transaction-payment-method'
+import type { TransactionTypeValuesType } from '../labels/transaction-type'
 
 export type TransactionType = {
   id: string
@@ -6,17 +8,11 @@ export type TransactionType = {
   createdByUserId: string
   name: string
   description: string
-  type: 'INCOME' | 'EXPENSE' | 'INVESTIMENT'
+  type: TransactionTypeValuesType
   category: string
   amount: string
   paymentDate: string
-  paymentMethod:
-    | 'CREDIT_CARD'
-    | 'DEBIT_CARD'
-    | 'PIX'
-    | 'CASH'
-    | 'BANK_SLIP'
-    | 'OTHER'
+  paymentMethod: TransactionPaymentMethodValuesType
   isRecurring: boolean
   recurringInterval: null
   recurringEndDate: null

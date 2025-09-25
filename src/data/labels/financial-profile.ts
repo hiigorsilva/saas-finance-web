@@ -13,3 +13,8 @@ export const FINANCIAL_PROFILE_LABELS = {
   [FINANCIAL_PROFILE_TYPE.SAVER]: 'Poupador',
   [FINANCIAL_PROFILE_TYPE.INVESTOR]: 'Investidor',
 }
+
+export const FINANCIAL_PROFILE_VALUES = Object.values(FINANCIAL_PROFILE_TYPE)
+
+export type FinancialProfileType =
+  (typeof FINANCIAL_PROFILE_TYPE)[keyof typeof FINANCIAL_PROFILE_TYPE]
