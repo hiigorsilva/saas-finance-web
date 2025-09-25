@@ -3,8 +3,9 @@ import { ChevronLeftIcon } from 'lucide-react'
 import { Container } from '@/components/layout/container'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
-
+import { financialProfileResponse } from '@/data/requests/financial-profile'
 import { userResponse } from '@/data/requests/user'
+import { ProfileFinancialCard } from './-components/profile-financial-card'
 import { ProfilePreferencesSelectCard } from './-components/profile-preferences-select-card'
 import { ProfileUserDataEditCard } from './-components/profile-user-data-edit-card'
 
@@ -16,6 +17,7 @@ function ProfilePage() {
   const router = Route.useNavigate()
 
   const { data: user } = userResponse.body
+  const { data: profileType } = financialProfileResponse.body
 
   const handleNavigateBack = () => {
     router({
@@ -37,6 +39,7 @@ function ProfilePage() {
 
       <div className="grid grid-cols-2 gap-6">
         <ProfilePreferencesSelectCard />
+        <ProfileFinancialCard profileType={profileType} />
       </div>
     </Container>
   )
