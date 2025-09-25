@@ -14,6 +14,7 @@ import {
   financialProfileDescritionTypeTranslate,
   financialProfileTypeTranslate,
 } from '../-utils/financial-profile'
+import { ProfileFinancialTextForm } from './profile-financial-text-form'
 
 type ProfileFinancialCardProps = {
   profileType: UserFinancialProfileType
@@ -58,13 +59,15 @@ export function ProfileFinancialCard({
       </CardContent>
 
       <CardFooter>
-        <Button variant="gradient" className="w-fit">
-          <AtomIcon
-            className="size-4 shrink-0 text-foreground"
-            strokeWidth={1.5}
-          />
-          Refazer teste
-        </Button>
+        <ProfileFinancialTextForm>
+          <Button variant="gradient" className="w-fit">
+            <AtomIcon
+              className="size-4 shrink-0 text-foreground"
+              strokeWidth={1.5}
+            />
+            Refazer teste
+          </Button>
+        </ProfileFinancialTextForm>
       </CardFooter>
     </Card>
   )
