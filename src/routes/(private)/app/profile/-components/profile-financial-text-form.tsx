@@ -57,10 +57,18 @@ export function ProfileFinancialTextForm({
   }
 
   const handleNextStep = () => {
-    setCurrentStepIndex(prevState => prevState + 1)
+    form.trigger(currentStep.nameStep).then(isValid => {
+      if (isValid) {
+        setCurrentStepIndex(prevState => prevState + 1)
+      }
+    })
   }
 
-  const progressBar = (currentStepIndex / steps.length) * 100
+  const isCurrentStepValid =
+    form.watch(currentStep.nameStep) !== undefined &&
+    form.watch(currentStep.nameStep) !== ''
+
+  const progressBar = ((currentStepIndex + 1) / steps.length) * 100
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
@@ -94,38 +102,31 @@ export function ProfileFinancialTextForm({
               control={form.control}
               name={currentStep.nameStep}
               render={({ field }) => (
-                <FormItem className="space-y-3">
+                <FormItem className="relative space-y-3">
                   <FormLabel>{currentStep.title}</FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                      className="flex flex-col"
+                      className="flex flex-col space-y-1"
+                      required
                     >
                       {currentStep.questions.map(question => (
                         <FormItem
                           key={question}
-                          className="flex items-center gap-3"
+                          className="flex items-center space-x-3 space-y-0"
                         >
                           <FormControl>
-                            <RadioGroupItem
-                              className="sr-only"
-                              id={question}
-                              defaultValue={question}
-                              {...field}
-                            />
+                            <RadioGroupItem value={question} />
                           </FormControl>
-                          <FormLabel
-                            htmlFor={question}
-                            className="w-full h-10 flex justify-start items-center gap-3 border px-4 rounded-sm cursor-pointer transition hover:bg-primary"
-                          >
+                          <FormLabel className="font-normal">
                             {question}
                           </FormLabel>
                         </FormItem>
                       ))}
                     </RadioGroup>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="absolute -bottom-5 left-0" />
                 </FormItem>
               )}
             />
@@ -155,7 +156,12 @@ export function ProfileFinancialTextForm({
               )}
 
               {isLastStep ? (
-                <Button className="flex-1" type="submit" variant="gradient">
+                <Button
+                  className="flex-1"
+                  type="submit"
+                  variant="gradient"
+                  disabled={!isCurrentStepValid}
+                >
                   Concluir teste
                 </Button>
               ) : (
@@ -164,6 +170,7 @@ export function ProfileFinancialTextForm({
                   type="button"
                   variant="gradient"
                   onClick={handleNextStep}
+                  disabled={!isCurrentStepValid}
                 >
                   Próximo
                 </Button>
