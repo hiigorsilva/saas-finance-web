@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router'
 import { AtomIcon, SmilePlusIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -22,7 +23,14 @@ type ProfileFinancialCardProps = {
 export function ProfileFinancialCard({
   profileType,
 }: ProfileFinancialCardProps) {
+  const router = useNavigate()
   const { financialProfile } = profileType
+
+  const handleRedirectToFinancialProfile = () => {
+    router({
+      to: '/app/profile/financial-profile',
+    })
+  }
 
   return (
     <Card>
@@ -58,7 +66,11 @@ export function ProfileFinancialCard({
       </CardContent>
 
       <CardFooter>
-        <Button variant="gradient" className="w-fit">
+        <Button
+          variant="gradient"
+          className="w-fit"
+          onClick={handleRedirectToFinancialProfile}
+        >
           <AtomIcon
             className="size-4 shrink-0 text-foreground"
             strokeWidth={1.5}
