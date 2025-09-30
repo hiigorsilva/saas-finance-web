@@ -25,7 +25,7 @@ const stepTwo: FinancialProfileType = {
 const stepThree: FinancialProfileType = {
   nameStep: 'stepThree',
   title: 'Qual é o seu principal objetivo ao usar nosso app?',
-  description: 'Ajuda a entender eu objetivo.',
+  description: 'Ajuda a entender o seu objetivo.',
   questions: [
     'Quitar dívidas para ter tranquilidade',
     'Ter uma reserva de emergência',

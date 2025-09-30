@@ -5,7 +5,7 @@ export type UserFinancialProfileType = {
 }
 
 export const financialProfile: UserFinancialProfileType = {
-  financialProfile: 'DEBTOR',
+  financialProfile: null,
 }
 
 export const financialProfileResponse = {
