@@ -1,4 +1,3 @@
-import { useNavigate } from '@tanstack/react-router'
 import { AtomIcon, SmilePlusIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,18 +17,17 @@ import {
 
 type ProfileFinancialCardProps = {
   profileType: UserFinancialProfileType
+  openFormClick: (open: boolean) => void
 }
 
 export function ProfileFinancialCard({
   profileType,
+  openFormClick,
 }: ProfileFinancialCardProps) {
-  const router = useNavigate()
   const { financialProfile } = profileType
 
-  const handleRedirectToFinancialProfile = () => {
-    router({
-      to: '/app/profile/financial-profile',
-    })
+  const handleOpenFinancialProfileForm = () => {
+    openFormClick(true)
   }
 
   return (
@@ -69,13 +67,14 @@ export function ProfileFinancialCard({
         <Button
           variant="gradient"
           className="w-fit"
-          onClick={handleRedirectToFinancialProfile}
+          onClick={handleOpenFinancialProfileForm}
         >
           <AtomIcon
             className="size-4 shrink-0 text-foreground"
             strokeWidth={1.5}
           />
-          Refazer teste
+          {financialProfile && 'Refazer teste'}
+          {!financialProfile && 'Iniciar teste'}
         </Button>
       </CardFooter>
     </Card>

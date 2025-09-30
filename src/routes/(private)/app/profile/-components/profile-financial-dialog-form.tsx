@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ChevronRightIcon } from 'lucide-react'
+import { ChevronRightIcon, Loader2Icon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
@@ -26,7 +26,13 @@ import {
 } from '@/schemas/financial-profile-form'
 import { steps } from '../-data/financial-profile-steps'
 
-export function ProfileFinancialDialogForm() {
+type ProfileFinancialDialogFormProps = {
+  openFormClick: (open: boolean) => void
+}
+
+export function ProfileFinancialDialogForm({
+  openFormClick,
+}: ProfileFinancialDialogFormProps) {
   const [currentStep, setCurrentStep] = useState(0)
 
   const form = useForm<FinancialProfileAnswerType>({
@@ -42,8 +48,11 @@ export function ProfileFinancialDialogForm() {
 
   const currentStepData = steps[currentStep]
   const progress = ((currentStep + 1) / steps.length) * 100
+
   const isLastStep = currentStep === steps.length - 1
   const isFirstStep = currentStep === 0
+
+  const isDisabledNextButton = !form.watch(currentStepData.nameStep)
 
   const handleNextStep = async () => {
     const fieldName = currentStepData.nameStep
@@ -62,6 +71,10 @@ export function ProfileFinancialDialogForm() {
 
   const onSubmit = async (data: FinancialProfileAnswerType) => {
     console.log('FINANCIAL_PROFILE', data)
+
+    await new Promise(resolve => setTimeout(resolve, 1000))
+
+    openFormClick(false)
   }
 
   return (
@@ -124,6 +137,7 @@ export function ProfileFinancialDialogForm() {
 
               <div className="flex justify-between items-center gap-4">
                 <Button
+                  className="min-w-28 w-fit"
                   type="button"
                   variant="outline"
                   onClick={handlePreviousStep}
@@ -133,15 +147,32 @@ export function ProfileFinancialDialogForm() {
                 </Button>
 
                 {isLastStep ? (
-                  <Button type="submit" variant="gradient">
-                    Finalizar
-                    <ChevronRightIcon className="size-4 shrink-0 text-foreground" />
+                  <Button
+                    className="min-w-28 w-fit"
+                    type="submit"
+                    variant="gradient"
+                    disabled={
+                      form.formState.isSubmitting || isDisabledNextButton
+                    }
+                  >
+                    {form.formState.isSubmitting && (
+                      <Loader2Icon className="size-4 shrink-0 text-foreground animate-spin" />
+                    )}
+
+                    {!form.formState.isSubmitting && (
+                      <>
+                        Enviar
+                        <ChevronRightIcon className="size-4 shrink-0 text-foreground" />
+                      </>
+                    )}
                   </Button>
                 ) : (
                   <Button
+                    className="min-w-28 w-fit"
                     type="button"
                     variant="gradient"
                     onClick={handleNextStep}
+                    disabled={isDisabledNextButton}
                   >
                     Próximo
                     <ChevronRightIcon className="size-4 shrink-0 text-foreground" />

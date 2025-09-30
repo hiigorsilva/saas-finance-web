@@ -2,21 +2,18 @@ import { createFileRoute } from '@tanstack/react-router'
 import { ChevronLeftIcon } from 'lucide-react'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
-import { userResponse } from '@/data/requests/user'
-import { ProfileUserDataEditCard } from './-components/profile-user-data-edit-card'
+import { ProfilePreferencesSelectCard } from '../-components/profile-preferences-select-card'
 
-export const Route = createFileRoute('/(private)/app/profile/')({
-  component: ProfilePage,
+export const Route = createFileRoute('/(private)/app/profile/preferences/')({
+  component: PreferencesPage,
 })
 
-function ProfilePage() {
+function PreferencesPage() {
   const router = Route.useNavigate()
-
-  const { data: user } = userResponse.body
 
   const handleNavigateBack = () => {
     router({
-      to: '/app',
+      to: '..',
     })
   }
 
@@ -26,10 +23,10 @@ function ProfilePage() {
         <TitleIconPage handleNavigateBack={handleNavigateBack}>
           <ChevronLeftIcon />
         </TitleIconPage>
-        <TitlePage>Perfil</TitlePage>
+        <TitlePage>Minhas preferências</TitlePage>
       </div>
 
-      <ProfileUserDataEditCard user={user} />
+      <ProfilePreferencesSelectCard />
     </>
   )
 }

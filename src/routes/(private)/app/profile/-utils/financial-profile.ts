@@ -23,7 +23,7 @@ export const financialProfileTypeTranslate = (
       return FINANCIAL_PROFILE_LABELS[FINANCIAL_PROFILE_TYPE.SPENDER]
 
     default:
-      return 'Outro'
+      return 'Não definido'
   }
 }
 

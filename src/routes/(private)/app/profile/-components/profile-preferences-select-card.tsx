@@ -62,7 +62,7 @@ export function ProfilePreferencesSelectCard() {
             className="size-5 shrink-0 text-foreground"
             strokeWidth={1.5}
           />
-          Minhas preferências
+          Defina suas preferências
         </CardTitle>
 
         <CardDescription className="text-base text-muted-foreground">
