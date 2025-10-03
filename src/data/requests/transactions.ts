@@ -1,4 +1,7 @@
-import { TRANSACTION_CATEGORY_TYPE } from '../labels/transaction-category'
+import {
+  TRANSACTION_CATEGORY_TYPE,
+  type TransactionCategoryValuesType,
+} from '../labels/transaction-category'
 import type { TransactionPaymentMethodValuesType } from '../labels/transaction-payment-method'
 import type { TransactionTypeValuesType } from '../labels/transaction-type'
 
@@ -9,7 +12,7 @@ export type TransactionType = {
   name: string
   description: string
   type: TransactionTypeValuesType
-  category: string
+  category: TransactionCategoryValuesType
   amount: string
   paymentDate: string
   paymentMethod: TransactionPaymentMethodValuesType
