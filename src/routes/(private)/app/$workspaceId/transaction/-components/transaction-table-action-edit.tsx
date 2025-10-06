@@ -107,7 +107,7 @@ export function TransactionTableActionEdit({
 
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogContent className="max-h-[80dvh] h-full overflow-y-auto">
         <DialogHeader>

@@ -37,7 +37,7 @@ export function TransactionTableActionRemove({
 
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogContent className="max-h-[80dvh] h-fit overflow-y-auto">
         <DialogHeader>
