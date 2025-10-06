@@ -11,6 +11,8 @@ import {
   transactionTypeBulletColor,
   transactionTypeTranslate,
 } from '../../-utils/transactions'
+import { TransactionTableActionEdit } from './transaction-table-action-edit'
+import { TransactionTableActionRemove } from './transaction-table-action-remove'
 
 type TransactionTableRowProps = {
   transaction: TransactionType
@@ -48,13 +50,17 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
       </TableCell>
       <TableCell>
         <div className="max-w-24 w-full flex justify-center items-center gap-2">
-          <Button variant="ghost" size="icon">
-            <PenIcon className="size-4 shrink-0 text-muted-foreground" />
-          </Button>
+          <TransactionTableActionEdit transaction={transaction}>
+            <Button variant="ghost" size="icon">
+              <PenIcon className="size-4 shrink-0 text-muted-foreground" />
+            </Button>
+          </TransactionTableActionEdit>
 
-          <Button variant="ghost" size="icon">
-            <Trash2Icon className="size-4 shrink-0 text-red-500" />
-          </Button>
+          <TransactionTableActionRemove transaction={transaction}>
+            <Button variant="ghost" size="icon">
+              <Trash2Icon className="size-4 shrink-0 text-red-500" />
+            </Button>
+          </TransactionTableActionRemove>
         </div>
       </TableCell>
     </TableRow>

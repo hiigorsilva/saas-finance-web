@@ -1,8 +1,27 @@
 import { HeartHandshakeIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import type { WorkspaceInvitationType } from '@/data/requests/workspace-invitations'
 
-export function WorkspaceNotificationItem() {
+type WorkspaceNotificationItemProps = {
+  workspaceInvitations: WorkspaceInvitationType
+}
+
+export function WorkspaceNotificationItem({
+  workspaceInvitations,
+}: WorkspaceNotificationItemProps) {
+  const { inviterName, workspaceName, id } = workspaceInvitations
+
+  const handleAcceptInvitation = async (id: string) => {
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    console.log('INVITE_ACCEPTED:', id)
+  }
+
+  const handeDeclineInvitation = async (id: string) => {
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    console.log('INVITE_DECLINED:', id)
+  }
+
   return (
     <DropdownMenuItem className="items-start">
       {/* ICON */}
@@ -21,20 +40,30 @@ export function WorkspaceNotificationItem() {
             Convite para workspace
           </h3>
           <p className="text-sm text-muted-foreground text-wrap line-clamp-2 truncate">
-            Higor Silva te convidou para integrar-se ao worksapce{' '}
+            {inviterName} te convidou para integrar-se ao worksapce{' '}
             <strong className="font-semibold text-sm text-muted-foreground uppercase">
-              Nexus Brand
+              {workspaceName}
             </strong>
           </p>
         </div>
 
         {/* ACTIONS */}
         <div className="grid grid-cols-2 items-center gap-4">
-          <Button className="rounded" variant="gradient" size="sm">
+          <Button
+            className="rounded"
+            variant="gradient"
+            size="sm"
+            onClick={() => handleAcceptInvitation(id)}
+          >
             Aceitar
           </Button>
 
-          <Button className="rounded" variant="outline" size="sm">
+          <Button
+            className="rounded"
+            variant="outline"
+            size="sm"
+            onClick={() => handeDeclineInvitation(id)}
+          >
             Recusar
           </Button>
         </div>

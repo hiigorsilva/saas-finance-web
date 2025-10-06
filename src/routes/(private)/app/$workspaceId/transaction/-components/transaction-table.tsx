@@ -6,7 +6,6 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { TransactionType } from '@/data/requests/transactions'
-import { TransactionTableEmpty } from './transaction-table-empty'
 import { TransactionTableRow } from './transaction-table-row'
 
 type TransactionTableProps = {
@@ -41,17 +40,6 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
             ))}
         </TableBody>
       </Table>
-
-      {transactions.length === 0 && (
-        <div className="w-full flex flex-auto justify-center items-center">
-          <TransactionTableEmpty>
-            Nenhuma transação registrada.{' '}
-            <span className="inline-block">
-              Crie a primeira transação deste mês.
-            </span>
-          </TransactionTableEmpty>
-        </div>
-      )}
     </div>
   )
 }

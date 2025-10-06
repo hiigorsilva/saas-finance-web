@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { ChevronDownIcon, LogOutIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -13,6 +13,15 @@ import { navigateProfileLinks } from '../-data/navigate-profile-links'
 import { ProfileImage } from './profile-image'
 
 export function ProfileDropdownMenu() {
+  const router = useNavigate()
+
+  const handleSignOut = () => {
+    router({
+      to: '/login',
+      replace: true,
+    })
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -71,6 +80,7 @@ export function ProfileDropdownMenu() {
             <Button
               className="w-full font-normal text-red-500 cursor-pointer"
               variant="outline"
+              onClick={handleSignOut}
             >
               <LogOutIcon
                 className="size-4 shrink-0 text-red-500"
