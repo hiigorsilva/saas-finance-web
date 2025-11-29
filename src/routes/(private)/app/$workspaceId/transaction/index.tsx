@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { transactionResponse } from '@/data/requests/transactions'
 import { listTransactionSchema } from '@/schemas/pagination'
 import { Pagination } from '../../-components/pagination'
+import { DashboardAddTransactionButton } from '../-components/dashboard-add-transaction-button'
 import { TransactionSearchFilterForm } from './-components/search-filter-form'
 import { TransactionTable } from './-components/transaction-table'
 
@@ -61,10 +62,12 @@ function TransactionPage() {
           <TransactionSearchFilterForm />
         </div>
 
-        <Button variant="gradient">
-          <PlusIcon className="size-5 shrink-0 text-foreground" />
-          <span>Adicionar Transação</span>
-        </Button>
+        <DashboardAddTransactionButton>
+          <Button variant="gradient">
+            <PlusIcon className="size-5 shrink-0 text-foreground" />
+            <span>Nova Transação</span>
+          </Button>
+        </DashboardAddTransactionButton>
       </div>
 
       {/* TRANSACTION TABLE */}

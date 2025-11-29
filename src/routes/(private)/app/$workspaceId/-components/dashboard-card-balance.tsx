@@ -88,7 +88,7 @@ export function DashBoardCardBalance({
         {/* BUTTON */}
         <DashboardAddTransactionButton>
           <Button variant="gradient">
-            Criar nova Transação
+            Nova Transação
             <PlusIcon className="size-4 shrink-0 text-foreground" />
           </Button>
         </DashboardAddTransactionButton>
