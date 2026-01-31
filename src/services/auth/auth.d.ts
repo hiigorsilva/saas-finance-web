@@ -1,3 +1,3 @@
-export interface IRegisterUser {
+export interface IAuthUser {
   accessToken: string
 }

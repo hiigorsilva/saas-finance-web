@@ -38,11 +38,11 @@ export function RegisterForm() {
       const resRegister = await AuthService.RegisterUser(name, email, password)
       if (resRegister.status === 201) {
         toast.success('Conta criada com sucesso!')
+        form.reset()
       }
     } catch (_error) {
       toast.error('Falha ao criar a conta.')
     } finally {
-      form.reset()
     }
   }
 

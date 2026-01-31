@@ -3,6 +3,7 @@ import { Link } from '@tanstack/react-router'
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -14,6 +15,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { type LoginFormType, loginFormSchema } from '@/schemas/login-form'
+import { AuthService } from '@/services/auth/auth'
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(true)
@@ -26,8 +28,18 @@ export function LoginForm() {
     },
   })
 
-  const onSubmit = (data: LoginFormType) => {
-    console.log('REGISTER', data)
+  async function onSubmit(data: LoginFormType) {
+    const { email, password } = data
+    try {
+      const resLogin = await AuthService.LoginUser(email, password)
+      if (resLogin.status === 200) {
+        toast.success('Login realizado com sucesso!')
+        form.reset()
+      }
+    } catch (_error) {
+      toast.error('Falha ao realizar o login.')
+    } finally {
+    }
   }
 
   const handleToggleShowPassword = () => {
