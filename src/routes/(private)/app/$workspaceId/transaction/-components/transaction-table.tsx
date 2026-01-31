@@ -14,7 +14,7 @@ type TransactionTableProps = {
 
 export function TransactionTable({ transactions }: TransactionTableProps) {
   return (
-    <div className="flex flex-auto flex-col bg-primary/[1%] border border-primary/20 rounded-lg overflow-hidden">
+    <div className="flex flex-col border border-primary/10 rounded-lg overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow className="bg-primary/10">

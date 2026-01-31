@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Container } from '@/components/layout/container'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
+import { DASHBOARD_KEYS } from '@/data/keys/local-storage'
 import type { ExpenseByCategoryType } from '@/data/requests/expense-by-category'
 import {
   type TransactionType,
@@ -37,7 +38,12 @@ function DashboardPage() {
   const router = Route.useNavigate()
   const match = Route.useMatch()
 
-  const [showAmount, setShowAmount] = useState(false)
+  const initialShowAmount = (): boolean => {
+    const storedShowAmount = localStorage.getItem(DASHBOARD_KEYS.showAmount)
+    if (!storedShowAmount) return false
+    return JSON.parse(storedShowAmount) ?? false
+  }
+  const [showAmount, setShowAmount] = useState(initialShowAmount)
 
   const { data: transactions } = transactionResponse.body
   // const transactions = [] as TransactionType[]
