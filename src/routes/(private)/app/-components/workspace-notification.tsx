@@ -1,4 +1,5 @@
 import { BellIcon } from 'lucide-react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -13,11 +14,13 @@ import { WorkspaceNotificationEmpty } from './workspace-notification-empty'
 import { WorkspaceNotificationItem } from './workspace-notification-item'
 
 export function WorkspaceNotification() {
+  const [isOpen, setIsOpen] = useState(false)
+
   const { data: workspaceInvitations, totalCount } =
     workspaceInvitationsResponse.body
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={isOpen} onOpenChange={open => setIsOpen(open)}>
       <DropdownMenuTrigger asChild>
         <Button className="relative" variant="ghost" size="icon">
           <BellIcon className="size-5 shrink-0 text-muted-foreground" />
@@ -45,6 +48,7 @@ export function WorkspaceNotification() {
                 <WorkspaceNotificationItem
                   key={workspaceInvitation.id}
                   workspaceInvitations={workspaceInvitation}
+                  setIsOpen={setIsOpen}
                 />
               ))}
           </DropdownMenuGroup>

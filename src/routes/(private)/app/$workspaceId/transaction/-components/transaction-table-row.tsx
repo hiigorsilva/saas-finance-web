@@ -20,7 +20,7 @@ type TransactionTableRowProps = {
 
 export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
   return (
-    <TableRow className="bg-primary/[1%] border-primary/10">
+    <TableRow className="hover:bg-primary/[5%] border-primary/10">
       <TableCell className="text-foreground tracking-tight">
         {transaction.name}
       </TableCell>

@@ -1,4 +1,10 @@
-import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  useLocation,
+} from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 import { Container } from '@/components/layout/container'
 import { Screen } from '@/components/layout/screen'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -11,6 +17,26 @@ export const Route = createFileRoute('/(private)/app/profile')({
 })
 
 function ProfileLayout() {
+  const [pathSelected, setPathSelected] = useState(false)
+  const location = useLocation()
+
+  const currentPath = location.pathname
+  const selectedLink = navigateProfileMenuLinks.find(
+    link => link.href === currentPath
+  )
+
+  const styleMenuLink = (href: string) => {
+    return pathSelected && selectedLink?.href === href
+      ? 'font-normal text-foreground'
+      : 'text-muted-foreground'
+  }
+
+  useEffect(() => {
+    if (selectedLink) {
+      setPathSelected(true)
+    }
+  }, [selectedLink])
+
   return (
     <Screen>
       <Header hiddenLinks />
@@ -30,11 +56,15 @@ function ProfileLayout() {
                     <li key={link.title}>
                       <Link
                         to={link.href}
-                        className="flex justify-start items-center gap-2 px-4 py-2 rounded-sm border transition hover:bg-accent"
+                        className={`flex justify-start items-center gap-2 px-4 py-2 rounded-sm border transition ${selectedLink && selectedLink.href === link.href ? 'bg-accent' : 'hover:bg-accent'}`}
                       >
-                        {link.icon}
+                        <span className={styleMenuLink(link.href)}>
+                          {link.icon}
+                        </span>
 
-                        <span className="text-base text-foreground">
+                        <span
+                          className={`${styleMenuLink(link.href)} text-base`}
+                        >
                           {link.title}
                         </span>
                       </Link>

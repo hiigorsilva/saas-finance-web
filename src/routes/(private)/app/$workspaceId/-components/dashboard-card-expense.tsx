@@ -38,7 +38,8 @@ export function DashBoardCardExpense({
           <div className="flex justify-start items-center gap-2">
             <div className="w-fit h-fit flex justify-center items-center gap-1 text-xs text-red-500 bg-red-500/10 border border-red-500/25 rounded-full pl-1.5 pr-2 py-0.5">
               <ArrowDownIcon className="size-3 shrink-0 text-red-500" />
-              {percentFormat(0.48)}
+              {!showAmount && percentFormat(0.48)}
+              {showAmount && '****%'}
             </div>
             <span className="inline-block font-normal text-xs text-muted-foreground leading-none">
               em relação ao mês anterior

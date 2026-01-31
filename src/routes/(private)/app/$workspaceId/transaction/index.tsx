@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button'
 import { transactionResponse } from '@/data/requests/transactions'
 import { listTransactionSchema } from '@/schemas/pagination'
 import { Pagination } from '../../-components/pagination'
-import { TransactionSearchFilterForm } from './-components/search-filter-form'
+import { DashboardAddTransactionButton } from '../-components/dashboard-add-transaction-button'
+import { TransactionFilterForm } from './-components/transaction-filter-form'
 import { TransactionTable } from './-components/transaction-table'
 
 export const Route = createFileRoute(
@@ -58,17 +59,19 @@ function TransactionPage() {
       {/* FILTER */}
       <div className="flex justify-between items-center gap-6">
         <div className="max-w-2xs w-full">
-          <TransactionSearchFilterForm />
+          <TransactionFilterForm />
         </div>
 
-        <Button variant="gradient">
-          <PlusIcon className="size-5 shrink-0 text-foreground" />
-          <span>Adicionar Transação</span>
-        </Button>
+        <DashboardAddTransactionButton>
+          <Button variant="gradient">
+            <PlusIcon className="size-5 shrink-0 text-foreground" />
+            <span>Nova Transação</span>
+          </Button>
+        </DashboardAddTransactionButton>
       </div>
 
       {/* TRANSACTION TABLE */}
-      <div className="flex flex-auto flex-col gap-6">
+      <div className="flex flex-col gap-6">
         <TransactionTable transactions={transactions} />
       </div>
 
