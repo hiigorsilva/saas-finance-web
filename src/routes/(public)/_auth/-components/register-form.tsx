@@ -3,6 +3,7 @@ import { Link } from '@tanstack/react-router'
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon, UserIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -17,6 +18,7 @@ import {
   type RegisterFormType,
   registerFormSchema,
 } from '@/schemas/register-form'
+import { AuthService } from '@/services/auth/auth'
 
 export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(true)
@@ -30,13 +32,24 @@ export function RegisterForm() {
     },
   })
 
-  const onSubmit = (data: RegisterFormType) => {
-    console.log('REGISTER', data)
+  async function onSubmit(data: RegisterFormType) {
+    const { name, email, password } = data
+    try {
+      const resRegister = await AuthService.RegisterUser(name, email, password)
+      if (resRegister.status === 201) {
+        toast.success('Conta criada com sucesso!')
+      }
+    } catch (_error) {
+      toast.error('Falha ao criar a conta.')
+    } finally {
+      form.reset()
+    }
   }
 
   const handleToggleShowPassword = () => {
     setShowPassword(prevState => !prevState)
   }
+
   return (
     <Form {...form}>
       <form

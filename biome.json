@@ -33,7 +33,8 @@
         "noUnusedImports": "error"
       },
       "complexity": {
-        "useOptionalChain": "off"
+        "useOptionalChain": "off",
+        "noStaticOnlyClass": "off"
       },
       "suspicious": {
         "noExplicitAny": "off",
