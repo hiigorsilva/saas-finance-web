@@ -65,6 +65,9 @@ export function DrawerFilterTransaction({
   async function handleSubmitChildren() {
     onSubmit()
     onOpenChange(false)
+  }
+
+  function handleResetFilters() {
     form.reset(defaultValuesTransactionFilters())
   }
 
@@ -90,7 +93,7 @@ export function DrawerFilterTransaction({
                 <FormLabel>Tipo de Transação</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value || ''}
                 >
                   <FormControl>
                     <SelectTrigger className="w-full">
@@ -119,7 +122,7 @@ export function DrawerFilterTransaction({
                 <FormLabel>Tipo de Categoria</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value || ''}
                 >
                   <FormControl>
                     <SelectTrigger className="w-full">
@@ -148,7 +151,7 @@ export function DrawerFilterTransaction({
                 <FormLabel>Tipo de Pagamento</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value || ''}
                 >
                   <FormControl>
                     <SelectTrigger className="w-full">
@@ -237,9 +240,7 @@ export function DrawerFilterTransaction({
             <Button
               type="button"
               variant="outline"
-              onClick={() => {
-                form.reset(defaultValuesTransactionFilters())
-              }}
+              onClick={handleResetFilters}
               className="w-full flex-1"
             >
               Resetar Filtros
