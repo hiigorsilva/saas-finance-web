@@ -47,12 +47,15 @@ export function ProfileFinancialDialogForm({
   })
 
   const currentStepData = steps[currentStep]
-  const progress = ((currentStep + 1) / steps.length) * 100
+
+  const answeredSteps = steps.filter(step => form.watch(step.nameStep)).length
+  const progress = (answeredSteps / steps.length) * 100
 
   const isLastStep = currentStep === steps.length - 1
   const isFirstStep = currentStep === 0
 
-  const isDisabledNextButton = !form.watch(currentStepData.nameStep)
+  const currentAnswer = form.watch(currentStepData.nameStep)
+  const isDisabledNextButton = !currentAnswer
 
   const handleNextStep = async () => {
     const fieldName = currentStepData.nameStep
@@ -83,7 +86,7 @@ export function ProfileFinancialDialogForm({
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm text-muted-foreground">
           <span>
-            Passo {currentStep + 1} de {steps.length}
+            Pergunta {currentStep + 1} de {steps.length}
           </span>
           <span>{Math.round(progress)}%</span>
         </div>
