@@ -4,7 +4,7 @@ import type { IUserLogged } from './user.d'
 
 export class UserService {
   static async GetUserLogged() {
-    const res = await api.get<IHttpResponse<IUserLogged>>('/me')
+    const res = await api.get<IHttpResponse<{ data: IUserLogged }>>('/me')
     return res
   }
 }

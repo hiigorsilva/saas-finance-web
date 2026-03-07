@@ -1,5 +1,5 @@
-import { api } from '@/lib/api'
 import type { IHttpResponse } from '@/utils/http'
+import { api } from '../api/api'
 import type { IAuthUser } from './auth.d'
 
 export class AuthService {
