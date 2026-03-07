@@ -9,17 +9,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useAuth } from '@/contexts/auth-context'
 import { navigateProfileLinks } from '../-data/navigate-profile-links'
 import { ProfileImage } from './profile-image'
 
 export function ProfileDropdownMenu() {
-  const router = useNavigate()
+  const { signOut } = useAuth()
+  const navigate = useNavigate()
 
-  const handleSignOut = () => {
-    router({
-      to: '/login',
-      replace: true,
-    })
+  const handleSignOut = async () => {
+    signOut()
+    await navigate({ to: '/login', replace: true })
   }
 
   return (
