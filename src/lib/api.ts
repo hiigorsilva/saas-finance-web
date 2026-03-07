@@ -1,15 +1,16 @@
 import axios from 'axios'
+import { getStorageToken } from '@/utils/auth.storage'
 
 export const api = axios.create({
   baseURL: 'http://localhost:3333/api',
   headers: {
-    Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+    Authorization: `Bearer ${getStorageToken() || ''}`,
   },
 })
 
 api.interceptors.request.use(
   config => {
-    const token = localStorage.getItem('token')
+    const token = getStorageToken()
     const isPublicRoute = config.headers?.isPublic
 
     if (!isPublicRoute && token) {

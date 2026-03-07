@@ -1,5 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { ChevronDownIcon, LogOutIcon } from 'lucide-react'
+import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -10,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useAuth } from '@/contexts/auth-context'
+import { UserService } from '@/services/user/user'
 import { navigateProfileLinks } from '../-data/navigate-profile-links'
 import { ProfileImage } from './profile-image'
 
@@ -17,10 +19,23 @@ export function ProfileDropdownMenu() {
   const { signOut } = useAuth()
   const navigate = useNavigate()
 
+  async function fetchData() {
+    const res = await UserService.GetUserLogged()
+    console.log(res)
+  }
+
   const handleSignOut = async () => {
     signOut()
     await navigate({ to: '/login', replace: true })
   }
+
+  async function effectFn() {
+    await fetchData()
+  }
+
+  useEffect(() => {
+    effectFn()
+  }, [])
 
   return (
     <DropdownMenu>
