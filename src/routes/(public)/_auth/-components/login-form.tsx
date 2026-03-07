@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -14,11 +14,12 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { useAuth } from '@/contexts/auth-context'
 import { type LoginFormType, loginFormSchema } from '@/schemas/login-form'
-import { AuthService } from '@/services/auth/auth'
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(true)
+  const navigate = useNavigate()
 
   const form = useForm<LoginFormType>({
     resolver: zodResolver(loginFormSchema),
@@ -28,14 +29,12 @@ export function LoginForm() {
     },
   })
 
+  const { signIn } = useAuth()
+
   async function onSubmit(data: LoginFormType) {
-    const { email, password } = data
     try {
-      const resLogin = await AuthService.LoginUser(email, password)
-      if (resLogin.status === 200) {
-        toast.success('Login realizado com sucesso!')
-        form.reset()
-      }
+      await signIn(data)
+      await navigate({ to: '/' })
     } catch (_error) {
       toast.error('Falha ao realizar o login.')
     } finally {

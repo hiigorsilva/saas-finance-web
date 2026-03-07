@@ -25,3 +25,5 @@ dist-ssr
 
 # Biome JS
 **/src/routeTree.gen.ts
+
+.env
