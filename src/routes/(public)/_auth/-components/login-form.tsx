@@ -19,7 +19,9 @@ import { type LoginFormType, loginFormSchema } from '@/schemas/login-form'
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(true)
+
   const navigate = useNavigate()
+  const { signIn } = useAuth()
 
   const form = useForm<LoginFormType>({
     resolver: zodResolver(loginFormSchema),
@@ -28,8 +30,6 @@ export function LoginForm() {
       password: '',
     },
   })
-
-  const { signIn } = useAuth()
 
   async function onSubmit(data: LoginFormType) {
     try {

@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon, UserIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -14,14 +14,17 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { useAuth } from '@/contexts/auth-context'
 import {
   type RegisterFormType,
   registerFormSchema,
 } from '@/schemas/register-form'
-import { AuthService } from '@/services/auth/auth'
 
 export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(true)
+
+  const navigate = useNavigate()
+  const { register } = useAuth()
 
   const form = useForm<RegisterFormType>({
     resolver: zodResolver(registerFormSchema),
@@ -33,13 +36,9 @@ export function RegisterForm() {
   })
 
   async function onSubmit(data: RegisterFormType) {
-    const { name, email, password } = data
     try {
-      const resRegister = await AuthService.RegisterUser(name, email, password)
-      if (resRegister.status === 201) {
-        toast.success('Conta criada com sucesso!')
-        form.reset()
-      }
+      await register(data)
+      await navigate({ to: '/' })
     } catch (_error) {
       toast.error('Falha ao criar a conta.')
     } finally {
