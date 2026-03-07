@@ -11,6 +11,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as privateLayoutRouteImport } from './routes/(private)/layout'
 import { Route as publicAuthLayoutRouteImport } from './routes/(public)/_auth/layout'
 import { Route as publicPricingIndexRouteImport } from './routes/(public)/pricing/index'
 import { Route as privateAppIndexRouteImport } from './routes/(private)/app/index'
@@ -33,6 +34,10 @@ const publicRoute = publicRouteImport.update({
   id: '/(public)',
   getParentRoute: () => rootRouteImport,
 } as any)
+const privateLayoutRoute = privateLayoutRouteImport.update({
+  id: '/(private)',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const publicAuthLayoutRoute = publicAuthLayoutRouteImport.update({
   id: '/_auth',
   getParentRoute: () => publicRoute,
@@ -43,25 +48,25 @@ const publicPricingIndexRoute = publicPricingIndexRouteImport.update({
   getParentRoute: () => publicRoute,
 } as any)
 const privateAppIndexRoute = privateAppIndexRouteImport.update({
-  id: '/(private)/app/',
+  id: '/app/',
   path: '/app/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => privateLayoutRoute,
 } as any)
 const privateHomeIndexRoute = privateHomeIndexRouteImport.update({
-  id: '/(private)/_home/',
+  id: '/_home/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => privateLayoutRoute,
 } as any)
 const privateAppProfileLayoutRoute = privateAppProfileLayoutRouteImport.update({
-  id: '/(private)/app/profile',
+  id: '/app/profile',
   path: '/app/profile',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => privateLayoutRoute,
 } as any)
 const privateAppWorkspaceIdLayoutRoute =
   privateAppWorkspaceIdLayoutRouteImport.update({
-    id: '/(private)/app/$workspaceId',
+    id: '/app/$workspaceId',
     path: '/app/$workspaceId',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => privateLayoutRoute,
   } as any)
 const publicAuthRegisterIndexRoute = publicAuthRegisterIndexRouteImport.update({
   id: '/register/',
@@ -147,6 +152,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/(private)': typeof privateLayoutRouteWithChildren
   '/(public)': typeof publicRouteWithChildren
   '/(public)/_auth': typeof publicAuthLayoutRouteWithChildren
   '/(private)/app/$workspaceId': typeof privateAppWorkspaceIdLayoutRouteWithChildren
@@ -197,6 +203,7 @@ export interface FileRouteTypes {
     | '/app/profile/preferences'
   id:
     | '__root__'
+    | '/(private)'
     | '/(public)'
     | '/(public)/_auth'
     | '/(private)/app/$workspaceId'
@@ -216,11 +223,8 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  privateLayoutRoute: typeof privateLayoutRouteWithChildren
   publicRoute: typeof publicRouteWithChildren
-  privateAppWorkspaceIdLayoutRoute: typeof privateAppWorkspaceIdLayoutRouteWithChildren
-  privateAppProfileLayoutRoute: typeof privateAppProfileLayoutRouteWithChildren
-  privateHomeIndexRoute: typeof privateHomeIndexRoute
-  privateAppIndexRoute: typeof privateAppIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -230,6 +234,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof publicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(private)': {
+      id: '/(private)'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof privateLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(public)/_auth': {
@@ -251,28 +262,28 @@ declare module '@tanstack/react-router' {
       path: '/app'
       fullPath: '/app'
       preLoaderRoute: typeof privateAppIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof privateLayoutRoute
     }
     '/(private)/_home/': {
       id: '/(private)/_home/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof privateHomeIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof privateLayoutRoute
     }
     '/(private)/app/profile': {
       id: '/(private)/app/profile'
       path: '/app/profile'
       fullPath: '/app/profile'
       preLoaderRoute: typeof privateAppProfileLayoutRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof privateLayoutRoute
     }
     '/(private)/app/$workspaceId': {
       id: '/(private)/app/$workspaceId'
       path: '/app/$workspaceId'
       fullPath: '/app/$workspaceId'
       preLoaderRoute: typeof privateAppWorkspaceIdLayoutRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof privateLayoutRoute
     }
     '/(public)/_auth/register/': {
       id: '/(public)/_auth/register/'
@@ -340,32 +351,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface publicAuthLayoutRouteChildren {
-  publicAuthLoginIndexRoute: typeof publicAuthLoginIndexRoute
-  publicAuthRegisterIndexRoute: typeof publicAuthRegisterIndexRoute
-}
-
-const publicAuthLayoutRouteChildren: publicAuthLayoutRouteChildren = {
-  publicAuthLoginIndexRoute: publicAuthLoginIndexRoute,
-  publicAuthRegisterIndexRoute: publicAuthRegisterIndexRoute,
-}
-
-const publicAuthLayoutRouteWithChildren =
-  publicAuthLayoutRoute._addFileChildren(publicAuthLayoutRouteChildren)
-
-interface publicRouteChildren {
-  publicAuthLayoutRoute: typeof publicAuthLayoutRouteWithChildren
-  publicPricingIndexRoute: typeof publicPricingIndexRoute
-}
-
-const publicRouteChildren: publicRouteChildren = {
-  publicAuthLayoutRoute: publicAuthLayoutRouteWithChildren,
-  publicPricingIndexRoute: publicPricingIndexRoute,
-}
-
-const publicRouteWithChildren =
-  publicRoute._addFileChildren(publicRouteChildren)
-
 interface privateAppWorkspaceIdLayoutRouteChildren {
   privateAppWorkspaceIdIndexRoute: typeof privateAppWorkspaceIdIndexRoute
   privateAppWorkspaceIdDetailsIndexRoute: typeof privateAppWorkspaceIdDetailsIndexRoute
@@ -409,13 +394,54 @@ const privateAppProfileLayoutRouteWithChildren =
     privateAppProfileLayoutRouteChildren,
   )
 
-const rootRouteChildren: RootRouteChildren = {
-  publicRoute: publicRouteWithChildren,
+interface privateLayoutRouteChildren {
+  privateAppWorkspaceIdLayoutRoute: typeof privateAppWorkspaceIdLayoutRouteWithChildren
+  privateAppProfileLayoutRoute: typeof privateAppProfileLayoutRouteWithChildren
+  privateHomeIndexRoute: typeof privateHomeIndexRoute
+  privateAppIndexRoute: typeof privateAppIndexRoute
+}
+
+const privateLayoutRouteChildren: privateLayoutRouteChildren = {
   privateAppWorkspaceIdLayoutRoute:
     privateAppWorkspaceIdLayoutRouteWithChildren,
   privateAppProfileLayoutRoute: privateAppProfileLayoutRouteWithChildren,
   privateHomeIndexRoute: privateHomeIndexRoute,
   privateAppIndexRoute: privateAppIndexRoute,
+}
+
+const privateLayoutRouteWithChildren = privateLayoutRoute._addFileChildren(
+  privateLayoutRouteChildren,
+)
+
+interface publicAuthLayoutRouteChildren {
+  publicAuthLoginIndexRoute: typeof publicAuthLoginIndexRoute
+  publicAuthRegisterIndexRoute: typeof publicAuthRegisterIndexRoute
+}
+
+const publicAuthLayoutRouteChildren: publicAuthLayoutRouteChildren = {
+  publicAuthLoginIndexRoute: publicAuthLoginIndexRoute,
+  publicAuthRegisterIndexRoute: publicAuthRegisterIndexRoute,
+}
+
+const publicAuthLayoutRouteWithChildren =
+  publicAuthLayoutRoute._addFileChildren(publicAuthLayoutRouteChildren)
+
+interface publicRouteChildren {
+  publicAuthLayoutRoute: typeof publicAuthLayoutRouteWithChildren
+  publicPricingIndexRoute: typeof publicPricingIndexRoute
+}
+
+const publicRouteChildren: publicRouteChildren = {
+  publicAuthLayoutRoute: publicAuthLayoutRouteWithChildren,
+  publicPricingIndexRoute: publicPricingIndexRoute,
+}
+
+const publicRouteWithChildren =
+  publicRoute._addFileChildren(publicRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  privateLayoutRoute: privateLayoutRouteWithChildren,
+  publicRoute: publicRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
