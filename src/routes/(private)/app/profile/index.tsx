@@ -2,7 +2,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import { ChevronLeftIcon } from 'lucide-react'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
-import { userResponse } from '@/data/requests/user'
 import { ProfileUserDataEditCard } from './-components/profile-user-data-edit-card'
 
 export const Route = createFileRoute('/(private)/app/profile/')({
@@ -11,8 +10,6 @@ export const Route = createFileRoute('/(private)/app/profile/')({
 
 function ProfilePage() {
   const router = Route.useNavigate()
-
-  const { data: user } = userResponse.body
 
   const handleNavigateBack = () => {
     router({
@@ -29,7 +26,7 @@ function ProfilePage() {
         <TitlePage>Perfil</TitlePage>
       </div>
 
-      <ProfileUserDataEditCard user={user} />
+      <ProfileUserDataEditCard />
     </>
   )
 }

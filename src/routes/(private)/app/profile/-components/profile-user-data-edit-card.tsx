@@ -6,6 +6,8 @@ import {
   PenIcon,
   UserIcon,
 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -16,16 +18,29 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import type { ProfileUserEditType } from '@/schemas/profile-user-data-edit-form'
+import { UserService } from '@/services/user/user'
+import type { IUserLogged } from '@/services/user/user.d'
 import { ProfileUserDataEditForm } from './profile-user-data-edit-form'
 
-type ProfileUserDataEditCardProps = {
-  user: ProfileUserEditType
-}
+export function ProfileUserDataEditCard() {
+  const [user, setUser] = useState<IUserLogged>({} as IUserLogged)
 
-export function ProfileUserDataEditCard({
-  user,
-}: ProfileUserDataEditCardProps) {
+  async function fetchData() {
+    try {
+      const res = await UserService.GetUserLogged()
+      if (res.status === 200 || res.status === 204) {
+        const user = res.data.body.data
+        setUser(user)
+      }
+    } catch (_error) {
+      toast.error('Erro ao carregar os dados do usuário')
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
   return (
     <Card>
       <CardHeader className="w-full flex justify-between items-center gap-6">
@@ -98,7 +113,7 @@ export function ProfileUserDataEditCard({
               <Input
                 className="w-full border-0 focus-visible:border-0 focus-visible:ring-0"
                 type="password"
-                value={'*'.repeat(user.password.length)}
+                value={'*'.repeat(8)}
                 placeholder="Insira sua senha"
                 disabled
               />
@@ -115,7 +130,11 @@ export function ProfileUserDataEditCard({
               />
               <Input
                 className="w-full border-0 focus-visible:border-0 focus-visible:ring-0"
-                value={user.birthDate ? String(user.birthDate) : ''}
+                value={Intl.DateTimeFormat('pt-BR', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                }).format(new Date())}
                 placeholder="Insira sua data de nascimento"
                 disabled
               />
