@@ -16,7 +16,7 @@ export class WorkspaceService {
     return res
   }
 
-  static async PostWorkspace(data: IWorkspace) {
+  static async PostWorkspace(data: Omit<IWorkspace, 'id'>) {
     const res = await api.post<IHttpResponse<{ data: IWorkspace }>>(
       '/workspace',
       data

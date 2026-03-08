@@ -75,7 +75,7 @@ function WorkspacesPage() {
             <WorkspaceSearchFilterForm />
           </div>
 
-          <AddWorkspaceButton>
+          <AddWorkspaceButton fetchData={fetchData}>
             <Button
               variant="gradient"
               className="drop-shadow-md hover:drop-shadow-none"

@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { type ComponentProps, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -32,10 +33,16 @@ import {
   type AddWorkspaceFormType,
   addWorkspaceFormSchema,
 } from '@/schemas/add-workspace-button'
+import { WorkspaceService } from '@/services/workspace/workspace'
 
-type AddWorkspaceButtonProps = ComponentProps<'button'>
+type AddWorkspaceButtonProps = ComponentProps<'button'> & {
+  fetchData: () => Promise<void>
+}
 
-export function AddWorkspaceButton({ children }: AddWorkspaceButtonProps) {
+export function AddWorkspaceButton({
+  children,
+  fetchData,
+}: AddWorkspaceButtonProps) {
   const [openModal, setOpenModal] = useState(false)
 
   const form = useForm<AddWorkspaceFormType>({
@@ -46,8 +53,18 @@ export function AddWorkspaceButton({ children }: AddWorkspaceButtonProps) {
     },
   })
 
-  const onSubmit = (data: AddWorkspaceFormType) => {
-    console.log('CREATE_WORKSPACE', data)
+  const onSubmit = async (data: AddWorkspaceFormType) => {
+    try {
+      const res = await WorkspaceService.PostWorkspace(data)
+      if (res.status === 200 || res.status === 201) {
+        toast.success('Workspace criado com sucesso!')
+        fetchData()
+        form.reset()
+        setOpenModal(false)
+      }
+    } catch (_error) {
+      toast.error('Erro ao criar workspace. Por favor, tente novamente.')
+    }
   }
 
   const handleCancelForm = () => {
