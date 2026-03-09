@@ -83,7 +83,7 @@ function TransactionPage() {
           <TransactionFilterForm />
         </div>
 
-        <DashboardAddTransactionButton>
+        <DashboardAddTransactionButton onFetchData={fetchData}>
           <Button variant="gradient">
             <PlusIcon className="size-5 shrink-0 text-foreground" />
             <span>Nova Transação</span>

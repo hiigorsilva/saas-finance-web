@@ -16,10 +16,13 @@ import {
 } from '@/schemas/add-transaction-button'
 import { AddTransactionForm } from './dashboard-add-transaction-form'
 
-type AddTransactionButtonProps = ComponentProps<'button'>
+type AddTransactionButtonProps = ComponentProps<'button'> & {
+  onFetchData: () => Promise<void>
+}
 
 export function DashboardAddTransactionButton({
   children,
+  onFetchData,
 }: AddTransactionButtonProps) {
   const [openModal, setOpenModal] = useState(false)
 
@@ -56,7 +59,11 @@ export function DashboardAddTransactionButton({
 
         <Separator />
 
-        <AddTransactionForm form={form} setOpenModal={setOpenModal} />
+        <AddTransactionForm
+          onFetchData={onFetchData}
+          form={form}
+          setOpenModal={setOpenModal}
+        />
       </DialogContent>
     </Dialog>
   )

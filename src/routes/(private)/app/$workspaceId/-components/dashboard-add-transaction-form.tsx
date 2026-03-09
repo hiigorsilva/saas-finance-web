@@ -1,8 +1,10 @@
+import { useParams } from '@tanstack/react-router'
 import { CalendarIcon } from 'lucide-react'
 import { useState } from 'react'
 import { ptBR } from 'react-day-picker/locale'
 import type { UseFormReturn } from 'react-hook-form'
 import { NumericFormat } from 'react-number-format'
+import { toast } from 'sonner'
 import { v4 as uuidV4 } from 'uuid'
 import type { CreateTransactionType } from '@/@types/transaction/create-transaction'
 import { Button } from '@/components/ui/button'
@@ -37,6 +39,7 @@ import { TRANSACTION_RECURRING_INTERVAL_TYPE_VALUES } from '@/data/labels/transa
 import { TRANSACTION_TYPE_VALUES } from '@/data/labels/transaction-type'
 import { cn } from '@/lib/utils'
 import type { AddTransactionType } from '@/schemas/add-transaction-button'
+import { TransactionService } from '@/services/transaction/transaction'
 import { dateFormatLong } from '@/utils/date-format'
 import {
   transactionCategoryTranslate,
@@ -48,16 +51,29 @@ import {
 type AddTransactionFormProps = {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
   form: UseFormReturn<CreateTransactionType>
+  onFetchData: () => Promise<void>
 }
 
 export function AddTransactionForm({
   setOpenModal,
   form,
+  onFetchData,
 }: AddTransactionFormProps) {
+  const { workspaceId } = useParams({ from: '/(private)/app/$workspaceId' })
   const [isRecurring, setIsRecurring] = useState(false)
 
-  const onSubmit = (data: AddTransactionType) => {
-    console.log('TRANSACTION_CREATED', data)
+  const onSubmit = async (data: AddTransactionType) => {
+    try {
+      const res = await TransactionService.PostTransaction(workspaceId, data)
+      if (res.status === 200 || res.status === 201) {
+        toast.success('Transação criada com sucesso!')
+        onFetchData()
+        form.reset()
+        setOpenModal(false)
+      }
+    } catch (_error) {
+      toast.error('Erro ao criar transação. Por favor, tente novamente.')
+    }
   }
 
   const handleCancelForm = () => {
