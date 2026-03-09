@@ -1,11 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ChevronLeftIcon, PlusIcon } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import { Container } from '@/components/layout/container'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
 import { Button } from '@/components/ui/button'
-import { transactionResponse } from '@/data/requests/transactions'
 import { listTransactionSchema } from '@/schemas/pagination'
+import { TransactionService } from '@/services/transaction/transaction'
+import type { ITransaction } from '@/services/transaction/transaction.d'
+import type { IPaginateResponse } from '@/utils/http'
 import { Pagination } from '../../-components/pagination'
 import { DashboardAddTransactionButton } from '../-components/dashboard-add-transaction-button'
 import { TransactionFilterForm } from './-components/transaction-filter-form'
@@ -29,15 +33,28 @@ function TransactionPage() {
   const { workspaceId } = Route.useParams()
   const router = Route.useNavigate()
 
-  const {
-    data: transactions,
-    currentPage,
-    limit,
-    totalCount,
-    totalPages,
-  } = transactionResponse.body
+  const [transactions, setTransactions] = useState<
+    IPaginateResponse<ITransaction>
+  >({
+    data: [],
+    currentPage: 1,
+    limit: 10,
+    totalCount: 0,
+    totalPages: 0,
+  })
 
-  // const transactions = [] as TransactionType[]
+  async function fetchData() {
+    try {
+      const res = await TransactionService.GetTransactions(workspaceId, 1, 50)
+      if (res.status === 200 || res.status === 204) {
+        const { data, currentPage, limit, totalCount, totalPages } =
+          res.data.body
+        setTransactions({ data, currentPage, limit, totalCount, totalPages })
+      }
+    } catch (_error) {
+      toast.error('Erro ao carregar transações. Por favor, tente novamente.')
+    }
+  }
 
   const handleNavigateBack = () => {
     router({
@@ -45,6 +62,10 @@ function TransactionPage() {
       params: { workspaceId: workspaceId },
     })
   }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   return (
     <Container className="gap-6 py-6">
@@ -72,15 +93,15 @@ function TransactionPage() {
 
       {/* TRANSACTION TABLE */}
       <div className="flex flex-col gap-6">
-        <TransactionTable transactions={transactions} />
+        <TransactionTable transactions={transactions.data} />
       </div>
 
       {transactions && (
         <Pagination
-          currentPage={currentPage}
-          limit={limit}
-          totalCount={totalCount}
-          totalPages={totalPages}
+          currentPage={transactions.currentPage}
+          limit={transactions.limit}
+          totalCount={transactions.totalCount}
+          totalPages={transactions.totalPages}
         />
       )}
     </Container>

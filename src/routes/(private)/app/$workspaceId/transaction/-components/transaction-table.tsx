@@ -5,11 +5,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import type { TransactionType } from '@/data/requests/transactions'
+import type { ITransaction } from '@/services/transaction/transaction.d'
 import { TransactionTableRow } from './transaction-table-row'
 
 type TransactionTableProps = {
-  transactions: TransactionType[]
+  transactions: ITransaction[]
 }
 
 export function TransactionTable({ transactions }: TransactionTableProps) {

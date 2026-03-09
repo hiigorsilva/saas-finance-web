@@ -31,18 +31,21 @@ export function Pagination({
 }: PaginationProps) {
   const router = useNavigate()
 
-  const [page, setPage] = useState(currentPage)
-  const [perPage, setPerPage] = useState(limit)
+  const [page, setPage] = useState(Math.max(1, currentPage))
+  const [perPage, setPerPage] = useState(Math.max(1, limit))
 
   useEffect(() => {
-    setPage(currentPage)
-    setPerPage(limit)
+    setPage(Math.max(1, currentPage))
+    setPerPage(Math.max(1, limit))
   }, [currentPage, limit])
 
   useEffect(() => {
+    const safePage = Math.max(1, page)
+    const safePerPage = Math.max(1, perPage)
+
     router({
       to: '.',
-      search: { page: page, limit: perPage },
+      search: { page: safePage, limit: safePerPage },
       replace: true,
     })
   }, [page, perPage, router])
