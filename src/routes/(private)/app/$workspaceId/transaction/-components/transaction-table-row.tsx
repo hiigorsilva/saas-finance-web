@@ -63,7 +63,10 @@ export function TransactionTableRow({
             </Button>
           </TransactionTableActionEdit>
 
-          <TransactionTableActionRemove transaction={transaction}>
+          <TransactionTableActionRemove
+            transaction={transaction}
+            onFetchData={onFetchData}
+          >
             <Button variant="ghost" size="icon">
               <Trash2Icon className="size-4 shrink-0 text-red-500" />
             </Button>

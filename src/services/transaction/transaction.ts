@@ -66,4 +66,11 @@ export class TransactionService {
     )
     return res
   }
+
+  static async DeleteTransaction(workspaceId: string, transactionId: string) {
+    const res = await api.delete<IHttpResponse<ITransaction>>(
+      `/${workspaceId}/transaction/${transactionId}`
+    )
+    return res
+  }
 }
