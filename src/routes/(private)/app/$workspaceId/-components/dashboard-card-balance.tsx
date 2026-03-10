@@ -15,11 +15,13 @@ import { DashboardCardIcon } from './dashboard-card-icon'
 type DashBoardCardBalanceProps = {
   showAmount: boolean
   showAmountSwitch: React.Dispatch<React.SetStateAction<boolean>>
+  onFetchData: () => Promise<void>
 }
 
 export function DashBoardCardBalance({
   showAmount,
   showAmountSwitch,
+  onFetchData,
 }: DashBoardCardBalanceProps) {
   const handleShowAmountSwitch = () => {
     showAmountSwitch(prevState => {
@@ -90,7 +92,7 @@ export function DashBoardCardBalance({
         </div>
 
         {/* BUTTON */}
-        <DashboardAddTransactionButton>
+        <DashboardAddTransactionButton onFetchData={onFetchData}>
           <Button variant="gradient">
             Nova Transação
             <PlusIcon className="size-4 shrink-0 text-foreground" />

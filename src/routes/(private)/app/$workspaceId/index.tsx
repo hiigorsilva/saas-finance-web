@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ChevronLeftIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Container } from '@/components/layout/container'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
@@ -51,11 +51,17 @@ function DashboardPage() {
   const weekPayments = [] as TransactionType[]
   const expenseByCategory = [] as ExpenseByCategoryType[]
 
+  async function fetchData() {}
+
   const handleNavigateBack = () => {
     router({
       to: '/app',
     })
   }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   return (
     <Container className="gap-6 py-6">
@@ -83,6 +89,7 @@ function DashboardPage() {
             <DashBoardCardBalance
               showAmountSwitch={setShowAmount}
               showAmount={showAmount}
+              onFetchData={fetchData}
             />
 
             <div className="grid grid-cols-3 gap-3">
