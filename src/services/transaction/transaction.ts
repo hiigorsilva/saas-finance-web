@@ -19,9 +19,23 @@ export class TransactionService {
   }
 
   static async PostTransaction(workspaceId: string, data: AddTransactionType) {
+    const { workspaceId: _workspaceId, ...payloadData } = data
+
+    const payload = payloadData.isRecurring
+      ? payloadData
+      : {
+          ...payloadData,
+          amount: payloadData.amount.split(' ')[1].replace(',', '.'),
+          isRecurring: false,
+          recurringInterval: undefined,
+          recurringEndDate: undefined,
+          installmentTotal: undefined,
+          currentInstallment: undefined,
+        }
+
     const res = await api.post<IHttpResponse<ITransaction>>(
       `/${workspaceId}/transaction`,
-      data
+      payload
     )
     return res
   }

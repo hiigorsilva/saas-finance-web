@@ -12,9 +12,9 @@ export type CreateTransactionType = {
   paymentDate: Date
   paymentMethod: TransactionPaymentMethodValuesType
   isRecurring: boolean
-  recurringInterval: TransactionRecurringIntervalValuesType | null
-  recurringEndDate: Date | null
-  installmentTotal: number | null
-  currentInstallment: number | null
+  recurringInterval?: TransactionRecurringIntervalValuesType
+  recurringEndDate?: Date
+  installmentTotal?: number
+  currentInstallment?: number
   description?: string | undefined
 }

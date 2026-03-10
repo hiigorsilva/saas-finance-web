@@ -16,10 +16,10 @@ export const addTransactionSchema = z.object({
   isRecurring: z.boolean(),
   recurringInterval: z
     .enum(TRANSACTION_RECURRING_INTERVAL_TYPE_VALUES)
-    .nullable(),
-  recurringEndDate: z.date().nullable(),
-  installmentTotal: z.number().nullable(),
-  currentInstallment: z.number().nullable(),
+    .optional(),
+  recurringEndDate: z.date().optional(),
+  installmentTotal: z.number().optional(),
+  currentInstallment: z.number().optional(),
 })
 
 export type AddTransactionType = z.infer<typeof addTransactionSchema>
