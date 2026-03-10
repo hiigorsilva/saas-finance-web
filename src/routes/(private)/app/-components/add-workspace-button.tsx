@@ -36,12 +36,12 @@ import {
 import { WorkspaceService } from '@/services/workspace/workspace'
 
 type AddWorkspaceButtonProps = ComponentProps<'button'> & {
-  fetchData: () => Promise<void>
+  onFetchData: () => Promise<void>
 }
 
 export function AddWorkspaceButton({
   children,
-  fetchData,
+  onFetchData,
 }: AddWorkspaceButtonProps) {
   const [openModal, setOpenModal] = useState(false)
 
@@ -58,7 +58,7 @@ export function AddWorkspaceButton({
       const res = await WorkspaceService.PostWorkspace(data)
       if (res.status === 200 || res.status === 201) {
         toast.success('Workspace criado com sucesso!')
-        fetchData()
+        onFetchData()
         form.reset()
         setOpenModal(false)
       }
