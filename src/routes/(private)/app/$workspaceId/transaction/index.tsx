@@ -93,7 +93,10 @@ function TransactionPage() {
 
       {/* TRANSACTION TABLE */}
       <div className="flex flex-col gap-6">
-        <TransactionTable transactions={transactions.data} />
+        <TransactionTable
+          transactions={transactions.data}
+          onFetchData={fetchData}
+        />
       </div>
 
       {transactions && (

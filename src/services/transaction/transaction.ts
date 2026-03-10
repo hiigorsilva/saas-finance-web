@@ -1,4 +1,5 @@
 import type { AddTransactionType } from '@/schemas/add-transaction-button'
+import type { EditTransactionType } from '@/schemas/edit-transaction-button'
 import type { IHttpResponse, IPaginateResponse } from '@/utils/http'
 import { api } from '../api/api'
 import type { ITransaction } from './transaction.d'
@@ -35,6 +36,32 @@ export class TransactionService {
 
     const res = await api.post<IHttpResponse<ITransaction>>(
       `/${workspaceId}/transaction`,
+      payload
+    )
+    return res
+  }
+
+  static async PutTransaction(
+    workspaceId: string,
+    transactionId: string,
+    data: EditTransactionType
+  ) {
+    const { workspaceId: _workspaceId, ...payloadData } = data
+
+    const payload = payloadData.isRecurring
+      ? payloadData
+      : {
+          ...payloadData,
+          amount: payloadData.amount.split(' ')[1].replace(',', '.'),
+          isRecurring: false,
+          recurringInterval: undefined,
+          recurringEndDate: undefined,
+          installmentTotal: undefined,
+          currentInstallment: undefined,
+        }
+
+    const res = await api.put<IHttpResponse<ITransaction>>(
+      `/${workspaceId}/transaction/${transactionId}`,
       payload
     )
     return res

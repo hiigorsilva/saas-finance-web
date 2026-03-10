@@ -16,9 +16,13 @@ import { TransactionTableActionRemove } from './transaction-table-action-remove'
 
 type TransactionTableRowProps = {
   transaction: TransactionType
+  onFetchData: () => Promise<void>
 }
 
-export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
+export function TransactionTableRow({
+  transaction,
+  onFetchData,
+}: TransactionTableRowProps) {
   return (
     <TableRow className="hover:bg-primary/[5%] border-primary/10">
       <TableCell className="text-foreground tracking-tight">
@@ -50,7 +54,10 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
       </TableCell>
       <TableCell>
         <div className="max-w-24 w-full flex justify-center items-center gap-2">
-          <TransactionTableActionEdit transaction={transaction}>
+          <TransactionTableActionEdit
+            transaction={transaction}
+            onFetchData={onFetchData}
+          >
             <Button variant="ghost" size="icon">
               <PenIcon className="size-4 shrink-0 text-muted-foreground" />
             </Button>
