@@ -327,7 +327,7 @@ export function TransactionTableActionEdit({
               />
             </div>
 
-            <div className="flex justify-between items-center gap-6">
+            <div className="w-1/2 flex justify-between items-center gap-6">
               {/* PAYMENT METHOD */}
               <FormField
                 control={form.control}
