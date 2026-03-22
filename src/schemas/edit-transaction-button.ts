@@ -1,7 +1,6 @@
 import z from 'zod'
 import { TRANSACTION_CATEGORY_TYPE_VALUES } from '@/data/labels/transaction-category'
 import { TRANSACTION_PAYMENT_METHOD_TYPE_VALUES } from '@/data/labels/transaction-payment-method'
-import { TRANSACTION_RECURRING_INTERVAL_TYPE_VALUES } from '@/data/labels/transaction-recurring-interval'
 import { TRANSACTION_TYPE_VALUES } from '@/data/labels/transaction-type'
 
 export const editTransactionSchema = z.object({
@@ -13,13 +12,6 @@ export const editTransactionSchema = z.object({
   amount: z.string().trim(),
   paymentDate: z.date(),
   paymentMethod: z.enum(TRANSACTION_PAYMENT_METHOD_TYPE_VALUES),
-  isRecurring: z.boolean(),
-  recurringInterval: z
-    .enum(TRANSACTION_RECURRING_INTERVAL_TYPE_VALUES)
-    .nullable(),
-  recurringEndDate: z.date().nullable(),
-  installmentTotal: z.number().nullable(),
-  currentInstallment: z.number().nullable(),
 })
 
 export type EditTransactionType = z.infer<typeof editTransactionSchema>

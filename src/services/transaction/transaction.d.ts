@@ -9,11 +9,6 @@ export interface ITransaction {
   amount: string
   paymentDate: string
   paymentMethod: TransactionPaymentMethodValuesType
-  isRecurring: boolean
-  recurringInterval: null
-  recurringEndDate: null
-  installmentTotal: null
-  currentInstallment: null
   createdAt: string
   updatedAt: string
 }

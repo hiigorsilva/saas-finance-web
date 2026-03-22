@@ -74,15 +74,10 @@ export function TransactionTableActionEdit({
       name: transaction.name,
       description: transaction.description,
       amount: transaction.amount,
-      isRecurring: transaction.isRecurring,
       type: transaction.type,
       paymentDate: new Date(transaction.paymentDate),
       paymentMethod: transaction.paymentMethod,
       category: transaction.category,
-      recurringInterval: transaction.recurringInterval,
-      currentInstallment: transaction.currentInstallment,
-      installmentTotal: transaction.installmentTotal,
-      recurringEndDate: transaction.recurringEndDate,
     },
   })
 

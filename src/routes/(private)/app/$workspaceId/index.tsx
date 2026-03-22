@@ -49,7 +49,14 @@ function DashboardPage() {
   // const transactions = [] as TransactionType[]
   const latePayments = [] as TransactionType[]
   const weekPayments = [] as TransactionType[]
-  const expenseByCategory = [] as ExpenseByCategoryType[]
+  const expenseByCategory = [
+    {
+      name: 'Alimentação',
+      expense: '500.00',
+      totalExpense: '2000.00',
+      progress: 25,
+    },
+  ] as ExpenseByCategoryType[]
 
   async function fetchData() {}
 

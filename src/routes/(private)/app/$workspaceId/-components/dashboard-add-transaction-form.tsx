@@ -1,5 +1,6 @@
 import { useParams } from '@tanstack/react-router'
-import { CalendarIcon } from 'lucide-react'
+import { CalendarIcon, Loader2Icon } from 'lucide-react'
+import { useState } from 'react'
 import { ptBR } from 'react-day-picker/locale'
 import type { UseFormReturn } from 'react-hook-form'
 import { NumericFormat } from 'react-number-format'
@@ -55,9 +56,16 @@ export function AddTransactionForm({
 }: AddTransactionFormProps) {
   const { workspaceId } = useParams({ from: '/(private)/app/$workspaceId' })
 
+  const [isLoading, setIsLoading] = useState(false)
+
   const onSubmit = async (data: AddTransactionType) => {
+    setIsLoading(true)
     try {
-      const res = await TransactionService.PostTransaction(workspaceId, data)
+      const payload = {
+        ...data,
+        amount: data.amount.split(' ')[1].replace('.', '').replace(',', '.'),
+      }
+      const res = await TransactionService.PostTransaction(workspaceId, payload)
       if (res.status === 200 || res.status === 201) {
         toast.success('Transação criada com sucesso!')
         onFetchData()
@@ -66,6 +74,8 @@ export function AddTransactionForm({
       }
     } catch (_error) {
       toast.error('Erro ao criar transação. Por favor, tente novamente.')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -319,8 +329,14 @@ export function AddTransactionForm({
             Cancelar
           </Button>
 
-          <Button className="flex-1" type="submit" variant="gradient">
-            Criar Transação
+          <Button
+            className="flex-1"
+            type="submit"
+            variant="gradient"
+            disabled={isLoading}
+          >
+            {isLoading && <Loader2Icon className="animate-spin" />}
+            {!isLoading && 'Criar Transação'}
           </Button>
         </div>
       </form>

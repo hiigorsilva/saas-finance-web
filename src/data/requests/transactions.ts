@@ -16,11 +16,6 @@ export type TransactionType = {
   amount: string
   paymentDate: string
   paymentMethod: TransactionPaymentMethodValuesType
-  isRecurring: boolean
-  recurringInterval: null
-  recurringEndDate: null
-  installmentTotal: null
-  currentInstallment: null
   createdAt: string
   updatedAt: string
 }
@@ -37,11 +32,6 @@ const transaction = [
     amount: '147.10',
     paymentDate: '2025-09-10T05:47:32',
     paymentMethod: 'CASH' as TransactionType['paymentMethod'],
-    isRecurring: false,
-    recurringInterval: null,
-    recurringEndDate: null,
-    installmentTotal: null,
-    currentInstallment: null,
     createdAt: '2025-09-10T05:47:32',
     updatedAt: '2025-09-10T05:47:32',
   },
@@ -56,11 +46,6 @@ const transaction = [
     amount: '147.10',
     paymentDate: '2025-09-24T07:31:40',
     paymentMethod: 'PIX' as TransactionType['paymentMethod'],
-    isRecurring: false,
-    recurringInterval: null,
-    recurringEndDate: null,
-    installmentTotal: null,
-    currentInstallment: null,
     createdAt: '2025-09-24T007:31:58',
     updatedAt: '2025-09-24T007:31:58',
   },
@@ -75,11 +60,6 @@ const transaction = [
     category: TRANSACTION_CATEGORY_TYPE.SALARY,
     amount: '2780',
     paymentDate: '2025-09-04T19:07:02',
-    isRecurring: false,
-    recurringInterval: null,
-    recurringEndDate: null,
-    installmentTotal: null,
-    currentInstallment: null,
     createdAt: '2025-09-04T19:07:02',
     updatedAt: '2025-09-04T19:07:02',
   },
@@ -94,11 +74,6 @@ const transaction = [
     amount: '2780',
     paymentDate: '2025-09-04T19:07:02',
     paymentMethod: 'CREDIT_CARD' as TransactionType['paymentMethod'],
-    isRecurring: false,
-    recurringInterval: null,
-    recurringEndDate: null,
-    installmentTotal: null,
-    currentInstallment: null,
     createdAt: '2025-09-04T19:07:02',
     updatedAt: '2025-09-04T19:07:02',
   },

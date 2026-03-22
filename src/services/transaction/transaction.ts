@@ -22,21 +22,9 @@ export class TransactionService {
   static async PostTransaction(workspaceId: string, data: AddTransactionType) {
     const { workspaceId: _workspaceId, ...payloadData } = data
 
-    const payload = payloadData.isRecurring
-      ? payloadData
-      : {
-          ...payloadData,
-          amount: payloadData.amount.split(' ')[1].replace(',', '.'),
-          isRecurring: false,
-          recurringInterval: undefined,
-          recurringEndDate: undefined,
-          installmentTotal: undefined,
-          currentInstallment: undefined,
-        }
-
     const res = await api.post<IHttpResponse<ITransaction>>(
       `/${workspaceId}/transaction`,
-      payload
+      payloadData
     )
     return res
   }
@@ -48,17 +36,10 @@ export class TransactionService {
   ) {
     const { workspaceId: _workspaceId, ...payloadData } = data
 
-    const payload = payloadData.isRecurring
-      ? payloadData
-      : {
-          ...payloadData,
-          amount: payloadData.amount.split(' ')[1].replace(',', '.'),
-          isRecurring: false,
-          recurringInterval: undefined,
-          recurringEndDate: undefined,
-          installmentTotal: undefined,
-          currentInstallment: undefined,
-        }
+    const payload = {
+      ...payloadData,
+      amount: payloadData.amount.split(' ')[1].replace(',', '.'),
+    }
 
     const res = await api.put<IHttpResponse<ITransaction>>(
       `/${workspaceId}/transaction/${transactionId}`,

@@ -36,11 +36,6 @@ export function DashboardAddTransactionButton({
       paymentDate: new Date(),
       paymentMethod: 'CREDIT_CARD',
       category: 'OTHER',
-      isRecurring: false,
-      recurringInterval: undefined,
-      currentInstallment: undefined,
-      installmentTotal: undefined,
-      recurringEndDate: undefined,
     },
   })
 
