@@ -1,16 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ChevronLeftIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import { Container } from '@/components/layout/container'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
 import { DASHBOARD_KEYS } from '@/data/keys/local-storage'
-import type { ExpenseByCategoryType } from '@/data/requests/expense-by-category'
-import {
-  type TransactionType,
-  transactionResponse,
-} from '@/data/requests/transactions'
 import { monthSelectSchema } from '@/schemas/dashboard-select-time'
+import { DashboardService } from '@/services/dashboard/dashboard'
+import type { IDashboard } from '@/services/dashboard/dashboard.d'
 import { DashBoardCardBalance } from './-components/dashboard-card-balance'
 import { DashBoardCardChart } from './-components/dashboard-card-chat'
 import { DashBoardCardExpense } from './-components/dashboard-card-expense'
@@ -38,6 +36,8 @@ function DashboardPage() {
   const router = Route.useNavigate()
   const match = Route.useMatch()
 
+  const [dashboard, setDashboard] = useState<IDashboard | null>(null)
+
   const initialShowAmount = (): boolean => {
     const storedShowAmount = localStorage.getItem(DASHBOARD_KEYS.showAmount)
     if (!storedShowAmount) return false
@@ -45,20 +45,48 @@ function DashboardPage() {
   }
   const [showAmount, setShowAmount] = useState(initialShowAmount)
 
-  const { data: transactions } = transactionResponse.body
-  // const transactions = [] as TransactionType[]
-  const latePayments = [] as TransactionType[]
-  const weekPayments = [] as TransactionType[]
-  const expenseByCategory = [
-    {
-      name: 'Alimentação',
-      expense: '500.00',
-      totalExpense: '2000.00',
-      progress: 25,
-    },
-  ] as ExpenseByCategoryType[]
+  function formattedSearchValue(value?: string) {
+    if (!value) return ''
+    const clearedValue = value.replace(/^"+|"+$/g, '').trim()
+    return clearedValue
+  }
 
-  async function fetchData() {}
+  async function fetchData() {
+    try {
+      const month = formattedSearchValue(match.search.month)
+      const year = formattedSearchValue(match.search.year)
+
+      const res = await DashboardService.GetDashboard(
+        match.params.workspaceId,
+        month,
+        year
+      )
+      if (res.status === 200) {
+        const {
+          resume,
+          expenseByCategory,
+          lastTransactions,
+          latePayments,
+          monthlyDistribution,
+          weeklyPayment,
+        } = res.data.body
+        setDashboard({
+          resume,
+          expenseByCategory,
+          lastTransactions,
+          latePayments,
+          monthlyDistribution,
+          weeklyPayment,
+        })
+      }
+
+      if (res.status === 204) {
+        setDashboard(null)
+      }
+    } catch (_error) {
+      toast.error('Erro ao carregar transações. Por favor, tente novamente.')
+    }
+  }
 
   const handleNavigateBack = () => {
     router({
@@ -68,7 +96,7 @@ function DashboardPage() {
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [match.search.month, match.search.year])
 
   return (
     <Container className="gap-6 py-6">
@@ -97,25 +125,41 @@ function DashboardPage() {
               showAmountSwitch={setShowAmount}
               showAmount={showAmount}
               onFetchData={fetchData}
+              balanceValue={dashboard?.resume?.totalBalance ?? 0}
             />
 
             <div className="grid grid-cols-3 gap-3">
-              <DashBoardCardIncome showAmount={showAmount} />
-              <DashBoardCardExpense showAmount={showAmount} />
-              <DashBoardCardInvestiment showAmount={showAmount} />
+              <DashBoardCardIncome
+                showAmount={showAmount}
+                incomeValue={dashboard?.resume?.totalIncome ?? 0}
+              />
+              <DashBoardCardExpense
+                showAmount={showAmount}
+                expenseValue={dashboard?.resume?.totalExpense ?? 0}
+              />
+              <DashBoardCardInvestiment
+                showAmount={showAmount}
+                investimentValue={dashboard?.resume?.totalInvestment ?? 0}
+              />
             </div>
           </div>
 
           <DashBoardCardChart />
-          <DashBoardCardLastTransactions transactions={transactions} />
+          <DashBoardCardLastTransactions
+            transactions={dashboard?.lastTransactions ?? []}
+          />
         </div>
 
         {/* RIGHTSIDE */}
         <div className="flex flex-col justify-between gap-3 col-span-1 col-start-3">
-          <DashboardCardLatePayment latePayments={latePayments} />
-          <DashboardCardWeekPayment weekPayments={weekPayments} />
+          <DashboardCardLatePayment
+            latePayments={dashboard?.latePayments ?? []}
+          />
+          <DashboardCardWeekPayment
+            weekPayments={dashboard?.weeklyPayment ?? []}
+          />
           <DashboardCardExpenseByCategory
-            expenseByCategory={expenseByCategory}
+            expenseByCategory={dashboard?.expenseByCategory ?? []}
           />
         </div>
       </div>

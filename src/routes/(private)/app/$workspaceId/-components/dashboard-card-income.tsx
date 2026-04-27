@@ -6,9 +6,13 @@ import { DashboardCardIcon } from './dashboard-card-icon'
 
 type DashBoardCardIncomeProps = {
   showAmount: boolean
+  incomeValue: number
 }
 
-export function DashBoardCardIncome({ showAmount }: DashBoardCardIncomeProps) {
+export function DashBoardCardIncome({
+  showAmount,
+  incomeValue,
+}: DashBoardCardIncomeProps) {
   return (
     <Card>
       <CardContent className="flex flex-col gap-2">
@@ -29,7 +33,7 @@ export function DashBoardCardIncome({ showAmount }: DashBoardCardIncomeProps) {
         {/* AMOUNT */}
         <div className="flex flex-col gap-2">
           <strong className="inline-block font-semibold text-xl text-foreground leading-none tracking-tight">
-            {!showAmount && currencyFormat(7700)}
+            {!showAmount && currencyFormat(incomeValue)}
             {showAmount && 'R$ ******'}
           </strong>
 

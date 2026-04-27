@@ -13,6 +13,7 @@ import { DashboardAddTransactionButton } from './dashboard-add-transaction-butto
 import { DashboardCardIcon } from './dashboard-card-icon'
 
 type DashBoardCardBalanceProps = {
+  balanceValue: number
   showAmount: boolean
   showAmountSwitch: React.Dispatch<React.SetStateAction<boolean>>
   onFetchData: () => Promise<void>
@@ -22,6 +23,7 @@ export function DashBoardCardBalance({
   showAmount,
   showAmountSwitch,
   onFetchData,
+  balanceValue,
 }: DashBoardCardBalanceProps) {
   const handleShowAmountSwitch = () => {
     showAmountSwitch(prevState => {
@@ -74,7 +76,7 @@ export function DashBoardCardBalance({
           {/* AMOUNT */}
           <div className="flex flex-col gap-2">
             <strong className="inline-block font-semibold text-xl text-foreground leading-none tracking-tight">
-              {!showAmount && currencyFormat(5200)}
+              {!showAmount && currencyFormat(balanceValue)}
               {showAmount && 'R$ ******'}
             </strong>
 

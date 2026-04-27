@@ -6,10 +6,12 @@ import { DashboardCardIcon } from './dashboard-card-icon'
 
 type DashBoardCardExpenseProps = {
   showAmount: boolean
+  expenseValue: number
 }
 
 export function DashBoardCardExpense({
   showAmount,
+  expenseValue,
 }: DashBoardCardExpenseProps) {
   return (
     <Card>
@@ -31,7 +33,7 @@ export function DashBoardCardExpense({
         {/* AMOUNT */}
         <div className="flex flex-col gap-2">
           <strong className="inline-block font-semibold text-xl text-foreground leading-none tracking-tight">
-            {!showAmount && currencyFormat(2500)}
+            {!showAmount && currencyFormat(expenseValue)}
             {showAmount && 'R$ ******'}
           </strong>
 
