@@ -10,10 +10,26 @@ import {
 
 export const description = 'A donut chart'
 
-const chartData = [
-  { type: 'Receitas', percent: 66.38, fill: 'oklch(0.723 0.219 149.579)' },
-  { type: 'Despesas', percent: 21.55, fill: 'oklch(0.637 0.237 25.331)' },
-  { type: 'Investimentos', percent: 12.07, fill: 'oklch(0.623 0.214 259.815)' },
+const chartData = (monthlyDistribution: {
+  income: number
+  expense: number
+  investment: number
+}) => [
+  {
+    type: 'Receitas',
+    percent: monthlyDistribution.income,
+    fill: 'oklch(0.723 0.219 149.579)',
+  },
+  {
+    type: 'Despesas',
+    percent: monthlyDistribution.expense,
+    fill: 'oklch(0.637 0.237 25.331)',
+  },
+  {
+    type: 'Investimentos',
+    percent: monthlyDistribution.investment,
+    fill: 'oklch(0.623 0.214 259.815)',
+  },
 ]
 
 const chartConfig = {
@@ -34,7 +50,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function DashboardCardChartItem() {
+type DashboardCardChartItemProps = {
+  monthlyDistribution: { income: number; expense: number; investment: number }
+}
+
+export function DashboardCardChartItem({
+  monthlyDistribution,
+}: DashboardCardChartItemProps) {
   return (
     <Card className="flex flex-col p-0 shadow-none border-none">
       <CardContent className="flex-1 p-0">
@@ -48,7 +70,7 @@ export function DashboardCardChartItem() {
               content={<ChartTooltipContent hideLabel />}
             />
             <Pie
-              data={chartData}
+              data={chartData(monthlyDistribution)}
               dataKey="percent"
               nameKey="type"
               innerRadius={72}

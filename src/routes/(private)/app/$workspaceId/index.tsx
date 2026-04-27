@@ -144,7 +144,15 @@ function DashboardPage() {
             </div>
           </div>
 
-          <DashBoardCardChart />
+          <DashBoardCardChart
+            monthlyDistribution={
+              dashboard?.monthlyDistribution ?? {
+                income: 0,
+                expense: 0,
+                investment: 0,
+              }
+            }
+          />
           <DashBoardCardLastTransactions
             transactions={dashboard?.lastTransactions ?? []}
           />
