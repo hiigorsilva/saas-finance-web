@@ -60,6 +60,15 @@ export function DetailsItemInfo() {
         {/* TITLE */}
         <div className="flex flex-col gap-1">
           <span className="inline-block font-normal text-sm text-muted-foreground leading-none tracking-wider uppercase">
+            Slug
+          </span>
+          <p className="font-normal text-base text-foreground">
+            viagem-para-gramado
+          </p>
+        </div>
+        {/* TITLE */}
+        <div className="flex flex-col gap-1">
+          <span className="inline-block font-normal text-sm text-muted-foreground leading-none tracking-wider uppercase">
             Título
           </span>
           <p className="font-normal text-base text-foreground">
@@ -134,6 +143,7 @@ export function WorkspaceDetailsInfoEdit({
   const form = useForm({
     resolver: zodResolver(editWorkspaceDetailsButtonSchema),
     defaultValues: {
+      slug: '',
       title: '',
       description: '',
       type: 'PRIVATE',
@@ -175,6 +185,25 @@ export function WorkspaceDetailsInfoEdit({
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex-1 flex flex-col gap-6"
           >
+            <FormField
+              control={form.control}
+              name="slug"
+              render={({ field }) => (
+                <FormItem className="relative w-full flex flex-col gap-1">
+                  <FormLabel className="font-normal text-base text-foreground">
+                    Slug
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Digite o slug do workspace..."
+                      autoComplete="off"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="absolute -bottom-5 left-0" />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="title"
