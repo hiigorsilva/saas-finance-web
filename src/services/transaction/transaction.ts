@@ -25,6 +25,11 @@ export class TransactionService {
     console.log('payload', payloadData)
     const payload = {
       ...payloadData,
+      amount:
+        payloadData.amount
+          .split(' ')[1]
+          ?.replaceAll('.', '')
+          .replace(',', '.') ?? payloadData.amount,
       paymentDate: format(payloadData.paymentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS"),
     }
 
@@ -44,6 +49,11 @@ export class TransactionService {
     console.log('payload', payloadData)
     const payload = {
       ...payloadData,
+      amount:
+        payloadData.amount
+          .split(' ')[1]
+          ?.replaceAll('.', '')
+          .replace(',', '.') ?? payloadData.amount,
       paymentDate: format(payloadData.paymentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS"),
     }
 

@@ -61,12 +61,7 @@ export function AddTransactionForm({
   const onSubmit = async (data: AddTransactionType) => {
     setIsLoading(true)
     try {
-      const payload = {
-        ...data,
-        amount: data.amount.split(' ')[1].replaceAll('.', '').replace(',', '.'),
-      }
-
-      const res = await TransactionService.PostTransaction(workspaceId, payload)
+      const res = await TransactionService.PostTransaction(workspaceId, data)
       if (res.status === 200 || res.status === 201) {
         toast.success('Transação criada com sucesso!')
         onFetchData()

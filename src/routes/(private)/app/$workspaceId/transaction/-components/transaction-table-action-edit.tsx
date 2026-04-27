@@ -83,14 +83,10 @@ export function TransactionTableActionEdit({
 
   const onSubmit = async (data: EditTransactionType) => {
     try {
-      const payload = {
-        ...data,
-        amount: data.amount.split(' ')[1].replaceAll('.', '').replace(',', '.'),
-      }
       const res = await TransactionService.PutTransaction(
         transaction.workspaceId,
         transaction.id,
-        payload
+        data
       )
       if (res.status === 200 || res.status === 201) {
         toast.success('Transação atualizada com sucesso!')
