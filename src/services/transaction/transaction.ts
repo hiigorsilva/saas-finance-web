@@ -21,10 +21,15 @@ export class TransactionService {
 
   static async PostTransaction(workspaceId: string, data: AddTransactionType) {
     const { workspaceId: _workspaceId, ...payloadData } = data
+    console.log('payload', payloadData)
+    const payload = {
+      ...payloadData,
+      amount: payloadData.amount.split(' ')[1].replace(',', '.'),
+    }
 
     const res = await api.post<IHttpResponse<ITransaction>>(
       `/${workspaceId}/transaction`,
-      payloadData
+      payload
     )
     return res
   }
@@ -35,7 +40,7 @@ export class TransactionService {
     data: EditTransactionType
   ) {
     const { workspaceId: _workspaceId, ...payloadData } = data
-
+    console.log('payload', payloadData)
     const payload = {
       ...payloadData,
       amount: payloadData.amount.split(' ')[1].replace(',', '.'),
