@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import type { AddTransactionType } from '@/schemas/add-transaction-button'
 import type { EditTransactionType } from '@/schemas/edit-transaction-button'
 import type { IHttpResponse, IPaginateResponse } from '@/utils/http'
@@ -24,7 +25,7 @@ export class TransactionService {
     console.log('payload', payloadData)
     const payload = {
       ...payloadData,
-      amount: payloadData.amount.split(' ')[1].replace(',', '.'),
+      paymentDate: format(payloadData.paymentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS"),
     }
 
     const res = await api.post<IHttpResponse<ITransaction>>(
@@ -43,7 +44,7 @@ export class TransactionService {
     console.log('payload', payloadData)
     const payload = {
       ...payloadData,
-      amount: payloadData.amount.split(' ')[1].replace(',', '.'),
+      paymentDate: format(payloadData.paymentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS"),
     }
 
     const res = await api.put<IHttpResponse<ITransaction>>(

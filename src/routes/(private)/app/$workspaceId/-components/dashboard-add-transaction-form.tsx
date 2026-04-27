@@ -63,8 +63,9 @@ export function AddTransactionForm({
     try {
       const payload = {
         ...data,
-        amount: data.amount.split(' ')[1].replace('.', '').replace(',', '.'),
+        amount: data.amount.split(' ')[1].replaceAll('.', '').replace(',', '.'),
       }
+
       const res = await TransactionService.PostTransaction(workspaceId, payload)
       if (res.status === 200 || res.status === 201) {
         toast.success('Transação criada com sucesso!')
@@ -72,7 +73,8 @@ export function AddTransactionForm({
         form.reset()
         setOpenModal(false)
       }
-    } catch (_error) {
+    } catch (error) {
+      console.error(error)
       toast.error('Erro ao criar transação. Por favor, tente novamente.')
     } finally {
       setIsLoading(false)
