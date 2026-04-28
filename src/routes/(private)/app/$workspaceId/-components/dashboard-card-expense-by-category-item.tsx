@@ -22,7 +22,7 @@ export function DashboardCardExpenseByCategoryItem({
           }
         </h3>
         <span className="inline-block font-semibold text-base text-foreground leading-none">
-          {percentFormat(item.progress)}
+          {percentFormat(item.progress, 1)}
         </span>
       </div>
 

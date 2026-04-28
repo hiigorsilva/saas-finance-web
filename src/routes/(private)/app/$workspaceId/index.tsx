@@ -126,20 +126,26 @@ function DashboardPage() {
               showAmount={showAmount}
               onFetchData={fetchData}
               balanceValue={dashboard?.resume?.totalBalance ?? 0}
+              balancePercent={dashboard?.resume?.totalBalancePercent ?? 0}
             />
 
             <div className="grid grid-cols-3 gap-3">
               <DashBoardCardIncome
                 showAmount={showAmount}
                 incomeValue={dashboard?.resume?.totalIncome ?? 0}
+                incomePercent={dashboard?.resume?.totalIncomePercent ?? 0}
               />
               <DashBoardCardExpense
                 showAmount={showAmount}
                 expenseValue={dashboard?.resume?.totalExpense ?? 0}
+                expensePercent={dashboard?.resume?.totalExpensePercent ?? 0}
               />
               <DashBoardCardInvestiment
                 showAmount={showAmount}
                 investimentValue={dashboard?.resume?.totalInvestment ?? 0}
+                investimentPercent={
+                  dashboard?.resume?.totalInvestmentPercent ?? 0
+                }
               />
             </div>
           </div>

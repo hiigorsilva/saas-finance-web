@@ -1,10 +1,9 @@
-export function percentFormat(value: number | string) {
+export function percentFormat(value: number | string, precision = 2) {
   const parseValue = Number(value) / 100
 
   return Intl.NumberFormat('pt-BR', {
     style: 'percent',
-    maximumFractionDigits: 2,
-    minimumFractionDigits: 2,
-    minimumIntegerDigits: 1,
+    maximumFractionDigits: precision,
+    minimumFractionDigits: precision,
   }).format(parseValue)
 }

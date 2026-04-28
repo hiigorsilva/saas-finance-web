@@ -4,9 +4,13 @@ import type { ITransaction } from '../transaction/transaction.d'
 export type IDashboard = {
   resume: {
     totalIncome: number
+    totalIncomePercent: number
     totalExpense: number
+    totalExpensePercent: number
     totalBalance: number
+    totalBalancePercent: number
     totalInvestment: number
+    totalInvestmentPercent: number
   }
   monthlyDistribution: {
     income: number
