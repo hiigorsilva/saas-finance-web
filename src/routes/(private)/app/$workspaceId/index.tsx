@@ -69,7 +69,7 @@ function DashboardPage() {
           latePayments,
           monthlyDistribution,
           weeklyPayment,
-        } = res.data.body
+        } = res.data.body.data
         setDashboard({
           resume,
           expenseByCategory,

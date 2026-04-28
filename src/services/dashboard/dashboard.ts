@@ -4,9 +4,12 @@ import type { IDashboard } from './dashboard.d'
 
 export class DashboardService {
   static async GetDashboard(workspaceId: string, month: string, year: string) {
-    const res = await api.get<IHttpResponse<IDashboard>>(`/${workspaceId}`, {
-      params: { month, year },
-    })
+    const res = await api.get<IHttpResponse<{ data: IDashboard }>>(
+      `/${workspaceId}`,
+      {
+        params: { month, year },
+      }
+    )
     return res
   }
 }
