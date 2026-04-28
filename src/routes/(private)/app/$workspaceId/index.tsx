@@ -158,6 +158,7 @@ function DashboardPage() {
                 investment: 0,
               }
             }
+            search={match.search}
           />
           <DashBoardCardLastTransactions
             transactions={dashboard?.lastTransactions ?? []}

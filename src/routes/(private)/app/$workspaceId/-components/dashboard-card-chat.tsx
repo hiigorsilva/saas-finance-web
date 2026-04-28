@@ -1,6 +1,7 @@
 import { PiggyBankIcon, TrendingDownIcon, TrendingUpIcon } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { MONTHS_OF_YEAR } from '@/data/date/month-select'
 import { percentFormat } from '@/utils/percent-format'
 import { DashboardCardChartItem } from './dashboard-card-chart-item'
 import { DashboardCardIcon } from './dashboard-card-icon'
@@ -13,16 +14,28 @@ type MonthlyDistributionType = {
 
 type DashBoardCardChartProps = {
   monthlyDistribution: MonthlyDistributionType
+  search: {
+    month?: string
+    year?: string
+  }
 }
 
 export function DashBoardCardChart({
   monthlyDistribution,
+  search,
 }: DashBoardCardChartProps) {
+  const monthAndYear = () => {
+    const monthIndex = Number(search.month) - 1
+    const monthName = MONTHS_OF_YEAR[monthIndex] || 'Mês desconhecido'
+    const year = search.year || 'Ano desconhecido'
+    return { month: monthName.label, year }
+  }
+
   return (
     <Card>
       <CardHeader className="gap-6">
         <CardTitle className="text-center">
-          Distribuição mensal da renda
+          Distribuição Mensal - {monthAndYear().month} de {monthAndYear().year}
         </CardTitle>
         <Separator />
       </CardHeader>
