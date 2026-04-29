@@ -6,7 +6,7 @@ export interface ITransaction {
   description: string
   type: TransactionTypeValuesType
   category: TransactionCategoryValuesType
-  amount: string
+  amount: number
   paymentDate: string
   paymentMethod: TransactionPaymentMethodValuesType
   createdAt: string

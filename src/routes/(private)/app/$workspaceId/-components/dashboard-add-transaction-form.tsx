@@ -5,7 +5,6 @@ import { ptBR } from 'react-day-picker/locale'
 import type { UseFormReturn } from 'react-hook-form'
 import { NumericFormat } from 'react-number-format'
 import { toast } from 'sonner'
-import type { CreateTransactionType } from '@/@types/transaction/create-transaction'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import {
@@ -51,19 +50,18 @@ import {
 
 type AddTransactionFormProps = {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
-  form: UseFormReturn<CreateTransactionType>
+  form: UseFormReturn<AddTransactionType>
   onFetchData: () => Promise<void>
 }
 
-export const defaultValuesNewTransaction =
-  (): Partial<CreateTransactionType> => ({
-    name: '',
-    description: '',
-    amount: '0',
-    paymentDate: new Date(),
-    type: TRANSACTION_TYPE.EXPENSE,
-    paymentMethod: TRANSACTION_PAYMENT_METHOD_TYPE.PIX,
-  })
+export const defaultValuesNewTransaction = (): Partial<AddTransactionType> => ({
+  name: '',
+  description: '',
+  amount: 0,
+  paymentDate: new Date(),
+  type: TRANSACTION_TYPE.EXPENSE,
+  paymentMethod: TRANSACTION_PAYMENT_METHOD_TYPE.PIX,
+})
 
 export function AddTransactionForm({
   setOpenModal,
@@ -231,13 +229,20 @@ export function AddTransactionForm({
                 <FormControl>
                   <NumericFormat
                     customInput={Input}
+                    name={field.name}
                     prefix="R$ "
+                    value={field.value ?? ''}
                     placeholder="R$ 0,00"
                     decimalScale={2}
                     thousandSeparator="."
                     decimalSeparator=","
                     fixedDecimalScale
-                    {...field}
+                    allowNegative={false}
+                    getInputRef={field.ref}
+                    onBlur={field.onBlur}
+                    onValueChange={({ floatValue }) => {
+                      field.onChange(floatValue)
+                    }}
                   />
                 </FormControl>
                 <FormMessage className="absolute -bottom-5 left-0" />

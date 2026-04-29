@@ -22,14 +22,9 @@ export class TransactionService {
 
   static async PostTransaction(workspaceId: string, data: AddTransactionType) {
     const { workspaceId: _workspaceId, ...payloadData } = data
-    console.log('payload', payloadData)
     const payload = {
       ...payloadData,
-      amount:
-        payloadData.amount
-          .split(' ')[1]
-          ?.replaceAll('.', '')
-          .replace(',', '.') ?? payloadData.amount,
+      amount: Number(payloadData.amount.toFixed(2)),
       paymentDate: format(payloadData.paymentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS"),
     }
 
