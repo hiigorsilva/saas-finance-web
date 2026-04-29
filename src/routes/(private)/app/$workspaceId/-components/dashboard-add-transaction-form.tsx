@@ -31,8 +31,14 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { TRANSACTION_CATEGORY_TYPE_VALUES } from '@/data/labels/transaction-category'
-import { TRANSACTION_PAYMENT_METHOD_TYPE_VALUES } from '@/data/labels/transaction-payment-method'
-import { TRANSACTION_TYPE_VALUES } from '@/data/labels/transaction-type'
+import {
+  TRANSACTION_PAYMENT_METHOD_TYPE,
+  TRANSACTION_PAYMENT_METHOD_TYPE_VALUES,
+} from '@/data/labels/transaction-payment-method'
+import {
+  TRANSACTION_TYPE,
+  TRANSACTION_TYPE_VALUES,
+} from '@/data/labels/transaction-type'
 import { cn } from '@/lib/utils'
 import type { AddTransactionType } from '@/schemas/add-transaction-button'
 import { TransactionService } from '@/services/transaction/transaction'
@@ -49,6 +55,16 @@ type AddTransactionFormProps = {
   onFetchData: () => Promise<void>
 }
 
+export const defaultValuesNewTransaction =
+  (): Partial<CreateTransactionType> => ({
+    name: '',
+    description: '',
+    amount: '0',
+    paymentDate: new Date(),
+    type: TRANSACTION_TYPE.EXPENSE,
+    paymentMethod: TRANSACTION_PAYMENT_METHOD_TYPE.PIX,
+  })
+
 export function AddTransactionForm({
   setOpenModal,
   form,
@@ -64,8 +80,8 @@ export function AddTransactionForm({
       const res = await TransactionService.PostTransaction(workspaceId, data)
       if (res.status === 200 || res.status === 201) {
         toast.success('Transação criada com sucesso!')
-        onFetchData()
-        form.reset()
+        await onFetchData()
+        form.reset(defaultValuesNewTransaction())
         setOpenModal(false)
       }
     } catch (error) {
@@ -77,7 +93,7 @@ export function AddTransactionForm({
   }
 
   const handleCancelForm = () => {
-    form.reset()
+    form.reset(defaultValuesNewTransaction())
     setOpenModal(false)
   }
 
@@ -157,12 +173,9 @@ export function AddTransactionForm({
               <FormItem className="relative w-full">
                 <FormLabel className="font-semibold">Tipo *</FormLabel>
                 <FormControl>
-                  <Select
-                    defaultValue={field.value}
-                    onValueChange={field.onChange}
-                  >
+                  <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger className="max-w-72 w-full min-h-10">
-                      <SelectValue {...field} placeholder="Selecione o tipo" />
+                      <SelectValue placeholder="Selecione o tipo" />
                     </SelectTrigger>
 
                     <SelectContent>
@@ -187,12 +200,9 @@ export function AddTransactionForm({
               <FormItem className="relative w-full">
                 <FormLabel className="font-semibold">Categoria *</FormLabel>
                 <FormControl>
-                  <Select
-                    defaultValue={field.value}
-                    onValueChange={field.onChange}
-                  >
+                  <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger className="max-w-72 w-full">
-                      <SelectValue {...field} placeholder="Selecione o tipo" />
+                      <SelectValue placeholder="Selecione o tipo" />
                     </SelectTrigger>
 
                     <SelectContent>
@@ -289,15 +299,9 @@ export function AddTransactionForm({
               <FormItem className="relative w-full">
                 <FormLabel className="font-semibold">Tipo *</FormLabel>
                 <FormControl>
-                  <Select
-                    defaultValue={TRANSACTION_PAYMENT_METHOD_TYPE_VALUES[0]}
-                    onValueChange={field.onChange}
-                  >
+                  <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger className="max-w-72 w-full min-h-10">
-                      <SelectValue
-                        {...field}
-                        placeholder="Selecionar método de pagamento"
-                      />
+                      <SelectValue placeholder="Selecionar método de pagamento" />
                     </SelectTrigger>
 
                     <SelectContent>
