@@ -39,7 +39,10 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import { TRANSACTION_CATEGORY_TYPE_VALUES } from '@/data/labels/transaction-category'
-import { TRANSACTION_PAYMENT_METHOD_TYPE_VALUES } from '@/data/labels/transaction-payment-method'
+import {
+  TRANSACTION_PAYMENT_METHOD_TYPE,
+  TRANSACTION_PAYMENT_METHOD_TYPE_VALUES,
+} from '@/data/labels/transaction-payment-method'
 import { TRANSACTION_TYPE_VALUES } from '@/data/labels/transaction-type'
 import type { TransactionType } from '@/data/requests/transactions'
 import { cn } from '@/lib/utils'
@@ -60,6 +63,40 @@ type TransactionTableActionEditProps = ComponentProps<'button'> & {
   onFetchData: () => Promise<void>
 }
 
+function normalizePaymentMethod(
+  paymentMethod: string
+): EditTransactionType['paymentMethod'] {
+  const normalizedValue =
+    paymentMethod === 'DEBEIT_CARD'
+      ? TRANSACTION_PAYMENT_METHOD_TYPE.DEBIT_CARD
+      : paymentMethod
+
+  if (
+    TRANSACTION_PAYMENT_METHOD_TYPE_VALUES.includes(
+      normalizedValue as EditTransactionType['paymentMethod']
+    )
+  ) {
+    return normalizedValue as EditTransactionType['paymentMethod']
+  }
+
+  return TRANSACTION_PAYMENT_METHOD_TYPE.OTHER
+}
+
+function defaultValuesEditTransaction(
+  transaction: TransactionType
+): EditTransactionType {
+  return {
+    workspaceId: transaction.workspaceId,
+    name: transaction.name,
+    description: transaction.description,
+    amount: Number(transaction.amount),
+    type: transaction.type,
+    paymentDate: new Date(transaction.paymentDate),
+    paymentMethod: normalizePaymentMethod(transaction.paymentMethod),
+    category: transaction.category,
+  }
+}
+
 export function TransactionTableActionEdit({
   transaction,
   children,
@@ -69,17 +106,13 @@ export function TransactionTableActionEdit({
 
   const form = useForm<EditTransactionType>({
     resolver: zodResolver(editTransactionSchema),
-    defaultValues: {
-      workspaceId: transaction.workspaceId,
-      name: transaction.name,
-      description: transaction.description,
-      amount: Number(transaction.amount),
-      type: transaction.type,
-      paymentDate: new Date(transaction.paymentDate),
-      paymentMethod: transaction.paymentMethod,
-      category: transaction.category,
-    },
+    defaultValues: defaultValuesEditTransaction(transaction),
   })
+
+  const handleOpenChange = (open: boolean) => {
+    form.reset(defaultValuesEditTransaction(transaction))
+    setOpenModal(open)
+  }
 
   const onSubmit = async (data: EditTransactionType) => {
     try {
@@ -91,7 +124,7 @@ export function TransactionTableActionEdit({
       if (res.status === 200 || res.status === 201) {
         toast.success('Transação atualizada com sucesso!')
         onFetchData()
-        form.reset()
+        form.reset(defaultValuesEditTransaction(transaction))
         setOpenModal(false)
       }
     } catch (error) {
@@ -101,7 +134,7 @@ export function TransactionTableActionEdit({
   }
 
   const handleCancelForm = () => {
-    form.reset()
+    form.reset(defaultValuesEditTransaction(transaction))
     setOpenModal(false)
   }
 
@@ -110,7 +143,7 @@ export function TransactionTableActionEdit({
   }
 
   return (
-    <Dialog open={openModal} onOpenChange={setOpenModal}>
+    <Dialog open={openModal} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogContent className="max-h-[80dvh] h-full overflow-y-auto">

@@ -59,7 +59,7 @@ export const transactionIconByPaymentMethod = (transactionType: string) => {
         />
       )
 
-    case TRANSACTION_PAYMENT_METHOD_TYPE.DEBEIT_CARD:
+    case TRANSACTION_PAYMENT_METHOD_TYPE.DEBIT_CARD:
       return (
         <CreditCardIcon
           className="size-5 shrink-0 text-primary"
@@ -159,9 +159,9 @@ export const transactionPaymentMethodTranslate = (
         TRANSACTION_PAYMENT_METHOD_TYPE.CREDIT_CARD
       ]
 
-    case TRANSACTION_PAYMENT_METHOD_TYPE.DEBEIT_CARD:
+    case TRANSACTION_PAYMENT_METHOD_TYPE.DEBIT_CARD:
       return TRANSACTION_PAYMENT_METHOD_LABELS[
-        TRANSACTION_PAYMENT_METHOD_TYPE.DEBEIT_CARD
+        TRANSACTION_PAYMENT_METHOD_TYPE.DEBIT_CARD
       ]
 
     case TRANSACTION_PAYMENT_METHOD_TYPE.BANK_SLIP:
