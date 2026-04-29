@@ -73,7 +73,7 @@ export function TransactionTableActionEdit({
       workspaceId: transaction.workspaceId,
       name: transaction.name,
       description: transaction.description,
-      amount: transaction.amount,
+      amount: Number(transaction.amount),
       type: transaction.type,
       paymentDate: new Date(transaction.paymentDate),
       paymentMethod: transaction.paymentMethod,
@@ -195,14 +195,11 @@ export function TransactionTableActionEdit({
                     <FormLabel className="font-semibold">Tipo *</FormLabel>
                     <FormControl>
                       <Select
-                        defaultValue={field.value}
+                        value={field.value}
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger className="max-w-72 w-full min-h-10">
-                          <SelectValue
-                            {...field}
-                            placeholder="Selecione o tipo"
-                          />
+                          <SelectValue placeholder="Selecione o tipo" />
                         </SelectTrigger>
 
                         <SelectContent>
@@ -228,14 +225,11 @@ export function TransactionTableActionEdit({
                     <FormLabel className="font-semibold">Categoria *</FormLabel>
                     <FormControl>
                       <Select
-                        defaultValue={field.value}
+                        value={field.value}
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger className="max-w-72 w-full">
-                          <SelectValue
-                            {...field}
-                            placeholder="Selecione o tipo"
-                          />
+                          <SelectValue placeholder="Selecione o tipo" />
                         </SelectTrigger>
 
                         <SelectContent>
@@ -264,13 +258,20 @@ export function TransactionTableActionEdit({
                     <FormControl>
                       <NumericFormat
                         customInput={Input}
+                        name={field.name}
                         prefix="R$ "
+                        value={field.value ?? ''}
                         placeholder="R$ 0,00"
                         decimalScale={2}
                         thousandSeparator="."
                         decimalSeparator=","
                         fixedDecimalScale
-                        {...field}
+                        allowNegative={false}
+                        getInputRef={field.ref}
+                        onBlur={field.onBlur}
+                        onValueChange={({ floatValue }) => {
+                          field.onChange(floatValue)
+                        }}
                       />
                     </FormControl>
                     <FormMessage className="absolute -bottom-5 left-0" />
@@ -333,14 +334,11 @@ export function TransactionTableActionEdit({
                     <FormLabel className="font-semibold">Tipo *</FormLabel>
                     <FormControl>
                       <Select
-                        defaultValue={TRANSACTION_PAYMENT_METHOD_TYPE_VALUES[0]}
+                        value={field.value}
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger className="max-w-72 w-full min-h-10">
-                          <SelectValue
-                            {...field}
-                            placeholder="Selecionar método de pagamento"
-                          />
+                          <SelectValue placeholder="Selecionar método de pagamento" />
                         </SelectTrigger>
 
                         <SelectContent>

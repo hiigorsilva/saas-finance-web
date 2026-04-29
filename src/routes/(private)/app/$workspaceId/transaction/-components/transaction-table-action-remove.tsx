@@ -39,8 +39,8 @@ export function TransactionTableActionRemove({
         id
       )
       if (res.status === 200 || res.status === 204) {
-        onFetchData()
         toast.success('Transação removida com sucesso!')
+        await onFetchData()
       }
     } catch (_error) {
       toast.error('Erro ao remover transação. Tente novamente mais tarde.')

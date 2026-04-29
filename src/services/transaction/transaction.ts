@@ -21,11 +21,10 @@ export class TransactionService {
   }
 
   static async PostTransaction(workspaceId: string, data: AddTransactionType) {
-    const { workspaceId: _workspaceId, ...payloadData } = data
     const payload = {
-      ...payloadData,
-      amount: Number(payloadData.amount.toFixed(2)),
-      paymentDate: format(payloadData.paymentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS"),
+      ...data,
+      amount: Number(data.amount.toFixed(2)),
+      paymentDate: format(data.paymentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS"),
     }
 
     const res = await api.post<IHttpResponse<ITransaction>>(
@@ -40,16 +39,10 @@ export class TransactionService {
     transactionId: string,
     data: EditTransactionType
   ) {
-    const { workspaceId: _workspaceId, ...payloadData } = data
-    console.log('payload', payloadData)
     const payload = {
-      ...payloadData,
-      amount:
-        payloadData.amount
-          .split(' ')[1]
-          ?.replaceAll('.', '')
-          .replace(',', '.') ?? payloadData.amount,
-      paymentDate: format(payloadData.paymentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS"),
+      ...data,
+      amount: Number(data.amount.toFixed(2)),
+      paymentDate: format(data.paymentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS"),
     }
 
     const res = await api.put<IHttpResponse<ITransaction>>(
