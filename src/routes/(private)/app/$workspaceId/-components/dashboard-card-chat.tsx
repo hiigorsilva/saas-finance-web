@@ -1,16 +1,41 @@
 import { PiggyBankIcon, TrendingDownIcon, TrendingUpIcon } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { MONTHS_OF_YEAR } from '@/data/date/month-select'
 import { percentFormat } from '@/utils/percent-format'
 import { DashboardCardChartItem } from './dashboard-card-chart-item'
 import { DashboardCardIcon } from './dashboard-card-icon'
 
-export function DashBoardCardChart() {
+type MonthlyDistributionType = {
+  income: number
+  expense: number
+  investment: number
+}
+
+type DashBoardCardChartProps = {
+  monthlyDistribution: MonthlyDistributionType
+  search: {
+    month?: string
+    year?: string
+  }
+}
+
+export function DashBoardCardChart({
+  monthlyDistribution,
+  search,
+}: DashBoardCardChartProps) {
+  const monthAndYear = () => {
+    const monthIndex = Number(search.month) - 1
+    const monthName = MONTHS_OF_YEAR[monthIndex] || 'Mês desconhecido'
+    const year = search.year || 'Ano desconhecido'
+    return { month: monthName.label, year }
+  }
+
   return (
     <Card>
       <CardHeader className="gap-6">
         <CardTitle className="text-center">
-          Distribuição mensal da renda
+          Distribuição Mensal - {monthAndYear().month} de {monthAndYear().year}
         </CardTitle>
         <Separator />
       </CardHeader>
@@ -29,7 +54,7 @@ export function DashBoardCardChart() {
             <h3 className="w-full font-semibold text-green-500">Receitas</h3>
 
             <strong className="inline-block font-semibold text-green-500">
-              {percentFormat(66.38)}
+              {percentFormat(monthlyDistribution.income)}
             </strong>
           </div>
 
@@ -45,7 +70,7 @@ export function DashBoardCardChart() {
             <h3 className="w-full font-semibold text-red-500">Despesas</h3>
 
             <strong className="inline-block font-semibold text-red-500">
-              {percentFormat(21.55)}
+              {percentFormat(monthlyDistribution.expense)}
             </strong>
           </div>
 
@@ -63,13 +88,17 @@ export function DashBoardCardChart() {
             </h3>
 
             <strong className="inline-block font-semibold text-blue-500">
-              {percentFormat(12.07)}
+              {percentFormat(monthlyDistribution.investment)}
             </strong>
           </div>
         </div>
 
         {/* CHART */}
-        <DashboardCardChartItem />
+        {monthlyDistribution.income === 0 &&
+        monthlyDistribution.expense === 0 &&
+        monthlyDistribution.investment === 0 ? null : (
+          <DashboardCardChartItem monthlyDistribution={monthlyDistribution} />
+        )}
       </CardContent>
     </Card>
   )

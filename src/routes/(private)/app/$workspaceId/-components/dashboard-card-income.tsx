@@ -1,4 +1,4 @@
-import { ArrowUpIcon, TrendingUpIcon } from 'lucide-react'
+import { ArrowDownIcon, ArrowUpIcon, TrendingUpIcon } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { currencyFormat } from '@/utils/currency-format'
 import { percentFormat } from '@/utils/percent-format'
@@ -6,9 +6,15 @@ import { DashboardCardIcon } from './dashboard-card-icon'
 
 type DashBoardCardIncomeProps = {
   showAmount: boolean
+  incomeValue: number
+  incomePercent: number
 }
 
-export function DashBoardCardIncome({ showAmount }: DashBoardCardIncomeProps) {
+export function DashBoardCardIncome({
+  showAmount,
+  incomeValue,
+  incomePercent,
+}: DashBoardCardIncomeProps) {
   return (
     <Card>
       <CardContent className="flex flex-col gap-2">
@@ -29,14 +35,21 @@ export function DashBoardCardIncome({ showAmount }: DashBoardCardIncomeProps) {
         {/* AMOUNT */}
         <div className="flex flex-col gap-2">
           <strong className="inline-block font-semibold text-xl text-foreground leading-none tracking-tight">
-            {!showAmount && currencyFormat(7700)}
+            {!showAmount && currencyFormat(incomeValue)}
             {showAmount && 'R$ ******'}
           </strong>
 
           <div className="flex justify-start items-center gap-2">
-            <div className="w-fit h-fit flex justify-center items-center gap-1 text-xs text-green-500 bg-green-500/10 border border-green-500/25 rounded-full pl-1.5 pr-2 py-0.5">
-              <ArrowUpIcon className="size-3 shrink-0 text-green-500" />
-              {!showAmount && percentFormat(1.08)}
+            <div
+              className={`w-fit h-fit flex justify-center items-center gap-1 text-xs text-${incomePercent >= 0 ? 'green' : 'red'}-500 bg-${incomePercent >= 0 ? 'green' : 'red'}-500/10 border border-${incomePercent >= 0 ? 'green' : 'red'}-500/25 rounded-full pl-1.5 pr-2 py-0.5`}
+            >
+              {incomePercent >= 0 && (
+                <ArrowUpIcon className="size-3 shrink-0 text-green-500" />
+              )}
+              {incomePercent < 0 && (
+                <ArrowDownIcon className="size-3 shrink-0 text-red-500" />
+              )}
+              {!showAmount && percentFormat(incomePercent, 1)}
               {showAmount && '****%'}
             </div>
             <span className="inline-block font-normal text-xs text-muted-foreground leading-none">

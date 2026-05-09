@@ -5,14 +5,18 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import type { TransactionType } from '@/data/requests/transactions'
+import type { ITransaction } from '@/services/transaction/transaction.d'
 import { TransactionTableRow } from './transaction-table-row'
 
 type TransactionTableProps = {
-  transactions: TransactionType[]
+  transactions: ITransaction[]
+  onFetchData: () => Promise<void>
 }
 
-export function TransactionTable({ transactions }: TransactionTableProps) {
+export function TransactionTable({
+  transactions,
+  onFetchData,
+}: TransactionTableProps) {
   return (
     <div className="flex flex-col border border-primary/10 rounded-lg overflow-hidden">
       <Table>
@@ -36,6 +40,7 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
               <TransactionTableRow
                 key={transaction.id}
                 transaction={transaction}
+                onFetchData={onFetchData}
               />
             ))}
         </TableBody>

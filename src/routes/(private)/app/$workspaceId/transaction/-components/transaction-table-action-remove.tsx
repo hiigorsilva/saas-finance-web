@@ -1,5 +1,6 @@
 import { Loader2Icon } from 'lucide-react'
 import { type ComponentProps, useState } from 'react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -11,14 +12,17 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import type { TransactionType } from '@/data/requests/transactions'
+import { TransactionService } from '@/services/transaction/transaction'
 
 type TransactionTableActionRemoveProps = ComponentProps<'button'> & {
   transaction: TransactionType
+  onFetchData: () => Promise<void>
 }
 
 export function TransactionTableActionRemove({
   transaction,
   children,
+  onFetchData,
 }: TransactionTableActionRemoveProps) {
   const [openModal, setOpenModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -29,10 +33,21 @@ export function TransactionTableActionRemove({
 
   const handleRemoveTransaction = async (id: string) => {
     setIsLoading(true)
-    console.log('TRANSACTION_REMOVED', id)
-    await new Promise(resolve => setTimeout(resolve, 3000))
-    setIsLoading(false)
-    setOpenModal(prevState => !prevState)
+    try {
+      const res = await TransactionService.DeleteTransaction(
+        transaction.workspaceId,
+        id
+      )
+      if (res.status === 200 || res.status === 204) {
+        toast.success('Transação removida com sucesso!')
+        await onFetchData()
+      }
+    } catch (_error) {
+      toast.error('Erro ao remover transação. Tente novamente mais tarde.')
+    } finally {
+      setIsLoading(false)
+      setOpenModal(prevState => !prevState)
+    }
   }
 
   return (

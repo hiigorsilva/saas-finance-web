@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -13,10 +14,14 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { useAuth } from '@/contexts/auth-context'
 import { type LoginFormType, loginFormSchema } from '@/schemas/login-form'
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(true)
+
+  const navigate = useNavigate()
+  const { signIn } = useAuth()
 
   const form = useForm<LoginFormType>({
     resolver: zodResolver(loginFormSchema),
@@ -26,8 +31,14 @@ export function LoginForm() {
     },
   })
 
-  const onSubmit = (data: LoginFormType) => {
-    console.log('REGISTER', data)
+  async function onSubmit(data: LoginFormType) {
+    try {
+      await signIn(data)
+      await navigate({ to: '/' })
+    } catch (_error) {
+      toast.error('Falha ao realizar o login.')
+    } finally {
+    }
   }
 
   const handleToggleShowPassword = () => {

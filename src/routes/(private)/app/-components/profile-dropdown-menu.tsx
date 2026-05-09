@@ -1,5 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { ChevronDownIcon, LogOutIcon } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -9,18 +10,38 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useAuth } from '@/contexts/auth-context'
+import { UserService } from '@/services/user/user'
+import type { IUserLogged } from '@/services/user/user.d'
 import { navigateProfileLinks } from '../-data/navigate-profile-links'
 import { ProfileImage } from './profile-image'
 
 export function ProfileDropdownMenu() {
-  const router = useNavigate()
+  const { signOut } = useAuth()
+  const navigate = useNavigate()
 
-  const handleSignOut = () => {
-    router({
-      to: '/login',
-      replace: true,
-    })
+  const [user, setUser] = useState<IUserLogged>({} as IUserLogged)
+
+  async function fetchData() {
+    const res = await UserService.GetUserLogged()
+    if (res.status === 200 || res.status === 204) {
+      const user = res.data.body.data
+      setUser(user)
+    }
   }
+
+  const handleSignOut = async () => {
+    signOut()
+    await navigate({ to: '/login', replace: true })
+  }
+
+  async function effectFn() {
+    await fetchData()
+  }
+
+  useEffect(() => {
+    effectFn()
+  }, [])
 
   return (
     <DropdownMenu>
@@ -43,10 +64,10 @@ export function ProfileDropdownMenu() {
         <div className="flex flex-col items-start gap-3">
           <div className="flex flex-col items-start gap-2">
             <DropdownMenuLabel className="font-semibold text-base text-foreground leading-none p-0">
-              Higor Silva
+              {user.name}
             </DropdownMenuLabel>
             <span className="font-normal text-sm text-muted-foreground leading-none">
-              higorscontato@gmail.com
+              {user.email}
             </span>
           </div>
 

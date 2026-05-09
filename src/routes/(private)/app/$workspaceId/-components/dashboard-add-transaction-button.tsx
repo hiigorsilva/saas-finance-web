@@ -14,34 +14,33 @@ import {
   type AddTransactionType,
   addTransactionSchema,
 } from '@/schemas/add-transaction-button'
-import { AddTransactionForm } from './dashboard-add-transaction-form'
+import {
+  AddTransactionForm,
+  defaultValuesNewTransaction,
+} from './dashboard-add-transaction-form'
 
-type AddTransactionButtonProps = ComponentProps<'button'>
+type AddTransactionButtonProps = ComponentProps<'button'> & {
+  onFetchData: () => Promise<void>
+}
 
 export function DashboardAddTransactionButton({
   children,
+  onFetchData,
 }: AddTransactionButtonProps) {
   const [openModal, setOpenModal] = useState(false)
 
   const form = useForm<AddTransactionType>({
     resolver: zodResolver(addTransactionSchema),
-    defaultValues: {
-      workspaceId: '',
-      name: '',
-      description: '',
-      type: 'EXPENSE',
-      paymentDate: new Date(),
-      paymentMethod: 'CREDIT_CARD',
-      category: 'OTHER',
-      recurringInterval: null,
-      currentInstallment: null,
-      installmentTotal: null,
-      recurringEndDate: null,
-    },
+    defaultValues: defaultValuesNewTransaction(),
   })
 
+  function handleOpenChange(open: boolean) {
+    if (!open) form.reset(defaultValuesNewTransaction())
+    setOpenModal(open)
+  }
+
   return (
-    <Dialog open={openModal} onOpenChange={setOpenModal}>
+    <Dialog open={openModal} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogContent className="max-h-[80dvh] h-full overflow-y-auto">
@@ -56,7 +55,11 @@ export function DashboardAddTransactionButton({
 
         <Separator />
 
-        <AddTransactionForm form={form} setOpenModal={setOpenModal} />
+        <AddTransactionForm
+          onFetchData={onFetchData}
+          form={form}
+          setOpenModal={setOpenModal}
+        />
       </DialogContent>
     </Dialog>
   )

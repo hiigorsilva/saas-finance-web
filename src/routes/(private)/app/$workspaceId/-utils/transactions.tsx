@@ -9,10 +9,6 @@ import {
   TRANSACTION_PAYMENT_METHOD_TYPE,
 } from '@/data/labels/transaction-payment-method'
 import {
-  TRANSACTION_RECURRING_INTERVAL_TYPE,
-  TRANSACTION_RECURRING_INTERVAL_TYPE_LABELS,
-} from '@/data/labels/transaction-recurring-interval'
-import {
   TRANSACTION_STATUS_LABELS,
   TRANSACTION_STATUS_TYPE,
 } from '@/data/labels/transaction-status'
@@ -63,7 +59,7 @@ export const transactionIconByPaymentMethod = (transactionType: string) => {
         />
       )
 
-    case TRANSACTION_PAYMENT_METHOD_TYPE.DEBEIT_CARD:
+    case TRANSACTION_PAYMENT_METHOD_TYPE.DEBIT_CARD:
       return (
         <CreditCardIcon
           className="size-5 shrink-0 text-primary"
@@ -163,9 +159,9 @@ export const transactionPaymentMethodTranslate = (
         TRANSACTION_PAYMENT_METHOD_TYPE.CREDIT_CARD
       ]
 
-    case TRANSACTION_PAYMENT_METHOD_TYPE.DEBEIT_CARD:
+    case TRANSACTION_PAYMENT_METHOD_TYPE.DEBIT_CARD:
       return TRANSACTION_PAYMENT_METHOD_LABELS[
-        TRANSACTION_PAYMENT_METHOD_TYPE.DEBEIT_CARD
+        TRANSACTION_PAYMENT_METHOD_TYPE.DEBIT_CARD
       ]
 
     case TRANSACTION_PAYMENT_METHOD_TYPE.BANK_SLIP:
@@ -255,35 +251,6 @@ export const transactionStatusTranslate = (transactionStatus: string) => {
 
     case TRANSACTION_STATUS_TYPE.INACTIVE:
       return TRANSACTION_STATUS_LABELS[TRANSACTION_STATUS_TYPE.INACTIVE]
-
-    default:
-      return 'Outro'
-  }
-}
-
-export const transactionRecurringIntervalTranslate = (
-  transactionInterval: string
-) => {
-  switch (transactionInterval) {
-    case TRANSACTION_RECURRING_INTERVAL_TYPE.DAILY:
-      return TRANSACTION_RECURRING_INTERVAL_TYPE_LABELS[
-        TRANSACTION_RECURRING_INTERVAL_TYPE.DAILY
-      ]
-
-    case TRANSACTION_RECURRING_INTERVAL_TYPE.WEEKLY:
-      return TRANSACTION_RECURRING_INTERVAL_TYPE_LABELS[
-        TRANSACTION_RECURRING_INTERVAL_TYPE.WEEKLY
-      ]
-
-    case TRANSACTION_RECURRING_INTERVAL_TYPE.MONTHLY:
-      return TRANSACTION_RECURRING_INTERVAL_TYPE_LABELS[
-        TRANSACTION_RECURRING_INTERVAL_TYPE.MONTHLY
-      ]
-
-    case TRANSACTION_RECURRING_INTERVAL_TYPE.YEARLY:
-      return TRANSACTION_RECURRING_INTERVAL_TYPE_LABELS[
-        TRANSACTION_RECURRING_INTERVAL_TYPE.YEARLY
-      ]
 
     default:
       return 'Outro'

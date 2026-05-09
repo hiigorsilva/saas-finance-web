@@ -8,7 +8,7 @@ import {
   MailIcon,
   UserIcon,
 } from 'lucide-react'
-import { type ComponentProps, useState } from 'react'
+import { type ComponentProps, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
@@ -42,7 +42,7 @@ import {
 import { dateFormatLong } from '@/utils/date-format'
 
 type ProfileUserDataEditFormProps = ComponentProps<'button'> & {
-  userData: ProfileUserEditType
+  userData: Omit<ProfileUserEditType, 'id' | 'password'>
 }
 
 export function ProfileUserDataEditForm({
@@ -57,7 +57,7 @@ export function ProfileUserDataEditForm({
     defaultValues: {
       name: userData.name,
       email: userData.email,
-      password: userData.password,
+      // password: userData.password,
       birthDate: userData.birthDate ?? undefined,
     },
   })
@@ -81,6 +81,15 @@ export function ProfileUserDataEditForm({
     if (date <= currentDate) return false
     return true
   }
+
+  useEffect(() => {
+    form.reset({
+      name: userData.name,
+      email: userData.email,
+      // password: userData.password,
+      birthDate: userData.birthDate ? new Date(userData.birthDate) : undefined,
+    })
+  }, [userData])
 
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>

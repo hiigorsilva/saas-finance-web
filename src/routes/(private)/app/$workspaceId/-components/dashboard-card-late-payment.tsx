@@ -26,7 +26,7 @@ export function DashboardCardLatePayment({
         </div>
         <Separator />
       </CardHeader>
-      <CardContent className="flex flex-auto justify-center items-center gap-6">
+      <CardContent className="flex flex-none justify-center items-center gap-6">
         <Table>
           <TableHeader className="sr-only">
             <TableRow>

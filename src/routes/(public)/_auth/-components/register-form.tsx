@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon, UserIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -13,6 +14,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { useAuth } from '@/contexts/auth-context'
 import {
   type RegisterFormType,
   registerFormSchema,
@@ -20,6 +22,9 @@ import {
 
 export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(true)
+
+  const navigate = useNavigate()
+  const { register } = useAuth()
 
   const form = useForm<RegisterFormType>({
     resolver: zodResolver(registerFormSchema),
@@ -30,13 +35,20 @@ export function RegisterForm() {
     },
   })
 
-  const onSubmit = (data: RegisterFormType) => {
-    console.log('REGISTER', data)
+  async function onSubmit(data: RegisterFormType) {
+    try {
+      await register(data)
+      await navigate({ to: '/' })
+    } catch (_error) {
+      toast.error('Falha ao criar a conta.')
+    } finally {
+    }
   }
 
   const handleToggleShowPassword = () => {
     setShowPassword(prevState => !prevState)
   }
+
   return (
     <Form {...form}>
       <form

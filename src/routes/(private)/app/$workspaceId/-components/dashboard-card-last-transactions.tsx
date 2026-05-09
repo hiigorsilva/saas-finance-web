@@ -10,6 +10,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { TransactionType } from '@/data/requests/transactions'
+import { Route } from '../layout'
 import { DashBoardCardLastTransactionsEmpty } from './dashboard-card-last-transaction-empty'
 import { DashBoardCardLastTransactionsRow } from './dashboard-card-last-transaction-row'
 
@@ -21,11 +22,12 @@ export function DashBoardCardLastTransactions({
   transactions,
 }: DashBoardCardLastTransactionsProps) {
   const router = useNavigate()
+  const match = Route.useMatch()
 
   const handleGoToTransactionsPage = () => {
     router({
       to: '/app/$workspaceId/transaction',
-      params: { workspaceId: 'buncker_id' },
+      params: { workspaceId: match.params.workspaceId },
     })
   }
 
