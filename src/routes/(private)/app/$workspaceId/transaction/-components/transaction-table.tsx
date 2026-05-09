@@ -1,0 +1,50 @@
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import type { ITransaction } from '@/services/transaction/transaction.d'
+import { TransactionTableRow } from './transaction-table-row'
+
+type TransactionTableProps = {
+  transactions: ITransaction[]
+  onFetchData: () => Promise<void>
+}
+
+export function TransactionTable({
+  transactions,
+  onFetchData,
+}: TransactionTableProps) {
+  return (
+    <div className="flex flex-col border border-primary/10 rounded-lg overflow-hidden">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-primary/10">
+            <TableHead>Nome</TableHead>
+            <TableHead className="w-40 font-semibold">Valor</TableHead>
+            <TableHead className="w-40 font-semibold">Tipo</TableHead>
+            <TableHead className="w-48 font-semibold">Categoria</TableHead>
+            <TableHead className="w-40 font-semibold">Pagamento</TableHead>
+            <TableHead className="w-32 font-semibold">Data</TableHead>
+            <TableHead className="w-28 font-semibold text-center">
+              Ações
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
+          {transactions.length > 0 &&
+            transactions.map(transaction => (
+              <TransactionTableRow
+                key={transaction.id}
+                transaction={transaction}
+                onFetchData={onFetchData}
+              />
+            ))}
+        </TableBody>
+      </Table>
+    </div>
+  )
+}
