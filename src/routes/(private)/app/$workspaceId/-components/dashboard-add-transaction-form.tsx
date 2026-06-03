@@ -38,10 +38,10 @@ import {
   TRANSACTION_TYPE,
   TRANSACTION_TYPE_VALUES,
 } from '@/data/labels/transaction-type'
+import { useCreateTransactionMutation } from '@/hooks/mutations/use-create-transaction-mutation'
 import { cn } from '@/lib/utils'
 import type { AddTransactionType } from '@/schemas/add-transaction-button'
 import { normalizeApiError } from '@/services/api/errors'
-import { TransactionService } from '@/services/transaction/transaction'
 import { dateFormatLong } from '@/utils/date-format'
 import {
   transactionCategoryTranslate,
@@ -52,7 +52,6 @@ import {
 type AddTransactionFormProps = {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
   form: UseFormReturn<AddTransactionType>
-  onFetchData: () => Promise<void>
 }
 
 export const defaultValuesNewTransaction = (): Partial<AddTransactionType> => ({
@@ -67,18 +66,17 @@ export const defaultValuesNewTransaction = (): Partial<AddTransactionType> => ({
 export function AddTransactionForm({
   setOpenModal,
   form,
-  onFetchData,
 }: AddTransactionFormProps) {
   const { workspaceId } = useParams({ from: '/(private)/app/$workspaceId' })
+  const { mutateAsync: createTransaction } = useCreateTransactionMutation()
 
   const [isLoading, setIsLoading] = useState(false)
 
   const onSubmit = async (data: AddTransactionType) => {
     setIsLoading(true)
     try {
-      await TransactionService.PostTransaction(workspaceId, data)
+      await createTransaction({ workspaceId, data })
       toast.success('Transação criada com sucesso!')
-      await onFetchData()
       form.reset(defaultValuesNewTransaction())
       setOpenModal(false)
     } catch (error) {

@@ -31,7 +31,7 @@ import { AddWorkspaceButton } from './add-workspace-button'
 export function WorkspaceSwitcher() {
   const [open, setOpen] = React.useState(false)
 
-  const { data, error, refetch } = useWorkspacesQuery(1, 20)
+  const { data, error } = useWorkspacesQuery(1, 20)
 
   const workspaces = data ?? {
     data: [],
@@ -48,10 +48,6 @@ export function WorkspaceSwitcher() {
   const [workspaceActive, setWorkspaceActive] = React.useState(initialValue)
 
   const route = useNavigate()
-
-  const fetchData = async () => {
-    await refetch()
-  }
 
   const handleRedirectToDashboard = (currentWorkspace: string) => {
     route({
@@ -182,7 +178,7 @@ export function WorkspaceSwitcher() {
 
           <Separator className="mt-2 mb-4" />
 
-          <AddWorkspaceButton onFetchData={fetchData}>
+          <AddWorkspaceButton>
             <Button className="w-full" variant="gradient">
               <PlusIcon className="size-5 shrink-0 text-foreground" />
               <span className="font-semibold text-foreground">

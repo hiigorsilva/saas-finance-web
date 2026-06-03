@@ -44,13 +44,13 @@ import {
   TRANSACTION_PAYMENT_METHOD_TYPE_VALUES,
 } from '@/data/labels/transaction-payment-method'
 import { TRANSACTION_TYPE_VALUES } from '@/data/labels/transaction-type'
+import { useUpdateTransactionMutation } from '@/hooks/mutations/use-update-transaction-mutation'
 import { cn } from '@/lib/utils'
 import {
   type EditTransactionType,
   editTransactionSchema,
 } from '@/schemas/edit-transaction-button'
 import { normalizeApiError } from '@/services/api/errors'
-import { TransactionService } from '@/services/transaction/transaction'
 import type { ITransaction } from '@/services/transaction/transaction.d'
 import { dateFormatLong } from '@/utils/date-format'
 import {
@@ -61,7 +61,6 @@ import {
 
 type TransactionTableActionEditProps = ComponentProps<'button'> & {
   transaction: ITransaction
-  onFetchData: () => Promise<void>
 }
 
 function normalizePaymentMethod(
@@ -101,9 +100,9 @@ function defaultValuesEditTransaction(
 export function TransactionTableActionEdit({
   transaction,
   children,
-  onFetchData,
 }: TransactionTableActionEditProps) {
   const [openModal, setOpenModal] = useState(false)
+  const { mutateAsync: updateTransaction } = useUpdateTransactionMutation()
 
   const form = useForm<EditTransactionType>({
     resolver: zodResolver(editTransactionSchema),
@@ -117,13 +116,12 @@ export function TransactionTableActionEdit({
 
   const onSubmit = async (data: EditTransactionType) => {
     try {
-      await TransactionService.PutTransaction(
-        transaction.workspaceId,
-        transaction.id,
-        data
-      )
+      await updateTransaction({
+        workspaceId: transaction.workspaceId,
+        transactionId: transaction.id,
+        data,
+      })
       toast.success('Transação atualizada com sucesso!')
-      await onFetchData()
       form.reset(defaultValuesEditTransaction(transaction))
       setOpenModal(false)
     } catch (error) {

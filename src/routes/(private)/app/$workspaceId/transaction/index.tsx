@@ -32,7 +32,7 @@ function TransactionPage() {
   const { workspaceId } = Route.useParams()
   const router = Route.useNavigate()
 
-  const { data, error, refetch } = useTransactionsQuery(workspaceId, 1, 50)
+  const { data, error } = useTransactionsQuery(workspaceId, 1, 50)
 
   const transactions = data ?? {
     data: [],
@@ -42,10 +42,6 @@ function TransactionPage() {
       totalCount: 0,
       totalPages: 0,
     },
-  }
-
-  const fetchData = async () => {
-    await refetch()
   }
 
   const handleNavigateBack = () => {
@@ -78,7 +74,7 @@ function TransactionPage() {
           <TransactionFilterForm />
         </div>
 
-        <DashboardAddTransactionButton onFetchData={fetchData}>
+        <DashboardAddTransactionButton>
           <Button variant="gradient">
             <PlusIcon className="size-5 shrink-0 text-foreground" />
             <span>Nova Transação</span>
@@ -88,10 +84,7 @@ function TransactionPage() {
 
       {/* TRANSACTION TABLE */}
       <div className="flex flex-col gap-6">
-        <TransactionTable
-          transactions={transactions.data}
-          onFetchData={fetchData}
-        />
+        <TransactionTable transactions={transactions.data} />
       </div>
 
       {transactions && (

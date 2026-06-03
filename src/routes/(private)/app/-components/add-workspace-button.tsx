@@ -29,22 +29,19 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
+import { useCreateWorkspaceMutation } from '@/hooks/mutations/use-create-workspace-mutation'
 import {
   type AddWorkspaceFormType,
   addWorkspaceFormSchema,
 } from '@/schemas/add-workspace-button'
 import { normalizeApiError } from '@/services/api/errors'
-import { WorkspaceService } from '@/services/workspace/workspace'
 
-type AddWorkspaceButtonProps = ComponentProps<'button'> & {
-  onFetchData: () => Promise<void>
-}
+type AddWorkspaceButtonProps = ComponentProps<'button'>
 
-export function AddWorkspaceButton({
-  children,
-  onFetchData,
-}: AddWorkspaceButtonProps) {
+export function AddWorkspaceButton({ children }: AddWorkspaceButtonProps) {
   const [openModal, setOpenModal] = useState(false)
+  const { mutateAsync: createWorkspace, isPending } =
+    useCreateWorkspaceMutation()
 
   const form = useForm<AddWorkspaceFormType>({
     resolver: zodResolver(addWorkspaceFormSchema),
@@ -56,9 +53,8 @@ export function AddWorkspaceButton({
 
   const onSubmit = async (data: AddWorkspaceFormType) => {
     try {
-      await WorkspaceService.PostWorkspace(data)
+      await createWorkspace(data)
       toast.success('Workspace criado com sucesso!')
-      await onFetchData()
       form.reset()
       setOpenModal(false)
     } catch (error) {
@@ -187,7 +183,12 @@ export function AddWorkspaceButton({
                 Cancelar
               </Button>
 
-              <Button className="flex-1" type="submit" variant="gradient">
+              <Button
+                className="flex-1"
+                type="submit"
+                variant="gradient"
+                disabled={isPending}
+              >
                 Criar Workspace
               </Button>
             </div>

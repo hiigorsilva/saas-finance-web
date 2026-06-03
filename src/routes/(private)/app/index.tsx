@@ -28,7 +28,7 @@ export const Route = createFileRoute('/(private)/app/')({
 })
 
 function WorkspacesPage() {
-  const { data, error, refetch } = useWorkspacesQuery(1, 20)
+  const { data, error } = useWorkspacesQuery(1, 20)
 
   const workspaces = data ?? {
     data: [],
@@ -38,10 +38,6 @@ function WorkspacesPage() {
       totalCount: 0,
       totalPages: 0,
     },
-  }
-
-  const fetchData = async () => {
-    await refetch()
   }
 
   useEffect(() => {
@@ -66,7 +62,7 @@ function WorkspacesPage() {
             <WorkspaceSearchFilterForm />
           </div>
 
-          <AddWorkspaceButton onFetchData={fetchData}>
+          <AddWorkspaceButton>
             <Button
               variant="gradient"
               className="drop-shadow-md hover:drop-shadow-none"

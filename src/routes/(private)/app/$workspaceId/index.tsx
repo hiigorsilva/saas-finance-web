@@ -52,15 +52,11 @@ function DashboardPage() {
   const month = formattedSearchValue(match.search.month)
   const year = formattedSearchValue(match.search.year)
 
-  const {
-    data: dashboard,
-    error,
-    refetch,
-  } = useDashboardQuery(match.params.workspaceId, month, year)
-
-  const fetchData = async () => {
-    await refetch()
-  }
+  const { data: dashboard, error } = useDashboardQuery(
+    match.params.workspaceId,
+    month,
+    year
+  )
 
   const handleNavigateBack = () => {
     router({
@@ -101,7 +97,6 @@ function DashboardPage() {
             <DashBoardCardBalance
               showAmountSwitch={setShowAmount}
               showAmount={showAmount}
-              onFetchData={fetchData}
               balanceValue={dashboard?.resume?.totalBalance ?? 0}
               balancePercent={dashboard?.resume?.totalBalancePercent ?? 0}
             />
