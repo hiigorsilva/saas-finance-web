@@ -1,14 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { PlusIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { Container } from '@/components/layout/container'
 import { TitlePage } from '@/components/layout/title-page'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { WorkspaceService } from '@/services/workspace/workspace'
-import type { IWorkspace } from '@/services/workspace/workspace.d'
-import type { IPaginateResponse } from '@/utils/http'
+import { useWorkspacesQuery } from '@/hooks/queries/use-workspaces-query'
+import { normalizeApiError } from '@/services/api/errors'
 import { SkeletonHomePage } from '../-components/skeleton-home-page'
 import { AddWorkspaceButton } from './-components/add-workspace-button'
 import { Header } from './-components/header'
@@ -29,36 +28,28 @@ export const Route = createFileRoute('/(private)/app/')({
 })
 
 function WorkspacesPage() {
-  const [workspaces, setWorkspaces] = useState<IPaginateResponse<IWorkspace>>({
-    data: [],
-    currentPage: 0,
-    limit: 0,
-    totalCount: 0,
-    totalPages: 0,
-  })
+  const { data, error, refetch } = useWorkspacesQuery(1, 20)
 
-  async function fetchData() {
-    try {
-      const res = await WorkspaceService.GetWorkspace(1, 20)
-      if (res.status === 200 || res.status === 204) {
-        const { data, currentPage, limit, totalCount, totalPages } =
-          res.data.body
-        setWorkspaces({
-          data: data,
-          currentPage: currentPage,
-          limit: limit,
-          totalCount: totalCount,
-          totalPages: totalPages,
-        })
-      }
-    } catch (_error) {
-      toast.error('Erro ao buscar workspaces. Por favor, tente novamente.')
-    }
+  const workspaces = data ?? {
+    data: [],
+    props: {
+      currentPage: 1,
+      limit: 20,
+      totalCount: 0,
+      totalPages: 0,
+    },
+  }
+
+  const fetchData = async () => {
+    await refetch()
   }
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    if (!error) return
+
+    const apiError = normalizeApiError(error)
+    toast.error(apiError.message)
+  }, [error])
 
   return (
     <>
@@ -95,11 +86,11 @@ function WorkspacesPage() {
         <Separator />
 
         {/* LIST WORKSPACES */}
-        {workspaces?.totalCount === 0 && <WorkspaceListEmpty />}
+        {workspaces.props.totalCount === 0 && <WorkspaceListEmpty />}
 
-        {workspaces?.totalCount > 0 && (
+        {workspaces.props.totalCount > 0 && (
           <ul className="w-full flex-auto grid grid-cols-3 gap-4">
-            {workspaces?.data.map(workspace => (
+            {workspaces.data.map(workspace => (
               <li className="w-full h-fit" key={workspace.id}>
                 <WorkspaceCard workspace={workspace} />
               </li>

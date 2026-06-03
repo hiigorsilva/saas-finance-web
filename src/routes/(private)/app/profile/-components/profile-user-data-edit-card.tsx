@@ -6,7 +6,7 @@ import {
   PenIcon,
   UserIcon,
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,28 +18,28 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { UserService } from '@/services/user/user'
-import type { IUserLogged } from '@/services/user/user.d'
+import { useUserLoggedQuery } from '@/hooks/queries/use-user-logged-query'
+import { normalizeApiError } from '@/services/api/errors'
 import { ProfileUserDataEditForm } from './profile-user-data-edit-form'
 
 export function ProfileUserDataEditCard() {
-  const [user, setUser] = useState<IUserLogged>({} as IUserLogged)
-
-  async function fetchData() {
-    try {
-      const res = await UserService.GetUserLogged()
-      if (res.status === 200 || res.status === 204) {
-        const user = res.data.body.data
-        setUser(user)
-      }
-    } catch (_error) {
-      toast.error('Erro ao carregar os dados do usuário')
-    }
-  }
+  const { data: user, error } = useUserLoggedQuery()
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    if (!error) return
+
+    const apiError = normalizeApiError(error)
+    toast.error(apiError.message)
+  }, [error])
+
+  const userData = user ?? {
+    id: '',
+    name: '',
+    email: '',
+    financialProfile: null,
+    createdAt: '',
+    updatedAt: '',
+  }
 
   return (
     <Card>
@@ -59,7 +59,7 @@ export function ProfileUserDataEditCard() {
           </CardDescription>
         </div>
 
-        <ProfileUserDataEditForm userData={user}>
+        <ProfileUserDataEditForm userData={userData}>
           <Button variant="outline" size="icon">
             <PenIcon className="size-4 shrink-0 text-muted-foreground" />
           </Button>
@@ -71,14 +71,14 @@ export function ProfileUserDataEditCard() {
           {/* NAME */}
           <div className="flex flex-auto flex-col gap-2">
             <Label>Nome</Label>
-            <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+            <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
               <UserIcon
                 className="size-5 text-muted-foreground"
                 strokeWidth={1}
               />
               <Input
                 className="w-full border-0 focus-visible:border-0 focus-visible:ring-0"
-                value={user.name}
+                value={userData.name}
                 placeholder="Insira seu nome"
                 disabled
               />
@@ -88,14 +88,14 @@ export function ProfileUserDataEditCard() {
           {/* EMAIL */}
           <div className="flex flex-auto flex-col gap-2">
             <Label>Email</Label>
-            <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+            <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
               <MailIcon
                 className="size-5 text-muted-foreground"
                 strokeWidth={1}
               />
               <Input
                 className="w-full border-0 focus-visible:border-0 focus-visible:ring-0"
-                value={user.email}
+                value={userData.email}
                 placeholder="Insira seu email"
                 disabled
               />
@@ -105,7 +105,7 @@ export function ProfileUserDataEditCard() {
           {/* PASSWORD */}
           <div className="flex flex-auto flex-col gap-2">
             <Label>Senha</Label>
-            <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+            <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
               <LockIcon
                 className="size-5 text-muted-foreground"
                 strokeWidth={1}
@@ -123,7 +123,7 @@ export function ProfileUserDataEditCard() {
           {/* BIRTHDATE */}
           <div className="flex flex-auto flex-col gap-2">
             <Label>Data de nascimento</Label>
-            <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+            <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
               <CalendarIcon
                 className="size-5 text-muted-foreground"
                 strokeWidth={1}

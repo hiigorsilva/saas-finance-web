@@ -1,10 +1,10 @@
-import type { IHttpResponse, IPaginateResponse } from '@/utils/http'
-import { api } from '../api/api'
+import type { ApiPaginatedResponse, ApiResponse } from '@/services/api/types'
+import { api } from '../api/client'
 import type { IWorkspace } from './workspace.d'
 
 export class WorkspaceService {
   static async GetWorkspace(page: number, limit: number) {
-    const res = await api.get<IHttpResponse<IPaginateResponse<IWorkspace>>>(
+    const response = await api.get<ApiPaginatedResponse<IWorkspace>>(
       '/workspace',
       {
         params: {
@@ -13,14 +13,13 @@ export class WorkspaceService {
         },
       }
     )
-    return res
+
+    return response.data
   }
 
   static async PostWorkspace(data: Omit<IWorkspace, 'id'>) {
-    const res = await api.post<IHttpResponse<{ data: IWorkspace }>>(
-      '/workspace',
-      data
-    )
-    return res
+    const response = await api.post<ApiResponse<IWorkspace>>('/workspace', data)
+
+    return response.data.data
   }
 }

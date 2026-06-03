@@ -21,24 +21,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function signIn(credentials: ISignInData) {
     const { email, password } = credentials
-    const { data } = await AuthService.LoginUser(email, password)
+    const data = await AuthService.LoginUser(email, password)
 
-    if (data.statusCode === 200 || data.statusCode === 201) {
-      const { accessToken } = data.body
-      setStorageToken(accessToken)
-      setToken(accessToken)
-    }
+    setStorageToken(data.accessToken)
+    setToken(data.accessToken)
   }
 
   async function register(credentials: IRegisterData) {
     const { name, email, password } = credentials
-    const { data } = await AuthService.RegisterUser(name, email, password)
+    const data = await AuthService.RegisterUser(name, email, password)
 
-    if (data.statusCode === 200 || data.statusCode === 201) {
-      const { accessToken } = data.body
-      setStorageToken(accessToken)
-      setToken(accessToken)
-    }
+    setStorageToken(data.accessToken)
+    setToken(data.accessToken)
   }
 
   function signOut() {

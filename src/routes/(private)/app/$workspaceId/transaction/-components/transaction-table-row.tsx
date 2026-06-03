@@ -1,7 +1,7 @@
 import { PenIcon, Trash2Icon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
-import type { TransactionType } from '@/data/requests/transactions'
+import type { ITransaction } from '@/services/transaction/transaction.d'
 import { currencyFormat } from '@/utils/currency-format'
 import { dateFormat } from '@/utils/date-format'
 import {
@@ -15,7 +15,7 @@ import { TransactionTableActionEdit } from './transaction-table-action-edit'
 import { TransactionTableActionRemove } from './transaction-table-action-remove'
 
 type TransactionTableRowProps = {
-  transaction: TransactionType
+  transaction: ITransaction
   onFetchData: () => Promise<void>
 }
 
@@ -24,7 +24,7 @@ export function TransactionTableRow({
   onFetchData,
 }: TransactionTableRowProps) {
   return (
-    <TableRow className="hover:bg-primary/[5%] border-primary/10">
+    <TableRow className="hover:bg-primary/5 border-primary/10">
       <TableCell className="text-foreground tracking-tight">
         {transaction.name}
       </TableCell>

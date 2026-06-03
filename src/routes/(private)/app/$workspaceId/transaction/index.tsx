@@ -1,15 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ChevronLeftIcon, PlusIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { Container } from '@/components/layout/container'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
 import { Button } from '@/components/ui/button'
+import { useTransactionsQuery } from '@/hooks/queries/use-transactions-query'
 import { listTransactionSchema } from '@/schemas/pagination'
-import { TransactionService } from '@/services/transaction/transaction'
-import type { ITransaction } from '@/services/transaction/transaction.d'
-import type { IPaginateResponse } from '@/utils/http'
+import { normalizeApiError } from '@/services/api/errors'
 import { Pagination } from '../../-components/pagination'
 import { DashboardAddTransactionButton } from '../-components/dashboard-add-transaction-button'
 import { TransactionFilterForm } from './-components/transaction-filter-form'
@@ -33,27 +32,20 @@ function TransactionPage() {
   const { workspaceId } = Route.useParams()
   const router = Route.useNavigate()
 
-  const [transactions, setTransactions] = useState<
-    IPaginateResponse<ITransaction>
-  >({
-    data: [],
-    currentPage: 1,
-    limit: 10,
-    totalCount: 0,
-    totalPages: 0,
-  })
+  const { data, error, refetch } = useTransactionsQuery(workspaceId, 1, 50)
 
-  async function fetchData() {
-    try {
-      const res = await TransactionService.GetTransactions(workspaceId, 1, 50)
-      if (res.status === 200 || res.status === 204) {
-        const { data, currentPage, limit, totalCount, totalPages } =
-          res.data.body
-        setTransactions({ data, currentPage, limit, totalCount, totalPages })
-      }
-    } catch (_error) {
-      toast.error('Erro ao carregar transações. Por favor, tente novamente.')
-    }
+  const transactions = data ?? {
+    data: [],
+    props: {
+      currentPage: 1,
+      limit: 10,
+      totalCount: 0,
+      totalPages: 0,
+    },
+  }
+
+  const fetchData = async () => {
+    await refetch()
   }
 
   const handleNavigateBack = () => {
@@ -64,8 +56,11 @@ function TransactionPage() {
   }
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    if (!error) return
+
+    const apiError = normalizeApiError(error)
+    toast.error(apiError.message)
+  }, [error])
 
   return (
     <Container className="gap-6 py-6">
@@ -101,10 +96,10 @@ function TransactionPage() {
 
       {transactions && (
         <Pagination
-          currentPage={transactions.currentPage}
-          limit={transactions.limit}
-          totalCount={transactions.totalCount}
-          totalPages={transactions.totalPages}
+          currentPage={transactions.props.currentPage}
+          limit={transactions.props.limit}
+          totalCount={transactions.props.totalCount}
+          totalPages={transactions.props.totalPages}
         />
       )}
     </Container>

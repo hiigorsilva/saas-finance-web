@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as privateLayoutRouteImport } from './routes/(private)/layout'
 import { Route as publicAuthLayoutRouteImport } from './routes/(public)/_auth/layout'
@@ -28,24 +26,18 @@ import { Route as privateAppWorkspaceIdTransactionIndexRouteImport } from './rou
 import { Route as privateAppWorkspaceIdManagerIndexRouteImport } from './routes/(private)/app/$workspaceId/manager/index'
 import { Route as privateAppWorkspaceIdDetailsIndexRouteImport } from './routes/(private)/app/$workspaceId/details/index'
 
-const publicRouteImport = createFileRoute('/(public)')()
-
-const publicRoute = publicRouteImport.update({
-  id: '/(public)',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const privateLayoutRoute = privateLayoutRouteImport.update({
   id: '/(private)',
   getParentRoute: () => rootRouteImport,
 } as any)
 const publicAuthLayoutRoute = publicAuthLayoutRouteImport.update({
-  id: '/_auth',
-  getParentRoute: () => publicRoute,
+  id: '/(public)/_auth',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const publicPricingIndexRoute = publicPricingIndexRouteImport.update({
-  id: '/pricing/',
+  id: '/(public)/pricing/',
   path: '/pricing/',
-  getParentRoute: () => publicRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
 const privateAppIndexRoute = privateAppIndexRouteImport.update({
   id: '/app/',
@@ -121,20 +113,20 @@ const privateAppWorkspaceIdDetailsIndexRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof privateHomeIndexRoute
   '/app/$workspaceId': typeof privateAppWorkspaceIdLayoutRouteWithChildren
   '/app/profile': typeof privateAppProfileLayoutRouteWithChildren
-  '/app': typeof privateAppIndexRoute
-  '/pricing': typeof publicPricingIndexRoute
+  '/': typeof privateHomeIndexRoute
+  '/app/': typeof privateAppIndexRoute
+  '/pricing/': typeof publicPricingIndexRoute
   '/app/$workspaceId/': typeof privateAppWorkspaceIdIndexRoute
   '/app/profile/': typeof privateAppProfileIndexRoute
-  '/login': typeof publicAuthLoginIndexRoute
-  '/register': typeof publicAuthRegisterIndexRoute
-  '/app/$workspaceId/details': typeof privateAppWorkspaceIdDetailsIndexRoute
-  '/app/$workspaceId/manager': typeof privateAppWorkspaceIdManagerIndexRoute
-  '/app/$workspaceId/transaction': typeof privateAppWorkspaceIdTransactionIndexRoute
-  '/app/profile/financial-profile': typeof privateAppProfileFinancialProfileIndexRoute
-  '/app/profile/preferences': typeof privateAppProfilePreferencesIndexRoute
+  '/login/': typeof publicAuthLoginIndexRoute
+  '/register/': typeof publicAuthRegisterIndexRoute
+  '/app/$workspaceId/details/': typeof privateAppWorkspaceIdDetailsIndexRoute
+  '/app/$workspaceId/manager/': typeof privateAppWorkspaceIdManagerIndexRoute
+  '/app/$workspaceId/transaction/': typeof privateAppWorkspaceIdTransactionIndexRoute
+  '/app/profile/financial-profile/': typeof privateAppProfileFinancialProfileIndexRoute
+  '/app/profile/preferences/': typeof privateAppProfilePreferencesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof privateHomeIndexRoute
@@ -153,7 +145,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(private)': typeof privateLayoutRouteWithChildren
-  '/(public)': typeof publicRouteWithChildren
   '/(public)/_auth': typeof publicAuthLayoutRouteWithChildren
   '/(private)/app/$workspaceId': typeof privateAppWorkspaceIdLayoutRouteWithChildren
   '/(private)/app/profile': typeof privateAppProfileLayoutRouteWithChildren
@@ -173,20 +164,20 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/app/$workspaceId'
     | '/app/profile'
-    | '/app'
-    | '/pricing'
+    | '/'
+    | '/app/'
+    | '/pricing/'
     | '/app/$workspaceId/'
     | '/app/profile/'
-    | '/login'
-    | '/register'
-    | '/app/$workspaceId/details'
-    | '/app/$workspaceId/manager'
-    | '/app/$workspaceId/transaction'
-    | '/app/profile/financial-profile'
-    | '/app/profile/preferences'
+    | '/login/'
+    | '/register/'
+    | '/app/$workspaceId/details/'
+    | '/app/$workspaceId/manager/'
+    | '/app/$workspaceId/transaction/'
+    | '/app/profile/financial-profile/'
+    | '/app/profile/preferences/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -204,7 +195,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/(private)'
-    | '/(public)'
     | '/(public)/_auth'
     | '/(private)/app/$workspaceId'
     | '/(private)/app/profile'
@@ -224,43 +214,37 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   privateLayoutRoute: typeof privateLayoutRouteWithChildren
-  publicRoute: typeof publicRouteWithChildren
+  publicAuthLayoutRoute: typeof publicAuthLayoutRouteWithChildren
+  publicPricingIndexRoute: typeof publicPricingIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/(public)': {
-      id: '/(public)'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof publicRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/(private)': {
       id: '/(private)'
-      path: '/'
-      fullPath: '/'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof privateLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(public)/_auth': {
       id: '/(public)/_auth'
-      path: '/'
-      fullPath: '/'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof publicAuthLayoutRouteImport
-      parentRoute: typeof publicRoute
+      parentRoute: typeof rootRouteImport
     }
     '/(public)/pricing/': {
       id: '/(public)/pricing/'
       path: '/pricing'
-      fullPath: '/pricing'
+      fullPath: '/pricing/'
       preLoaderRoute: typeof publicPricingIndexRouteImport
-      parentRoute: typeof publicRoute
+      parentRoute: typeof rootRouteImport
     }
     '/(private)/app/': {
       id: '/(private)/app/'
       path: '/app'
-      fullPath: '/app'
+      fullPath: '/app/'
       preLoaderRoute: typeof privateAppIndexRouteImport
       parentRoute: typeof privateLayoutRoute
     }
@@ -288,14 +272,14 @@ declare module '@tanstack/react-router' {
     '/(public)/_auth/register/': {
       id: '/(public)/_auth/register/'
       path: '/register'
-      fullPath: '/register'
+      fullPath: '/register/'
       preLoaderRoute: typeof publicAuthRegisterIndexRouteImport
       parentRoute: typeof publicAuthLayoutRoute
     }
     '/(public)/_auth/login/': {
       id: '/(public)/_auth/login/'
       path: '/login'
-      fullPath: '/login'
+      fullPath: '/login/'
       preLoaderRoute: typeof publicAuthLoginIndexRouteImport
       parentRoute: typeof publicAuthLayoutRoute
     }
@@ -316,35 +300,35 @@ declare module '@tanstack/react-router' {
     '/(private)/app/profile/preferences/': {
       id: '/(private)/app/profile/preferences/'
       path: '/preferences'
-      fullPath: '/app/profile/preferences'
+      fullPath: '/app/profile/preferences/'
       preLoaderRoute: typeof privateAppProfilePreferencesIndexRouteImport
       parentRoute: typeof privateAppProfileLayoutRoute
     }
     '/(private)/app/profile/financial-profile/': {
       id: '/(private)/app/profile/financial-profile/'
       path: '/financial-profile'
-      fullPath: '/app/profile/financial-profile'
+      fullPath: '/app/profile/financial-profile/'
       preLoaderRoute: typeof privateAppProfileFinancialProfileIndexRouteImport
       parentRoute: typeof privateAppProfileLayoutRoute
     }
     '/(private)/app/$workspaceId/transaction/': {
       id: '/(private)/app/$workspaceId/transaction/'
       path: '/transaction'
-      fullPath: '/app/$workspaceId/transaction'
+      fullPath: '/app/$workspaceId/transaction/'
       preLoaderRoute: typeof privateAppWorkspaceIdTransactionIndexRouteImport
       parentRoute: typeof privateAppWorkspaceIdLayoutRoute
     }
     '/(private)/app/$workspaceId/manager/': {
       id: '/(private)/app/$workspaceId/manager/'
       path: '/manager'
-      fullPath: '/app/$workspaceId/manager'
+      fullPath: '/app/$workspaceId/manager/'
       preLoaderRoute: typeof privateAppWorkspaceIdManagerIndexRouteImport
       parentRoute: typeof privateAppWorkspaceIdLayoutRoute
     }
     '/(private)/app/$workspaceId/details/': {
       id: '/(private)/app/$workspaceId/details/'
       path: '/details'
-      fullPath: '/app/$workspaceId/details'
+      fullPath: '/app/$workspaceId/details/'
       preLoaderRoute: typeof privateAppWorkspaceIdDetailsIndexRouteImport
       parentRoute: typeof privateAppWorkspaceIdLayoutRoute
     }
@@ -426,22 +410,10 @@ const publicAuthLayoutRouteChildren: publicAuthLayoutRouteChildren = {
 const publicAuthLayoutRouteWithChildren =
   publicAuthLayoutRoute._addFileChildren(publicAuthLayoutRouteChildren)
 
-interface publicRouteChildren {
-  publicAuthLayoutRoute: typeof publicAuthLayoutRouteWithChildren
-  publicPricingIndexRoute: typeof publicPricingIndexRoute
-}
-
-const publicRouteChildren: publicRouteChildren = {
-  publicAuthLayoutRoute: publicAuthLayoutRouteWithChildren,
-  publicPricingIndexRoute: publicPricingIndexRoute,
-}
-
-const publicRouteWithChildren =
-  publicRoute._addFileChildren(publicRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   privateLayoutRoute: privateLayoutRouteWithChildren,
-  publicRoute: publicRouteWithChildren,
+  publicAuthLayoutRoute: publicAuthLayoutRouteWithChildren,
+  publicPricingIndexRoute: publicPricingIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

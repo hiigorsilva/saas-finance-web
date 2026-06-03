@@ -7,12 +7,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import type { TransactionType } from '@/data/requests/transactions'
+import type { ITransaction } from '@/services/transaction/transaction.d'
 import { LatePaymentTransactionEmpty } from './dashboard-card-late-payment-empty'
 import { LatePaymentTransactionRow } from './dashboard-card-late-payment-row'
 
 type DashboardCardLatePaymentProps = {
-  latePayments: TransactionType[]
+  latePayments: ITransaction[]
 }
 
 export function DashboardCardLatePayment({

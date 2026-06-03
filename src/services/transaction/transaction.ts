@@ -1,8 +1,8 @@
 import { format } from 'date-fns'
 import type { AddTransactionType } from '@/schemas/add-transaction-button'
 import type { EditTransactionType } from '@/schemas/edit-transaction-button'
-import type { IHttpResponse, IPaginateResponse } from '@/utils/http'
-import { api } from '../api/api'
+import type { ApiPaginatedResponse, ApiResponse } from '@/services/api/types'
+import { api } from '../api/client'
 import type { ITransaction } from './transaction.d'
 
 export class TransactionService {
@@ -11,13 +11,14 @@ export class TransactionService {
     page: number,
     limit: number
   ) {
-    const res = await api.get<IHttpResponse<IPaginateResponse<ITransaction>>>(
+    const response = await api.get<ApiPaginatedResponse<ITransaction>>(
       `/${workspaceId}/transaction`,
       {
         params: { page, limit },
       }
     )
-    return res
+
+    return response.data
   }
 
   static async PostTransaction(workspaceId: string, data: AddTransactionType) {
@@ -27,11 +28,12 @@ export class TransactionService {
       paymentDate: format(data.paymentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS"),
     }
 
-    const res = await api.post<IHttpResponse<ITransaction>>(
+    const response = await api.post<ApiResponse<ITransaction>>(
       `/${workspaceId}/transaction`,
       payload
     )
-    return res
+
+    return response.data.data
   }
 
   static async PutTransaction(
@@ -45,17 +47,19 @@ export class TransactionService {
       paymentDate: format(data.paymentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS"),
     }
 
-    const res = await api.put<IHttpResponse<ITransaction>>(
+    const response = await api.put<ApiResponse<ITransaction>>(
       `/${workspaceId}/transaction/${transactionId}`,
       payload
     )
-    return res
+
+    return response.data.data
   }
 
   static async DeleteTransaction(workspaceId: string, transactionId: string) {
-    const res = await api.delete<IHttpResponse<ITransaction>>(
+    const response = await api.delete<ApiResponse<ITransaction>>(
       `/${workspaceId}/transaction/${transactionId}`
     )
-    return res
+
+    return response.data.data
   }
 }

@@ -40,6 +40,7 @@ import {
 } from '@/data/labels/transaction-type'
 import { cn } from '@/lib/utils'
 import type { AddTransactionType } from '@/schemas/add-transaction-button'
+import { normalizeApiError } from '@/services/api/errors'
 import { TransactionService } from '@/services/transaction/transaction'
 import { dateFormatLong } from '@/utils/date-format'
 import {
@@ -75,16 +76,14 @@ export function AddTransactionForm({
   const onSubmit = async (data: AddTransactionType) => {
     setIsLoading(true)
     try {
-      const res = await TransactionService.PostTransaction(workspaceId, data)
-      if (res.status === 200 || res.status === 201) {
-        toast.success('Transação criada com sucesso!')
-        await onFetchData()
-        form.reset(defaultValuesNewTransaction())
-        setOpenModal(false)
-      }
+      await TransactionService.PostTransaction(workspaceId, data)
+      toast.success('Transação criada com sucesso!')
+      await onFetchData()
+      form.reset(defaultValuesNewTransaction())
+      setOpenModal(false)
     } catch (error) {
-      console.error(error)
-      toast.error('Erro ao criar transação. Por favor, tente novamente.')
+      const apiError = normalizeApiError(error)
+      toast.error(apiError.message)
     } finally {
       setIsLoading(false)
     }

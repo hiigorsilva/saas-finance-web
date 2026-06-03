@@ -44,13 +44,14 @@ import {
   TRANSACTION_PAYMENT_METHOD_TYPE_VALUES,
 } from '@/data/labels/transaction-payment-method'
 import { TRANSACTION_TYPE_VALUES } from '@/data/labels/transaction-type'
-import type { TransactionType } from '@/data/requests/transactions'
 import { cn } from '@/lib/utils'
 import {
   type EditTransactionType,
   editTransactionSchema,
 } from '@/schemas/edit-transaction-button'
+import { normalizeApiError } from '@/services/api/errors'
 import { TransactionService } from '@/services/transaction/transaction'
+import type { ITransaction } from '@/services/transaction/transaction.d'
 import { dateFormatLong } from '@/utils/date-format'
 import {
   transactionCategoryTranslate,
@@ -59,7 +60,7 @@ import {
 } from '../../-utils/transactions'
 
 type TransactionTableActionEditProps = ComponentProps<'button'> & {
-  transaction: TransactionType
+  transaction: ITransaction
   onFetchData: () => Promise<void>
 }
 
@@ -83,7 +84,7 @@ function normalizePaymentMethod(
 }
 
 function defaultValuesEditTransaction(
-  transaction: TransactionType
+  transaction: ITransaction
 ): EditTransactionType {
   return {
     workspaceId: transaction.workspaceId,
@@ -116,20 +117,18 @@ export function TransactionTableActionEdit({
 
   const onSubmit = async (data: EditTransactionType) => {
     try {
-      const res = await TransactionService.PutTransaction(
+      await TransactionService.PutTransaction(
         transaction.workspaceId,
         transaction.id,
         data
       )
-      if (res.status === 200 || res.status === 201) {
-        toast.success('Transação atualizada com sucesso!')
-        onFetchData()
-        form.reset(defaultValuesEditTransaction(transaction))
-        setOpenModal(false)
-      }
+      toast.success('Transação atualizada com sucesso!')
+      await onFetchData()
+      form.reset(defaultValuesEditTransaction(transaction))
+      setOpenModal(false)
     } catch (error) {
-      console.error(error)
-      toast.error('Erro ao atualizar transação. Por favor, tente novamente.')
+      const apiError = normalizeApiError(error)
+      toast.error(apiError.message)
     }
   }
 

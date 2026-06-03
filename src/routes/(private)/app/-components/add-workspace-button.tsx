@@ -33,6 +33,7 @@ import {
   type AddWorkspaceFormType,
   addWorkspaceFormSchema,
 } from '@/schemas/add-workspace-button'
+import { normalizeApiError } from '@/services/api/errors'
 import { WorkspaceService } from '@/services/workspace/workspace'
 
 type AddWorkspaceButtonProps = ComponentProps<'button'> & {
@@ -55,15 +56,14 @@ export function AddWorkspaceButton({
 
   const onSubmit = async (data: AddWorkspaceFormType) => {
     try {
-      const res = await WorkspaceService.PostWorkspace(data)
-      if (res.status === 200 || res.status === 201) {
-        toast.success('Workspace criado com sucesso!')
-        onFetchData()
-        form.reset()
-        setOpenModal(false)
-      }
-    } catch (_error) {
-      toast.error('Erro ao criar workspace. Por favor, tente novamente.')
+      await WorkspaceService.PostWorkspace(data)
+      toast.success('Workspace criado com sucesso!')
+      await onFetchData()
+      form.reset()
+      setOpenModal(false)
+    } catch (error) {
+      const apiError = normalizeApiError(error)
+      toast.error(apiError.message)
     }
   }
 

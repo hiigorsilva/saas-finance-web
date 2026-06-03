@@ -1,6 +1,6 @@
 import { ClockIcon } from 'lucide-react'
 import { TableCell, TableRow } from '@/components/ui/table'
-import type { TransactionType } from '@/data/requests/transactions'
+import type { ITransaction } from '@/services/transaction/transaction.d'
 import {
   dateFormat,
   dateFormatDistanceToNow,
@@ -8,7 +8,7 @@ import {
 } from '@/utils/date-format'
 
 type LatePaymentTransactionRowProps = {
-  latePayment: TransactionType[]
+  latePayment: ITransaction[]
 }
 
 export function LatePaymentTransactionRow({

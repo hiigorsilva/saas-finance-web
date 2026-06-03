@@ -9,13 +9,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import type { TransactionType } from '@/data/requests/transactions'
+import type { ITransaction } from '@/services/transaction/transaction.d'
 import { Route } from '../layout'
 import { DashBoardCardLastTransactionsEmpty } from './dashboard-card-last-transaction-empty'
 import { DashBoardCardLastTransactionsRow } from './dashboard-card-last-transaction-row'
 
 type DashBoardCardLastTransactionsProps = {
-  transactions: TransactionType[]
+  transactions: ITransaction[]
 }
 
 export function DashBoardCardLastTransactions({

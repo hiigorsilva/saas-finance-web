@@ -1,5 +1,5 @@
 import { TableCell, TableRow } from '@/components/ui/table'
-import type { TransactionType } from '@/data/requests/transactions'
+import type { ITransaction } from '@/services/transaction/transaction.d'
 import { currencyFormat } from '@/utils/currency-format'
 import { dateFormat } from '@/utils/date-format'
 import {
@@ -10,7 +10,7 @@ import {
 import { DashboardCardIcon } from './dashboard-card-icon'
 
 type DashBoardCardLastTransactionsRowProps = {
-  transaction: TransactionType
+  transaction: ITransaction
 }
 
 export function DashBoardCardLastTransactionsRow({
