@@ -9,3 +9,10 @@ export function useWorkspacesQuery(page = 1, limit = 20) {
     queryFn: () => WorkspaceService.GetWorkspace(page, limit),
   })
 }
+
+export function useWorkspaceIdQuery(workspaceId: string) {
+  return useQuery({
+    queryKey: [...workspacesQueryKey, workspaceId],
+    queryFn: () => WorkspaceService.GetWorkspaceById(workspaceId),
+  })
+}
