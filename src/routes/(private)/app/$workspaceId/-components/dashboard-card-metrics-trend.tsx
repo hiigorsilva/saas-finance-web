@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import type { Metrics } from '@/services/dashboard/dashboard.d'
 import { currencyFormat } from '@/utils/currency-format'
 import { percentFormat } from '@/utils/percent-format'
+import { DashboardCardTip } from './dashboard-card-tip'
 
 type DashboardCardMetricsTrendProps = {
   metrics: Metrics
@@ -51,6 +52,10 @@ export function DashboardCardMetricsTrend({
       <CardHeader className="gap-6">
         <div className="flex justify-between items-center">
           <CardTitle className="text-center">Tendência mensal</CardTitle>
+          <DashboardCardTip
+            label="Tendência mensal"
+            description="Exibe projeção de saldo e variações de receita/despesa no mês. Isso ajuda a antecipar cenários e ajustar decisões financeiras antes do fechamento do período."
+          />
         </div>
         <Separator />
       </CardHeader>

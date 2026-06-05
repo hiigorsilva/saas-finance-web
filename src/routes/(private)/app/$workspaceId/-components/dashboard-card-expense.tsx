@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { currencyFormat } from '@/utils/currency-format'
 import { percentFormat } from '@/utils/percent-format'
 import { DashboardCardIcon } from './dashboard-card-icon'
+import { DashboardCardTip } from './dashboard-card-tip'
 
 type DashBoardCardExpenseProps = {
   showAmount: boolean
@@ -19,17 +20,24 @@ export function DashBoardCardExpense({
     <Card>
       <CardContent className="flex flex-col gap-2">
         {/* LABEL */}
-        <div className="flex justify-start items-center gap-2">
-          <DashboardCardIcon className="bg-red-500/10 border border-red-500/25">
-            <TrendingDownIcon
-              className="size-5 shrink-0 text-red-500"
-              strokeWidth={2}
-            />
-          </DashboardCardIcon>
+        <div className="flex justify-between items-center gap-2">
+          <div className="flex justify-start items-center gap-2">
+            <DashboardCardIcon className="bg-red-500/10 border border-red-500/25">
+              <TrendingDownIcon
+                className="size-5 shrink-0 text-red-500"
+                strokeWidth={2}
+              />
+            </DashboardCardIcon>
 
-          <h2 className="font-normal text-sm text-muted-foreground leading-none tracking-tight">
-            Despesas
-          </h2>
+            <h2 className="font-normal text-sm text-muted-foreground leading-none tracking-tight">
+              Despesas
+            </h2>
+          </div>
+
+          <DashboardCardTip
+            label="Despesas do período"
+            description="Exibe o total de saídas no mês selecionado. O percentual representa a variação em relação ao mês anterior."
+          />
         </div>
 
         {/* AMOUNT */}

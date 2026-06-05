@@ -5,6 +5,7 @@ import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import type { Metrics } from '@/services/dashboard/dashboard.d'
 import { percentFormat } from '@/utils/percent-format'
+import { DashboardCardTip } from './dashboard-card-tip'
 
 type DashboardCardMetricsRatiosProps = {
   metrics: Metrics
@@ -48,6 +49,10 @@ export function DashboardCardMetricsRatios({
       <CardHeader className="gap-6">
         <div className="flex justify-between items-center">
           <CardTitle className="text-center">Indicadores financeiros</CardTitle>
+          <DashboardCardTip
+            label="Indicadores financeiros"
+            description="Resume três métricas de saúde financeira: taxa de poupança, burn rate e relação despesa/receita. Quanto maior o controle dessas métricas, melhor o equilíbrio do orçamento."
+          />
         </div>
         <Separator />
       </CardHeader>

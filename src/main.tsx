@@ -3,6 +3,7 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
+import { TooltipProvider } from './components/ui/tooltip.tsx'
 import { AuthProvider, useAuth } from './contexts/auth-context.tsx'
 import { queryClient } from './lib/query/query-client.ts'
 import { routeTree } from './routeTree.gen.ts'
@@ -32,7 +33,9 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <App />
+          <TooltipProvider>
+            <App />
+          </TooltipProvider>
         </AuthProvider>
       </QueryClientProvider>
     </StrictMode>
