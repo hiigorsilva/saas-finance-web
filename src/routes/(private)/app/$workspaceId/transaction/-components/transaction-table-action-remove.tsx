@@ -11,21 +11,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import type { TransactionType } from '@/data/requests/transactions'
-import { TransactionService } from '@/services/transaction/transaction'
+import { useDeleteTransactionMutation } from '@/hooks/mutations/use-delete-transaction-mutation'
+import { normalizeApiError } from '@/services/api/errors'
+import type { ITransaction } from '@/services/transaction/transaction.d'
 
 type TransactionTableActionRemoveProps = ComponentProps<'button'> & {
-  transaction: TransactionType
-  onFetchData: () => Promise<void>
+  transaction: ITransaction
 }
 
 export function TransactionTableActionRemove({
   transaction,
   children,
-  onFetchData,
 }: TransactionTableActionRemoveProps) {
   const [openModal, setOpenModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const { mutateAsync: deleteTransaction } = useDeleteTransactionMutation()
 
   const handleCancelDialog = () => {
     setOpenModal(prevState => !prevState)
@@ -34,16 +34,14 @@ export function TransactionTableActionRemove({
   const handleRemoveTransaction = async (id: string) => {
     setIsLoading(true)
     try {
-      const res = await TransactionService.DeleteTransaction(
-        transaction.workspaceId,
-        id
-      )
-      if (res.status === 200 || res.status === 204) {
-        toast.success('Transação removida com sucesso!')
-        await onFetchData()
-      }
-    } catch (_error) {
-      toast.error('Erro ao remover transação. Tente novamente mais tarde.')
+      await deleteTransaction({
+        workspaceId: transaction.workspaceId,
+        transactionId: id,
+      })
+      toast.success('Transação removida com sucesso!')
+    } catch (error) {
+      const apiError = normalizeApiError(error)
+      toast.error(apiError.message)
     } finally {
       setIsLoading(false)
       setOpenModal(prevState => !prevState)

@@ -5,6 +5,7 @@ import { MONTHS_OF_YEAR } from '@/data/date/month-select'
 import { percentFormat } from '@/utils/percent-format'
 import { DashboardCardChartItem } from './dashboard-card-chart-item'
 import { DashboardCardIcon } from './dashboard-card-icon'
+import { DashboardCardTip } from './dashboard-card-tip'
 
 type MonthlyDistributionType = {
   income: number
@@ -34,9 +35,17 @@ export function DashBoardCardChart({
   return (
     <Card>
       <CardHeader className="gap-6">
-        <CardTitle className="text-center">
-          Distribuição Mensal - {monthAndYear().month} de {monthAndYear().year}
-        </CardTitle>
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle className="text-center">
+            Distribuição Mensal - {monthAndYear().month} de{' '}
+            {monthAndYear().year}
+          </CardTitle>
+
+          <DashboardCardTip
+            label="Distribuição mensal"
+            description="Apresenta como o mês foi dividido entre receitas, despesas e investimentos. Cada percentual representa a participação de cada grupo no total do período."
+          />
+        </div>
         <Separator />
       </CardHeader>
       <CardContent className="flex justify-center items-center gap-6">

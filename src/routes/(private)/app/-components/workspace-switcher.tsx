@@ -7,7 +7,7 @@ import {
   UserIcon,
   UsersIcon,
 } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
@@ -24,45 +24,30 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
-import { WorkspaceService } from '@/services/workspace/workspace'
-import type { IWorkspace } from '@/services/workspace/workspace.d'
-import type { IPaginateResponse } from '@/utils/http'
+import { useWorkspacesQuery } from '@/hooks/queries/use-workspaces-query'
+import { normalizeApiError } from '@/services/api/errors'
 import { AddWorkspaceButton } from './add-workspace-button'
 
 export function WorkspaceSwitcher() {
   const [open, setOpen] = React.useState(false)
 
-  const [workspaces, setWorkspaces] = useState<IPaginateResponse<IWorkspace>>({
-    data: [],
-    currentPage: 0,
-    limit: 0,
-    totalCount: 0,
-    totalPages: 0,
-  })
+  const { data, error } = useWorkspacesQuery(1, 20)
 
-  const initialValue = workspaces.totalCount > 0 ? workspaces.data[0].id : ''
+  const workspaces = data ?? {
+    data: [],
+    props: {
+      currentPage: 1,
+      limit: 20,
+      totalCount: 0,
+      totalPages: 0,
+    },
+  }
+
+  const initialValue =
+    workspaces.props.totalCount > 0 ? workspaces.data[0].id : ''
   const [workspaceActive, setWorkspaceActive] = React.useState(initialValue)
 
   const route = useNavigate()
-
-  async function fetchData() {
-    try {
-      const res = await WorkspaceService.GetWorkspace(1, 20)
-      if (res.status === 200 || res.status === 204) {
-        const { data, currentPage, limit, totalCount, totalPages } =
-          res.data.body
-        setWorkspaces({
-          data: data,
-          currentPage: currentPage,
-          limit: limit,
-          totalCount: totalCount,
-          totalPages: totalPages,
-        })
-      }
-    } catch (_error) {
-      toast.error('Erro ao buscar workspaces. Por favor, tente novamente.')
-    }
-  }
 
   const handleRedirectToDashboard = (currentWorkspace: string) => {
     route({
@@ -71,8 +56,17 @@ export function WorkspaceSwitcher() {
   }
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    if (workspaceActive || workspaces.data.length === 0) return
+
+    setWorkspaceActive(workspaces.data[0].id)
+  }, [workspaces.data, workspaceActive])
+
+  useEffect(() => {
+    if (!error) return
+
+    const apiError = normalizeApiError(error)
+    toast.error(apiError.message)
+  }, [error])
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -117,8 +111,8 @@ export function WorkspaceSwitcher() {
 
               <div className="bg-primary/10 rounded-full border border-primary/25 px-3 py-1">
                 <span className="block text-xs uppercase text-primary leading-none tracking-widest">
-                  {workspaces.totalCount}{' '}
-                  {workspaces.totalCount <= 1 ? 'Item' : 'Itens'}
+                  {workspaces.props.totalCount}{' '}
+                  {workspaces.props.totalCount <= 1 ? 'Item' : 'Itens'}
                 </span>
               </div>
             </div>
@@ -184,7 +178,7 @@ export function WorkspaceSwitcher() {
 
           <Separator className="mt-2 mb-4" />
 
-          <AddWorkspaceButton onFetchData={fetchData}>
+          <AddWorkspaceButton>
             <Button className="w-full" variant="gradient">
               <PlusIcon className="size-5 shrink-0 text-foreground" />
               <span className="font-semibold text-foreground">

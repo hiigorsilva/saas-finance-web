@@ -62,7 +62,7 @@ export function DashboardCardChartItem({
       <CardContent className="flex-1 p-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square w-full min-h-[250px]"
+          className="mx-auto aspect-square w-full min-h-62.5"
         >
           <PieChart>
             <ChartTooltip

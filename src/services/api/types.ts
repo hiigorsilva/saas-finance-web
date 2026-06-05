@@ -1,0 +1,46 @@
+export type ApiResponse<T> = {
+  data: T
+}
+
+export type ApiPaginatedResponse<T> = {
+  data: T[]
+  props: {
+    totalCount: number
+    totalPages: number
+    currentPage: number
+    limit: number
+  }
+}
+
+export type ApiErrorCode =
+  | 'EMAIL_ALREADY_IN_USE'
+  | 'FORBIDDEN'
+  | 'INTERNAL_SERVER_ERROR'
+  | 'INVALID_CREDENTIALS'
+  | 'INVALID_MONTH'
+  | 'INVALID_YEAR'
+  | 'METHOD_NOT_ALLOWED'
+  | 'PAGE_OUT_OF_RANGE'
+  | 'PASSWORD_TOO_SHORT'
+  | 'PRIVATE_WORKSPACE_CANNOT_HAVE_MEMBERS'
+  | 'TRANSACTION_NOT_FOUND'
+  | 'UNAUTHORIZED'
+  | 'UNKNOWN_ERROR'
+  | 'USER_ALREADY_WORKSPACE_MEMBER'
+  | 'USER_CANNOT_REMOVE_SELF_FROM_WORKSPACE'
+  | 'USER_NOT_FOUND'
+  | 'USER_NOT_WORKSPACE_MEMBER'
+  | 'VALIDATION_ERROR'
+  | 'WORKSPACE_CREATION_FAILED'
+  | 'WORKSPACE_MEMBER_CREATION_FAILED'
+  | 'WORKSPACE_MEMBER_NOT_FOUND'
+  | 'WORKSPACE_MEMBER_ROLE_NOT_FOUND'
+  | 'WORKSPACE_NAME_ALREADY_EXISTS'
+  | 'WORKSPACE_NOT_FOUND'
+  | 'WORKSPACE_OWNER_CANNOT_BE_REMOVED'
+  | 'WORKSPACE_OWNER_ROLE_IMMUTABLE'
+
+export type ApiErrorResponse = {
+  message: string
+  code: ApiErrorCode
+}

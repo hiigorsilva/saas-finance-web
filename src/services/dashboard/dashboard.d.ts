@@ -1,24 +1,36 @@
 import type { ICategory } from '../transaction/categories'
 import type { ITransaction } from '../transaction/transaction.d'
 
-export type IDashboard = {
-  resume: {
-    totalIncome: number
-    totalIncomePercent: number
-    totalExpense: number
-    totalExpensePercent: number
-    totalBalance: number
-    totalBalancePercent: number
-    totalInvestment: number
-    totalInvestmentPercent: number
-  }
-  monthlyDistribution: {
-    income: number
-    expense: number
-    investment: number
-  }
+export interface IDashboard {
+  resume: Resume
+  metrics: Metrics
+  monthlyDistribution: MonthlyDistribution
   lastTransactions: ITransaction[]
   expenseByCategory: ICategory[]
-  weeklyPayment: ITransaction[]
-  latePayments: ITransaction[]
+}
+
+export interface Resume {
+  totalIncome: number
+  totalIncomePercent: number
+  totalExpense: number
+  totalExpensePercent: number
+  totalBalance: number
+  totalBalancePercent: number
+  totalInvestment: number
+  totalInvestmentPercent: number
+}
+
+export interface Metrics {
+  savingsRate: number
+  burnRate: number
+  projectedBalance: number
+  expenseRatio: number
+  expenseChange: number
+  incomeChange: number
+}
+
+export interface MonthlyDistribution {
+  income: number
+  expense: number
+  investment: number
 }

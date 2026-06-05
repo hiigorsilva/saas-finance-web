@@ -38,9 +38,10 @@ import {
   TRANSACTION_TYPE,
   TRANSACTION_TYPE_VALUES,
 } from '@/data/labels/transaction-type'
+import { useCreateTransactionMutation } from '@/hooks/mutations/use-create-transaction-mutation'
 import { cn } from '@/lib/utils'
 import type { AddTransactionType } from '@/schemas/add-transaction-button'
-import { TransactionService } from '@/services/transaction/transaction'
+import { normalizeApiError } from '@/services/api/errors'
 import { dateFormatLong } from '@/utils/date-format'
 import {
   transactionCategoryTranslate,
@@ -51,7 +52,6 @@ import {
 type AddTransactionFormProps = {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
   form: UseFormReturn<AddTransactionType>
-  onFetchData: () => Promise<void>
 }
 
 export const defaultValuesNewTransaction = (): Partial<AddTransactionType> => ({
@@ -66,25 +66,22 @@ export const defaultValuesNewTransaction = (): Partial<AddTransactionType> => ({
 export function AddTransactionForm({
   setOpenModal,
   form,
-  onFetchData,
 }: AddTransactionFormProps) {
   const { workspaceId } = useParams({ from: '/(private)/app/$workspaceId' })
+  const { mutateAsync: createTransaction } = useCreateTransactionMutation()
 
   const [isLoading, setIsLoading] = useState(false)
 
   const onSubmit = async (data: AddTransactionType) => {
     setIsLoading(true)
     try {
-      const res = await TransactionService.PostTransaction(workspaceId, data)
-      if (res.status === 200 || res.status === 201) {
-        toast.success('Transação criada com sucesso!')
-        await onFetchData()
-        form.reset(defaultValuesNewTransaction())
-        setOpenModal(false)
-      }
+      await createTransaction({ workspaceId, data })
+      toast.success('Transação criada com sucesso!')
+      form.reset(defaultValuesNewTransaction())
+      setOpenModal(false)
     } catch (error) {
-      console.error(error)
-      toast.error('Erro ao criar transação. Por favor, tente novamente.')
+      const apiError = normalizeApiError(error)
+      toast.error(apiError.message)
     } finally {
       setIsLoading(false)
     }

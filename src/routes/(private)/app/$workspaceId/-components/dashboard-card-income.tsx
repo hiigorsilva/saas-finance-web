@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { currencyFormat } from '@/utils/currency-format'
 import { percentFormat } from '@/utils/percent-format'
 import { DashboardCardIcon } from './dashboard-card-icon'
+import { DashboardCardTip } from './dashboard-card-tip'
 
 type DashBoardCardIncomeProps = {
   showAmount: boolean
@@ -19,17 +20,24 @@ export function DashBoardCardIncome({
     <Card>
       <CardContent className="flex flex-col gap-2">
         {/* LABEL */}
-        <div className="flex justify-start items-center gap-2">
-          <DashboardCardIcon className="bg-green-500/10 border border-green-500/25">
-            <TrendingUpIcon
-              className="size-5 shrink-0 text-green-500"
-              strokeWidth={2}
-            />
-          </DashboardCardIcon>
+        <div className="flex justify-between items-center gap-2">
+          <div className="flex justify-start items-center gap-2">
+            <DashboardCardIcon className="bg-green-500/10 border border-green-500/25">
+              <TrendingUpIcon
+                className="size-5 shrink-0 text-green-500"
+                strokeWidth={2}
+              />
+            </DashboardCardIcon>
 
-          <h2 className="font-normal text-sm text-muted-foreground leading-none tracking-tight">
-            Receitas
-          </h2>
+            <h2 className="font-normal text-sm text-muted-foreground leading-none tracking-tight">
+              Receitas
+            </h2>
+          </div>
+
+          <DashboardCardTip
+            label="Receitas do período"
+            description="Mostra o total de entradas registradas no mês selecionado. O percentual compara esse total com o mês anterior."
+          />
         </div>
 
         {/* AMOUNT */}

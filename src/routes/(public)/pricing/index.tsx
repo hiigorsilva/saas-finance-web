@@ -14,7 +14,7 @@ function PricingPage() {
         <h1>Pricing Page</h1>
 
         <Button className="w-fit" variant="gradient" asChild>
-          <Link from="/pricing" to="/app">
+          <Link from="/pricing/" to="/app">
             Ir para o início
           </Link>
         </Button>

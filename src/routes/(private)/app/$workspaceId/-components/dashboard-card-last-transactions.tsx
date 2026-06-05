@@ -9,13 +9,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import type { TransactionType } from '@/data/requests/transactions'
+import type { ITransaction } from '@/services/transaction/transaction.d'
 import { Route } from '../layout'
 import { DashBoardCardLastTransactionsEmpty } from './dashboard-card-last-transaction-empty'
 import { DashBoardCardLastTransactionsRow } from './dashboard-card-last-transaction-row'
+import { DashboardCardTip } from './dashboard-card-tip'
 
 type DashBoardCardLastTransactionsProps = {
-  transactions: TransactionType[]
+  transactions: ITransaction[]
 }
 
 export function DashBoardCardLastTransactions({
@@ -32,10 +33,16 @@ export function DashBoardCardLastTransactions({
   }
 
   return (
-    <Card>
+    <Card className="flex-auto">
       <CardHeader className="gap-6">
         <div className="flex justify-between items-center">
-          <CardTitle className="text-center">Últimas transações</CardTitle>
+          <div className="flex items-center gap-2">
+            <CardTitle className="text-center">Últimas transações</CardTitle>
+            <DashboardCardTip
+              label="Últimas transações"
+              description="Lista os lançamentos mais recentes do período selecionado para facilitar a conferência rápida das movimentações."
+            />
+          </div>
 
           <Button
             variant="outline"

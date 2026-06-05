@@ -23,7 +23,7 @@ function ProfileFinancialPage() {
 
   const handleNavigateBack = () => {
     router({
-      to: '..',
+      to: '/app/profile',
     })
   }
 

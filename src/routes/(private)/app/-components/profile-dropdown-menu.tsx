@@ -1,6 +1,7 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { ChevronDownIcon, LogOutIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -11,37 +12,27 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useAuth } from '@/contexts/auth-context'
-import { UserService } from '@/services/user/user'
-import type { IUserLogged } from '@/services/user/user.d'
+import { useUserLoggedQuery } from '@/hooks/queries/use-user-logged-query'
+import { normalizeApiError } from '@/services/api/errors'
 import { navigateProfileLinks } from '../-data/navigate-profile-links'
 import { ProfileImage } from './profile-image'
 
 export function ProfileDropdownMenu() {
   const { signOut } = useAuth()
   const navigate = useNavigate()
-
-  const [user, setUser] = useState<IUserLogged>({} as IUserLogged)
-
-  async function fetchData() {
-    const res = await UserService.GetUserLogged()
-    if (res.status === 200 || res.status === 204) {
-      const user = res.data.body.data
-      setUser(user)
-    }
-  }
+  const { data: user, error } = useUserLoggedQuery()
 
   const handleSignOut = async () => {
     signOut()
     await navigate({ to: '/login', replace: true })
   }
 
-  async function effectFn() {
-    await fetchData()
-  }
-
   useEffect(() => {
-    effectFn()
-  }, [])
+    if (!error) return
+
+    const apiError = normalizeApiError(error)
+    toast.error(apiError.message)
+  }, [error])
 
   return (
     <DropdownMenu>
@@ -64,10 +55,10 @@ export function ProfileDropdownMenu() {
         <div className="flex flex-col items-start gap-3">
           <div className="flex flex-col items-start gap-2">
             <DropdownMenuLabel className="font-semibold text-base text-foreground leading-none p-0">
-              {user.name}
+              {user?.name}
             </DropdownMenuLabel>
             <span className="font-normal text-sm text-muted-foreground leading-none">
-              {user.email}
+              {user?.email}
             </span>
           </div>
 

@@ -29,21 +29,19 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
+import { useCreateWorkspaceMutation } from '@/hooks/mutations/use-create-workspace-mutation'
 import {
   type AddWorkspaceFormType,
   addWorkspaceFormSchema,
 } from '@/schemas/add-workspace-button'
-import { WorkspaceService } from '@/services/workspace/workspace'
+import { normalizeApiError } from '@/services/api/errors'
 
-type AddWorkspaceButtonProps = ComponentProps<'button'> & {
-  onFetchData: () => Promise<void>
-}
+type AddWorkspaceButtonProps = ComponentProps<'button'>
 
-export function AddWorkspaceButton({
-  children,
-  onFetchData,
-}: AddWorkspaceButtonProps) {
+export function AddWorkspaceButton({ children }: AddWorkspaceButtonProps) {
   const [openModal, setOpenModal] = useState(false)
+  const { mutateAsync: createWorkspace, isPending } =
+    useCreateWorkspaceMutation()
 
   const form = useForm<AddWorkspaceFormType>({
     resolver: zodResolver(addWorkspaceFormSchema),
@@ -55,15 +53,13 @@ export function AddWorkspaceButton({
 
   const onSubmit = async (data: AddWorkspaceFormType) => {
     try {
-      const res = await WorkspaceService.PostWorkspace(data)
-      if (res.status === 200 || res.status === 201) {
-        toast.success('Workspace criado com sucesso!')
-        onFetchData()
-        form.reset()
-        setOpenModal(false)
-      }
-    } catch (_error) {
-      toast.error('Erro ao criar workspace. Por favor, tente novamente.')
+      await createWorkspace(data)
+      toast.success('Workspace criado com sucesso!')
+      form.reset()
+      setOpenModal(false)
+    } catch (error) {
+      const apiError = normalizeApiError(error)
+      toast.error(apiError.message)
     }
   }
 
@@ -187,7 +183,12 @@ export function AddWorkspaceButton({
                 Cancelar
               </Button>
 
-              <Button className="flex-1" type="submit" variant="gradient">
+              <Button
+                className="flex-1"
+                type="submit"
+                variant="gradient"
+                disabled={isPending}
+              >
                 Criar Workspace
               </Button>
             </div>

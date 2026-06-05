@@ -16,6 +16,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { useAuth } from '@/contexts/auth-context'
 import { type LoginFormType, loginFormSchema } from '@/schemas/login-form'
+import { normalizeApiError } from '@/services/api/errors'
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(true)
@@ -35,8 +36,9 @@ export function LoginForm() {
     try {
       await signIn(data)
       await navigate({ to: '/' })
-    } catch (_error) {
-      toast.error('Falha ao realizar o login.')
+    } catch (error) {
+      const apiError = normalizeApiError(error)
+      toast.error(apiError.message)
     } finally {
     }
   }
@@ -60,7 +62,7 @@ export function LoginForm() {
                   E-mail
                 </FormLabel>
                 <FormControl>
-                  <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+                  <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
                     <MailIcon
                       className="size-5 text-muted-foreground"
                       strokeWidth={1}
@@ -88,7 +90,7 @@ export function LoginForm() {
                   Senha
                 </FormLabel>
                 <FormControl>
-                  <div className="flex items-center border rounded-md pl-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+                  <div className="flex items-center border rounded-md pl-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
                     <LockIcon
                       className="size-5 text-muted-foreground"
                       strokeWidth={1}

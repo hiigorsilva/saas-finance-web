@@ -3,12 +3,13 @@ import { ChevronLeftIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Container } from '@/components/layout/container'
+import { Loading } from '@/components/layout/loading'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
 import { DASHBOARD_KEYS } from '@/data/keys/local-storage'
+import { useDashboardQuery } from '@/hooks/queries/use-dashboard-query'
 import { monthSelectSchema } from '@/schemas/dashboard-select-time'
-import { DashboardService } from '@/services/dashboard/dashboard'
-import type { IDashboard } from '@/services/dashboard/dashboard.d'
+import { normalizeApiError } from '@/services/api/errors'
 import { DashBoardCardBalance } from './-components/dashboard-card-balance'
 import { DashBoardCardChart } from './-components/dashboard-card-chat'
 import { DashBoardCardExpense } from './-components/dashboard-card-expense'
@@ -16,8 +17,8 @@ import { DashboardCardExpenseByCategory } from './-components/dashboard-card-exp
 import { DashBoardCardIncome } from './-components/dashboard-card-income'
 import { DashBoardCardInvestiment } from './-components/dashboard-card-investiment'
 import { DashBoardCardLastTransactions } from './-components/dashboard-card-last-transactions'
-import { DashboardCardLatePayment } from './-components/dashboard-card-late-payment'
-import { DashboardCardWeekPayment } from './-components/dashboard-card-week-payment'
+import { DashboardCardMetricsRatios } from './-components/dashboard-card-metrics-ratios'
+import { DashboardCardMetricsTrend } from './-components/dashboard-card-metrics-trend'
 import { DashboardTimeSelect } from './-components/dashboard-time-select'
 
 export const Route = createFileRoute('/(private)/app/$workspaceId/')({
@@ -36,8 +37,6 @@ function DashboardPage() {
   const router = Route.useNavigate()
   const match = Route.useMatch()
 
-  const [dashboard, setDashboard] = useState<IDashboard | null>(null)
-
   const initialShowAmount = (): boolean => {
     const storedShowAmount = localStorage.getItem(DASHBOARD_KEYS.showAmount)
     if (!storedShowAmount) return false
@@ -51,42 +50,22 @@ function DashboardPage() {
     return clearedValue
   }
 
-  async function fetchData() {
-    try {
-      const month = formattedSearchValue(match.search.month)
-      const year = formattedSearchValue(match.search.year)
+  const month = formattedSearchValue(match.search.month)
+  const year = formattedSearchValue(match.search.year)
 
-      const res = await DashboardService.GetDashboard(
-        match.params.workspaceId,
-        month,
-        year
-      )
-      if (res.status === 200) {
-        const {
-          resume,
-          expenseByCategory,
-          lastTransactions,
-          latePayments,
-          monthlyDistribution,
-          weeklyPayment,
-        } = res.data.body.data
-        setDashboard({
-          resume,
-          expenseByCategory,
-          lastTransactions,
-          latePayments,
-          monthlyDistribution,
-          weeklyPayment,
-        })
-      }
+  const {
+    data: dashboard,
+    isPending,
+    error,
+    isError,
+  } = useDashboardQuery(match.params.workspaceId, month, year)
 
-      if (res.status === 204) {
-        setDashboard(null)
-      }
-    } catch (_error) {
-      toast.error('Erro ao carregar transações. Por favor, tente novamente.')
-    }
-  }
+  useEffect(() => {
+    if (!error) return
+
+    const apiError = normalizeApiError(error)
+    toast.error(apiError.message)
+  }, [error])
 
   const handleNavigateBack = () => {
     router({
@@ -94,9 +73,25 @@ function DashboardPage() {
     })
   }
 
-  useEffect(() => {
-    fetchData()
-  }, [match.search.month, match.search.year])
+  if (isPending) return <Loading />
+  if (isError || !dashboard) {
+    return (
+      <Container className="gap-6 py-6">
+        <div className="flex justify-between items-center gap-6">
+          <div className="flex items-center gap-2">
+            <TitleIconPage handleNavigateBack={handleNavigateBack}>
+              <ChevronLeftIcon />
+            </TitleIconPage>
+            <TitlePage>Dashboard</TitlePage>
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-dashed p-6 text-sm text-muted-foreground">
+          Não foi possível carregar os dados do dashboard para este período.
+        </div>
+      </Container>
+    )
+  }
 
   return (
     <Container className="gap-6 py-6">
@@ -124,57 +119,46 @@ function DashboardPage() {
             <DashBoardCardBalance
               showAmountSwitch={setShowAmount}
               showAmount={showAmount}
-              onFetchData={fetchData}
-              balanceValue={dashboard?.resume?.totalBalance ?? 0}
-              balancePercent={dashboard?.resume?.totalBalancePercent ?? 0}
+              balanceValue={dashboard.resume.totalBalance ?? 0}
+              balancePercent={dashboard.resume.totalBalancePercent ?? 0}
             />
 
             <div className="grid grid-cols-3 gap-3">
               <DashBoardCardIncome
                 showAmount={showAmount}
-                incomeValue={dashboard?.resume?.totalIncome ?? 0}
-                incomePercent={dashboard?.resume?.totalIncomePercent ?? 0}
+                incomeValue={dashboard.resume.totalIncome ?? 0}
+                incomePercent={dashboard.resume.totalIncomePercent ?? 0}
               />
               <DashBoardCardExpense
                 showAmount={showAmount}
-                expenseValue={dashboard?.resume?.totalExpense ?? 0}
-                expensePercent={dashboard?.resume?.totalExpensePercent ?? 0}
+                expenseValue={dashboard.resume.totalExpense ?? 0}
+                expensePercent={dashboard.resume.totalExpensePercent ?? 0}
               />
               <DashBoardCardInvestiment
                 showAmount={showAmount}
-                investimentValue={dashboard?.resume?.totalInvestment ?? 0}
+                investimentValue={dashboard.resume.totalInvestment ?? 0}
                 investimentPercent={
-                  dashboard?.resume?.totalInvestmentPercent ?? 0
+                  dashboard.resume.totalInvestmentPercent ?? 0
                 }
               />
             </div>
           </div>
 
           <DashBoardCardChart
-            monthlyDistribution={
-              dashboard?.monthlyDistribution ?? {
-                income: 0,
-                expense: 0,
-                investment: 0,
-              }
-            }
+            monthlyDistribution={dashboard.monthlyDistribution}
             search={match.search}
           />
           <DashBoardCardLastTransactions
-            transactions={dashboard?.lastTransactions ?? []}
+            transactions={dashboard.lastTransactions ?? []}
           />
         </div>
 
         {/* RIGHTSIDE */}
         <div className="flex flex-col justify-between gap-3 col-span-1 col-start-3">
-          <DashboardCardLatePayment
-            latePayments={dashboard?.latePayments ?? []}
-          />
-          <DashboardCardWeekPayment
-            weekPayments={dashboard?.weeklyPayment ?? []}
-          />
+          <DashboardCardMetricsRatios metrics={dashboard.metrics} />
+          <DashboardCardMetricsTrend metrics={dashboard.metrics} />
           <DashboardCardExpenseByCategory
-            expenseByCategory={dashboard?.expenseByCategory ?? []}
+            expenseByCategory={dashboard.expenseByCategory ?? []}
           />
         </div>
       </div>

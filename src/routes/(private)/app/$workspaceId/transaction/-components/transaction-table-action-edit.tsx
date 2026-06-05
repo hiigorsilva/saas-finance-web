@@ -44,13 +44,14 @@ import {
   TRANSACTION_PAYMENT_METHOD_TYPE_VALUES,
 } from '@/data/labels/transaction-payment-method'
 import { TRANSACTION_TYPE_VALUES } from '@/data/labels/transaction-type'
-import type { TransactionType } from '@/data/requests/transactions'
+import { useUpdateTransactionMutation } from '@/hooks/mutations/use-update-transaction-mutation'
 import { cn } from '@/lib/utils'
 import {
   type EditTransactionType,
   editTransactionSchema,
 } from '@/schemas/edit-transaction-button'
-import { TransactionService } from '@/services/transaction/transaction'
+import { normalizeApiError } from '@/services/api/errors'
+import type { ITransaction } from '@/services/transaction/transaction.d'
 import { dateFormatLong } from '@/utils/date-format'
 import {
   transactionCategoryTranslate,
@@ -59,8 +60,7 @@ import {
 } from '../../-utils/transactions'
 
 type TransactionTableActionEditProps = ComponentProps<'button'> & {
-  transaction: TransactionType
-  onFetchData: () => Promise<void>
+  transaction: ITransaction
 }
 
 function normalizePaymentMethod(
@@ -83,7 +83,7 @@ function normalizePaymentMethod(
 }
 
 function defaultValuesEditTransaction(
-  transaction: TransactionType
+  transaction: ITransaction
 ): EditTransactionType {
   return {
     workspaceId: transaction.workspaceId,
@@ -100,9 +100,9 @@ function defaultValuesEditTransaction(
 export function TransactionTableActionEdit({
   transaction,
   children,
-  onFetchData,
 }: TransactionTableActionEditProps) {
   const [openModal, setOpenModal] = useState(false)
+  const { mutateAsync: updateTransaction } = useUpdateTransactionMutation()
 
   const form = useForm<EditTransactionType>({
     resolver: zodResolver(editTransactionSchema),
@@ -116,20 +116,17 @@ export function TransactionTableActionEdit({
 
   const onSubmit = async (data: EditTransactionType) => {
     try {
-      const res = await TransactionService.PutTransaction(
-        transaction.workspaceId,
-        transaction.id,
-        data
-      )
-      if (res.status === 200 || res.status === 201) {
-        toast.success('Transação atualizada com sucesso!')
-        onFetchData()
-        form.reset(defaultValuesEditTransaction(transaction))
-        setOpenModal(false)
-      }
+      await updateTransaction({
+        workspaceId: transaction.workspaceId,
+        transactionId: transaction.id,
+        data,
+      })
+      toast.success('Transação atualizada com sucesso!')
+      form.reset(defaultValuesEditTransaction(transaction))
+      setOpenModal(false)
     } catch (error) {
-      console.error(error)
-      toast.error('Erro ao atualizar transação. Por favor, tente novamente.')
+      const apiError = normalizeApiError(error)
+      toast.error(apiError.message)
     }
   }
 

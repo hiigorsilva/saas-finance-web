@@ -19,6 +19,7 @@ import {
   type RegisterFormType,
   registerFormSchema,
 } from '@/schemas/register-form'
+import { normalizeApiError } from '@/services/api/errors'
 
 export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(true)
@@ -39,8 +40,9 @@ export function RegisterForm() {
     try {
       await register(data)
       await navigate({ to: '/' })
-    } catch (_error) {
-      toast.error('Falha ao criar a conta.')
+    } catch (error) {
+      const apiError = normalizeApiError(error)
+      toast.error(apiError.message)
     } finally {
     }
   }
@@ -65,7 +67,7 @@ export function RegisterForm() {
                   Nome
                 </FormLabel>
                 <FormControl>
-                  <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+                  <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
                     <UserIcon
                       className="size-5 text-muted-foreground"
                       strokeWidth={1}
@@ -93,7 +95,7 @@ export function RegisterForm() {
                   E-mail
                 </FormLabel>
                 <FormControl>
-                  <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+                  <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
                     <MailIcon
                       className="size-5 text-muted-foreground"
                       strokeWidth={1}
@@ -121,7 +123,7 @@ export function RegisterForm() {
                   Senha
                 </FormLabel>
                 <FormControl>
-                  <div className="flex items-center border rounded-md pl-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+                  <div className="flex items-center border rounded-md pl-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
                     <LockIcon
                       className="size-5 text-muted-foreground"
                       strokeWidth={1}

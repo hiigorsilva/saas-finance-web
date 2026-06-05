@@ -1,7 +1,7 @@
 import { PenIcon, Trash2Icon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
-import type { TransactionType } from '@/data/requests/transactions'
+import type { ITransaction } from '@/services/transaction/transaction.d'
 import { currencyFormat } from '@/utils/currency-format'
 import { dateFormat } from '@/utils/date-format'
 import {
@@ -15,16 +15,12 @@ import { TransactionTableActionEdit } from './transaction-table-action-edit'
 import { TransactionTableActionRemove } from './transaction-table-action-remove'
 
 type TransactionTableRowProps = {
-  transaction: TransactionType
-  onFetchData: () => Promise<void>
+  transaction: ITransaction
 }
 
-export function TransactionTableRow({
-  transaction,
-  onFetchData,
-}: TransactionTableRowProps) {
+export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
   return (
-    <TableRow className="hover:bg-primary/[5%] border-primary/10">
+    <TableRow className="hover:bg-primary/5 border-primary/10">
       <TableCell className="text-foreground tracking-tight">
         {transaction.name}
       </TableCell>
@@ -54,19 +50,13 @@ export function TransactionTableRow({
       </TableCell>
       <TableCell>
         <div className="max-w-24 w-full flex justify-center items-center gap-2">
-          <TransactionTableActionEdit
-            transaction={transaction}
-            onFetchData={onFetchData}
-          >
+          <TransactionTableActionEdit transaction={transaction}>
             <Button variant="ghost" size="icon">
               <PenIcon className="size-4 shrink-0 text-muted-foreground" />
             </Button>
           </TransactionTableActionEdit>
 
-          <TransactionTableActionRemove
-            transaction={transaction}
-            onFetchData={onFetchData}
-          >
+          <TransactionTableActionRemove transaction={transaction}>
             <Button variant="ghost" size="icon">
               <Trash2Icon className="size-4 shrink-0 text-red-500" />
             </Button>

@@ -13,7 +13,7 @@ function PreferencesPage() {
 
   const handleNavigateBack = () => {
     router({
-      to: '..',
+      to: '/app/profile',
     })
   }
 

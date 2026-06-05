@@ -34,18 +34,25 @@ import {
   WORKSPACE_LABELS,
   WORKSPACE_VALUES,
 } from '@/data/labels/workspace-type'
+import { useUpdateWorkspaceMutation } from '@/hooks/mutations/use-update-workspace-mutation'
 import {
   type EditWorkspaceDetailsButtonType,
   editWorkspaceDetailsButtonSchema,
 } from '@/schemas/edit-workspace-details-button'
+import { normalizeApiError } from '@/services/api/errors'
+import type { IWorkspace } from '@/services/workspace/workspace.d'
 
-export function DetailsItemInfo() {
+type DetailsItemInfoProps = {
+  workspace: IWorkspace
+}
+
+export function DetailsItemInfo({ workspace }: DetailsItemInfoProps) {
   return (
     <Card>
       <CardHeader className="flex justify-between items-center gap-6">
         <CardTitle>Informações do workspace</CardTitle>
 
-        <WorkspaceDetailsInfoEdit>
+        <WorkspaceDetailsInfoEdit workspace={workspace}>
           <Button variant="ghost" size="icon">
             <PenIcon
               className="size-4 shrink-0 text-foreground"
@@ -58,21 +65,21 @@ export function DetailsItemInfo() {
       <CardContent className="flex flex-col gap-6">
         <Separator />
         {/* TITLE */}
-        <div className="flex flex-col gap-1">
+        {/* <div className="flex flex-col gap-1">
           <span className="inline-block font-normal text-sm text-muted-foreground leading-none tracking-wider uppercase">
             Slug
           </span>
           <p className="font-normal text-base text-foreground">
-            viagem-para-gramado
+            {workspace.slug}
           </p>
-        </div>
+        </div> */}
         {/* TITLE */}
         <div className="flex flex-col gap-1">
           <span className="inline-block font-normal text-sm text-muted-foreground leading-none tracking-wider uppercase">
             Título
           </span>
           <p className="font-normal text-base text-foreground">
-            Viagem para Gramado
+            {workspace.name}
           </p>
         </div>
 
@@ -82,8 +89,7 @@ export function DetailsItemInfo() {
             Descrição
           </span>
           <p className="font-normal text-base text-foreground">
-            Centralização de todos os gastos realizados nessa viagem para
-            facilitar o controle.
+            {workspace.description}
           </p>
         </div>
 
@@ -98,7 +104,7 @@ export function DetailsItemInfo() {
               strokeWidth={1.5}
             />
             <p className="font-normal text-sm text-foreground uppercase leading-none tracking-widest">
-              Compartilhado
+              {WORKSPACE_LABELS[workspace.type]}
             </p>
           </div>
         </div>
@@ -133,32 +139,38 @@ export function DetailsItemInfo() {
 
 type WorkspaceDetailsInfoEditProps = {
   children: React.ReactNode
+  workspace: IWorkspace
 }
 
 export function WorkspaceDetailsInfoEdit({
+  workspace,
   children,
 }: WorkspaceDetailsInfoEditProps) {
   const [openModal, setOpenModal] = useState(false)
+  const { mutateAsync: updateWorkspace } = useUpdateWorkspaceMutation()
 
   const form = useForm({
     resolver: zodResolver(editWorkspaceDetailsButtonSchema),
     defaultValues: {
-      slug: '',
-      title: '',
-      description: '',
-      type: 'PRIVATE',
+      title: workspace.name,
+      description: workspace.description,
+      type: workspace.type,
     },
   })
 
   const onSubmit = async (data: EditWorkspaceDetailsButtonType) => {
     try {
-      console.log('MEMBER', data)
+      await updateWorkspace({
+        workspaceId: workspace.id,
+        description: data.description || undefined,
+        name: data.title || undefined,
+        type: data.type || undefined,
+      })
       toast.success('Workspace atualizado com sucesso!')
-    } catch (error) {
-      console.error('UPDATING_WORKSPACE_DETAILS_ERROR:', error)
-      toast.error('Erro ao atualizar as informações do workspace.')
-    } finally {
       setOpenModal(false)
+    } catch (error) {
+      const apiError = normalizeApiError(error)
+      toast.error(apiError.message)
     }
   }
 
@@ -185,7 +197,7 @@ export function WorkspaceDetailsInfoEdit({
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex-1 flex flex-col gap-6"
           >
-            <FormField
+            {/* <FormField
               control={form.control}
               name="slug"
               render={({ field }) => (
@@ -203,7 +215,7 @@ export function WorkspaceDetailsInfoEdit({
                   <FormMessage className="absolute -bottom-5 left-0" />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="title"

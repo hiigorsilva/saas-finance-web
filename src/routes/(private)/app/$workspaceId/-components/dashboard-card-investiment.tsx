@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { currencyFormat } from '@/utils/currency-format'
 import { percentFormat } from '@/utils/percent-format'
 import { DashboardCardIcon } from './dashboard-card-icon'
+import { DashboardCardTip } from './dashboard-card-tip'
 
 type DashBoardCardInvestimentProps = {
   showAmount: boolean
@@ -19,14 +20,21 @@ export function DashBoardCardInvestiment({
     <Card>
       <CardContent className="flex flex-col gap-2">
         {/* LABEL */}
-        <div className="flex justify-start items-center gap-2">
-          <DashboardCardIcon className="bg-blue-500/10 border border-blue-500/25">
-            <PiggyBankIcon className="size-5 shrink-0 text-blue-500" />
-          </DashboardCardIcon>
+        <div className="flex justify-between items-center gap-2">
+          <div className="flex justify-start items-center gap-2">
+            <DashboardCardIcon className="bg-blue-500/10 border border-blue-500/25">
+              <PiggyBankIcon className="size-5 shrink-0 text-blue-500" />
+            </DashboardCardIcon>
 
-          <h2 className="font-normal text-sm text-muted-foreground leading-none tracking-tight">
-            Investimento
-          </h2>
+            <h2 className="font-normal text-sm text-muted-foreground leading-none tracking-tight">
+              Investimento
+            </h2>
+          </div>
+
+          <DashboardCardTip
+            label="Investimentos do período"
+            description="Mostra o total destinado a investimentos no mês. O percentual indica se esse valor aumentou ou diminuiu frente ao mês anterior."
+          />
         </div>
 
         {/* AMOUNT */}

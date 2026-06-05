@@ -10,13 +10,9 @@ import { TransactionTableRow } from './transaction-table-row'
 
 type TransactionTableProps = {
   transactions: ITransaction[]
-  onFetchData: () => Promise<void>
 }
 
-export function TransactionTable({
-  transactions,
-  onFetchData,
-}: TransactionTableProps) {
+export function TransactionTable({ transactions }: TransactionTableProps) {
   return (
     <div className="flex flex-col border border-primary/10 rounded-lg overflow-hidden">
       <Table>
@@ -40,7 +36,6 @@ export function TransactionTable({
               <TransactionTableRow
                 key={transaction.id}
                 transaction={transaction}
-                onFetchData={onFetchData}
               />
             ))}
         </TableBody>

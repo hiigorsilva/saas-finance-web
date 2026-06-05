@@ -12,19 +12,18 @@ import { currencyFormat } from '@/utils/currency-format'
 import { percentFormat } from '@/utils/percent-format'
 import { DashboardAddTransactionButton } from './dashboard-add-transaction-button'
 import { DashboardCardIcon } from './dashboard-card-icon'
+import { DashboardCardTip } from './dashboard-card-tip'
 
 type DashBoardCardBalanceProps = {
   balanceValue: number
   balancePercent: number
   showAmount: boolean
   showAmountSwitch: React.Dispatch<React.SetStateAction<boolean>>
-  onFetchData: () => Promise<void>
 }
 
 export function DashBoardCardBalance({
   showAmount,
   showAmountSwitch,
-  onFetchData,
   balanceValue,
   balancePercent,
 }: DashBoardCardBalanceProps) {
@@ -53,6 +52,11 @@ export function DashBoardCardBalance({
               <h2 className="font-normal text-sm text-muted-foreground leading-none tracking-tight">
                 Saldo
               </h2>
+
+              <DashboardCardTip
+                label="Saldo consolidado"
+                description="Exibe o saldo total do período selecionado. O percentual indica a variação do saldo em comparação com o mês anterior."
+              />
             </div>
 
             <Button
@@ -105,7 +109,7 @@ export function DashBoardCardBalance({
         </div>
 
         {/* BUTTON */}
-        <DashboardAddTransactionButton onFetchData={onFetchData}>
+        <DashboardAddTransactionButton>
           <Button variant="gradient">
             Nova Transação
             <PlusIcon className="size-4 shrink-0 text-foreground" />
