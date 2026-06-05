@@ -1,14 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ChevronLeftIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
+import { useState } from 'react'
 import { Container } from '@/components/layout/container'
+import { Loading } from '@/components/layout/loading'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
 import { DASHBOARD_KEYS } from '@/data/keys/local-storage'
 import { useDashboardQuery } from '@/hooks/queries/use-dashboard-query'
 import { monthSelectSchema } from '@/schemas/dashboard-select-time'
-import { normalizeApiError } from '@/services/api/errors'
 import { DashBoardCardBalance } from './-components/dashboard-card-balance'
 import { DashBoardCardChart } from './-components/dashboard-card-chat'
 import { DashBoardCardExpense } from './-components/dashboard-card-expense'
@@ -52,24 +51,20 @@ function DashboardPage() {
   const month = formattedSearchValue(match.search.month)
   const year = formattedSearchValue(match.search.year)
 
-  const { data: dashboard, error } = useDashboardQuery(
+  const { data: dashboard, isPending } = useDashboardQuery(
     match.params.workspaceId,
     month,
     year
   )
+
+  if (isPending) return <Loading />
+  if (!dashboard) return null
 
   const handleNavigateBack = () => {
     router({
       to: '/app',
     })
   }
-
-  useEffect(() => {
-    if (!error) return
-
-    const apiError = normalizeApiError(error)
-    toast.error(apiError.message)
-  }, [error])
 
   return (
     <Container className="gap-6 py-6">
@@ -97,57 +92,45 @@ function DashboardPage() {
             <DashBoardCardBalance
               showAmountSwitch={setShowAmount}
               showAmount={showAmount}
-              balanceValue={dashboard?.resume?.totalBalance ?? 0}
-              balancePercent={dashboard?.resume?.totalBalancePercent ?? 0}
+              balanceValue={dashboard.resume.totalBalance ?? 0}
+              balancePercent={dashboard.resume.totalBalancePercent ?? 0}
             />
 
             <div className="grid grid-cols-3 gap-3">
               <DashBoardCardIncome
                 showAmount={showAmount}
-                incomeValue={dashboard?.resume?.totalIncome ?? 0}
-                incomePercent={dashboard?.resume?.totalIncomePercent ?? 0}
+                incomeValue={dashboard.resume.totalIncome ?? 0}
+                incomePercent={dashboard.resume.totalIncomePercent ?? 0}
               />
               <DashBoardCardExpense
                 showAmount={showAmount}
-                expenseValue={dashboard?.resume?.totalExpense ?? 0}
-                expensePercent={dashboard?.resume?.totalExpensePercent ?? 0}
+                expenseValue={dashboard.resume.totalExpense ?? 0}
+                expensePercent={dashboard.resume.totalExpensePercent ?? 0}
               />
               <DashBoardCardInvestiment
                 showAmount={showAmount}
-                investimentValue={dashboard?.resume?.totalInvestment ?? 0}
+                investimentValue={dashboard.resume.totalInvestment ?? 0}
                 investimentPercent={
-                  dashboard?.resume?.totalInvestmentPercent ?? 0
+                  dashboard.resume.totalInvestmentPercent ?? 0
                 }
               />
             </div>
           </div>
 
           <DashBoardCardChart
-            monthlyDistribution={
-              dashboard?.monthlyDistribution ?? {
-                income: 0,
-                expense: 0,
-                investment: 0,
-              }
-            }
+            monthlyDistribution={dashboard.monthlyDistribution}
             search={match.search}
           />
           <DashBoardCardLastTransactions
-            transactions={dashboard?.lastTransactions ?? []}
+            transactions={dashboard.lastTransactions ?? []}
           />
         </div>
 
         {/* RIGHTSIDE */}
         <div className="flex flex-col justify-between gap-3 col-span-1 col-start-3">
-          <DashboardCardLatePayment
-            latePayments={dashboard?.latePayments ?? []}
-          />
-          <DashboardCardWeekPayment
-            weekPayments={dashboard?.weeklyPayment ?? []}
-          />
-          <DashboardCardExpenseByCategory
-            expenseByCategory={dashboard?.expenseByCategory ?? []}
-          />
+          <DashboardCardLatePayment latePayments={[]} />
+          <DashboardCardWeekPayment weekPayments={[]} />
+          <DashboardCardExpenseByCategory expenseByCategory={[]} />
         </div>
       </div>
     </Container>

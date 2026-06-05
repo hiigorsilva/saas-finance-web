@@ -1,11 +1,13 @@
 import { createRootRoute, HeadContent, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import { Loading } from '@/components/layout/loading'
 import { NotFoundPage } from '@/components/layout/not-found'
 import { Screen } from '@/components/layout/screen'
 import { Toaster } from '@/components/ui/sonner'
 
 export const Route = createRootRoute({
   component: RootLayout,
+  loader: () => <Loading />,
   head: () => ({
     meta: [
       {
