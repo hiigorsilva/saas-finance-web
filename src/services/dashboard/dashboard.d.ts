@@ -2,13 +2,11 @@ import type { ICategory } from '../transaction/categories'
 import type { ITransaction } from '../transaction/transaction.d'
 
 export interface IDashboard {
-  data: {
-    resume: Resume
-    metrics: Metrics
-    monthlyDistribution: MonthlyDistribution
-    lastTransactions: ITransaction[]
-    expenseByCategory: ICategory[]
-  }
+  resume: Resume
+  metrics: Metrics
+  monthlyDistribution: MonthlyDistribution
+  lastTransactions: ITransaction[]
+  expenseByCategory: ICategory[]
 }
 
 export interface Resume {

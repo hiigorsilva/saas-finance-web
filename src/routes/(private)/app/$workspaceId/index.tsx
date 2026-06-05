@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ChevronLeftIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import { Container } from '@/components/layout/container'
 import { Loading } from '@/components/layout/loading'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
@@ -8,6 +9,7 @@ import { TitlePage } from '@/components/layout/title-page'
 import { DASHBOARD_KEYS } from '@/data/keys/local-storage'
 import { useDashboardQuery } from '@/hooks/queries/use-dashboard-query'
 import { monthSelectSchema } from '@/schemas/dashboard-select-time'
+import { normalizeApiError } from '@/services/api/errors'
 import { DashBoardCardBalance } from './-components/dashboard-card-balance'
 import { DashBoardCardChart } from './-components/dashboard-card-chat'
 import { DashBoardCardExpense } from './-components/dashboard-card-expense'
@@ -15,8 +17,8 @@ import { DashboardCardExpenseByCategory } from './-components/dashboard-card-exp
 import { DashBoardCardIncome } from './-components/dashboard-card-income'
 import { DashBoardCardInvestiment } from './-components/dashboard-card-investiment'
 import { DashBoardCardLastTransactions } from './-components/dashboard-card-last-transactions'
-import { DashboardCardLatePayment } from './-components/dashboard-card-late-payment'
-import { DashboardCardWeekPayment } from './-components/dashboard-card-week-payment'
+import { DashboardCardMetricsRatios } from './-components/dashboard-card-metrics-ratios'
+import { DashboardCardMetricsTrend } from './-components/dashboard-card-metrics-trend'
 import { DashboardTimeSelect } from './-components/dashboard-time-select'
 
 export const Route = createFileRoute('/(private)/app/$workspaceId/')({
@@ -51,19 +53,44 @@ function DashboardPage() {
   const month = formattedSearchValue(match.search.month)
   const year = formattedSearchValue(match.search.year)
 
-  const { data: dashboard, isPending } = useDashboardQuery(
-    match.params.workspaceId,
-    month,
-    year
-  )
+  const {
+    data: dashboard,
+    isPending,
+    error,
+    isError,
+  } = useDashboardQuery(match.params.workspaceId, month, year)
 
-  if (isPending) return <Loading />
-  if (!dashboard) return null
+  useEffect(() => {
+    if (!error) return
+
+    const apiError = normalizeApiError(error)
+    toast.error(apiError.message)
+  }, [error])
 
   const handleNavigateBack = () => {
     router({
       to: '/app',
     })
+  }
+
+  if (isPending) return <Loading />
+  if (isError || !dashboard) {
+    return (
+      <Container className="gap-6 py-6">
+        <div className="flex justify-between items-center gap-6">
+          <div className="flex items-center gap-2">
+            <TitleIconPage handleNavigateBack={handleNavigateBack}>
+              <ChevronLeftIcon />
+            </TitleIconPage>
+            <TitlePage>Dashboard</TitlePage>
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-dashed p-6 text-sm text-muted-foreground">
+          Não foi possível carregar os dados do dashboard para este período.
+        </div>
+      </Container>
+    )
   }
 
   return (
@@ -128,9 +155,11 @@ function DashboardPage() {
 
         {/* RIGHTSIDE */}
         <div className="flex flex-col justify-between gap-3 col-span-1 col-start-3">
-          <DashboardCardLatePayment latePayments={[]} />
-          <DashboardCardWeekPayment weekPayments={[]} />
-          <DashboardCardExpenseByCategory expenseByCategory={[]} />
+          <DashboardCardMetricsRatios metrics={dashboard.metrics} />
+          <DashboardCardMetricsTrend metrics={dashboard.metrics} />
+          <DashboardCardExpenseByCategory
+            expenseByCategory={dashboard.expenseByCategory ?? []}
+          />
         </div>
       </div>
     </Container>
