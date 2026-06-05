@@ -23,7 +23,7 @@ export function DashboardCardTip({
       <TooltipContent
         side="top"
         align="end"
-        className="w-80 p-3 text-xs leading-relaxed bg-background text-foreground border"
+        className="w-80 p-3 text-xs leading-relaxed"
       >
         <p className="font-semibold text-foreground">{label}</p>
         <p className="mt-1 text-muted-foreground">{description}</p>
