@@ -30,9 +30,14 @@ export function Pagination({
   totalPages,
 }: PaginationProps) {
   const router = useNavigate()
+  const perPageOptions = [20, 50, 100]
 
   const [page, setPage] = useState(Math.max(1, currentPage))
   const [perPage, setPerPage] = useState(Math.max(1, limit))
+
+  const selectPerPageValue = perPageOptions.includes(perPage)
+    ? String(perPage)
+    : '50'
 
   useEffect(() => {
     setPage(Math.max(1, currentPage))
@@ -52,6 +57,7 @@ export function Pagination({
 
   const setSelectItemPerPage = (perPage: string) => {
     const limitFormatted = Number(perPage)
+    setPage(1)
     setPerPage(limitFormatted)
   }
 
@@ -119,20 +125,23 @@ export function Pagination({
             Itens por página
           </span>
 
-          <Select defaultValue="10" onValueChange={setSelectItemPerPage}>
+          <Select
+            value={selectPerPageValue}
+            onValueChange={setSelectItemPerPage}
+          >
             <SelectTrigger className="text-foreground">
               <SelectValue placeholder="Selecione" />
             </SelectTrigger>
 
             <SelectContent align="end">
-              <SelectItem value="10" className="text-foreground">
-                10
-              </SelectItem>
               <SelectItem value="20" className="text-foreground">
                 20
               </SelectItem>
-              <SelectItem value="30" className="text-foreground">
-                30
+              <SelectItem value="50" className="text-foreground">
+                50
+              </SelectItem>
+              <SelectItem value="100" className="text-foreground">
+                100
               </SelectItem>
             </SelectContent>
           </Select>

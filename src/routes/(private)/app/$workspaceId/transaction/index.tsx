@@ -3,6 +3,7 @@ import { ChevronLeftIcon, PlusIcon } from 'lucide-react'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { Container } from '@/components/layout/container'
+import { Loading } from '@/components/layout/loading'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
 import { Button } from '@/components/ui/button'
@@ -31,18 +32,22 @@ export const Route = createFileRoute(
 function TransactionPage() {
   const { workspaceId } = Route.useParams()
   const router = Route.useNavigate()
+  const searchParams = Route.useSearch()
 
-  const { data, error } = useTransactionsQuery(workspaceId, 1, 50)
+  const page =
+    Number.isFinite(searchParams.page) && searchParams.page > 0
+      ? searchParams.page
+      : 1
+  const limit =
+    Number.isFinite(searchParams.limit) && searchParams.limit > 0
+      ? searchParams.limit
+      : 50
 
-  const transactions = data ?? {
-    data: [],
-    props: {
-      currentPage: 1,
-      limit: 10,
-      totalCount: 0,
-      totalPages: 0,
-    },
-  }
+  const {
+    data: transactions,
+    isPending,
+    error,
+  } = useTransactionsQuery(workspaceId, page, limit)
 
   const handleNavigateBack = () => {
     router({
@@ -57,6 +62,9 @@ function TransactionPage() {
     const apiError = normalizeApiError(error)
     toast.error(apiError.message)
   }, [error])
+
+  if (isPending) return <Loading />
+  if (!transactions) return null
 
   return (
     <Container className="gap-6 py-6">
