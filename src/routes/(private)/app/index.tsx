@@ -28,17 +28,7 @@ export const Route = createFileRoute('/(private)/app/')({
 })
 
 function WorkspacesPage() {
-  const { data, error } = useWorkspacesQuery(1, 20)
-
-  const workspaces = data ?? {
-    data: [],
-    props: {
-      currentPage: 1,
-      limit: 20,
-      totalCount: 0,
-      totalPages: 0,
-    },
-  }
+  const { data: workspaces, error } = useWorkspacesQuery(1, 20)
 
   useEffect(() => {
     if (!error) return
@@ -46,6 +36,8 @@ function WorkspacesPage() {
     const apiError = normalizeApiError(error)
     toast.error(apiError.message)
   }, [error])
+
+  if (!workspaces) return <SkeletonHomePage />
 
   return (
     <>
