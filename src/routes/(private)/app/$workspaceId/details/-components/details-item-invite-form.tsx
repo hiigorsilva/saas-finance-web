@@ -22,20 +22,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import {
+  ROLE_MEMBER_WORKSPACE_LABELS,
+  ROLE_MEMBER_WORKSPACE_TYPE,
+  ROLE_MEMBER_WORKSPACE_TYPE_VALUES,
+} from '@/data/labels/role-member-workspace'
 import { useAddMemberToWorkspaceMutation } from '@/hooks/mutations/use-add-member-workspace-mutation'
 import {
   type InviteMemberFormSchemaType,
   inviteMemberFormSchema,
 } from '@/schemas/invite-member-form'
 import { normalizeApiError } from '@/services/api/errors'
-import { MemberRolesType } from '@/services/workspace/workspace.d'
 
 export function DetailsItemInviteMemberForm() {
   const form = useForm<InviteMemberFormSchemaType>({
     resolver: zodResolver(inviteMemberFormSchema),
     defaultValues: {
       email: '',
-      role: MemberRolesType.MEMBER,
+      role: ROLE_MEMBER_WORKSPACE_TYPE.MEMBER,
     },
   })
 
@@ -66,12 +70,13 @@ export function DetailsItemInviteMemberForm() {
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem className="relative max-w-sm w-full flex flex-col gap-1">
+            <FormItem className="relative w-full flex flex-col gap-1">
               <FormLabel className="font-normal text-base text-foreground">
                 E-mail
               </FormLabel>
               <FormControl>
                 <Input
+                  className="w-full"
                   placeholder="Digite o email de um usuário..."
                   autoComplete="off"
                   {...field}
@@ -85,22 +90,23 @@ export function DetailsItemInviteMemberForm() {
           control={form.control}
           name="role"
           render={({ field }) => (
-            <FormItem className="relative max-w-sm w-full flex flex-col gap-1">
+            <FormItem className="relative w-fit flex flex-col gap-1">
               <FormLabel className="font-normal text-base text-foreground">
                 Cargo
               </FormLabel>
               <FormControl>
                 <Select>
-                  <SelectTrigger className="w-full max-w-48">
+                  <SelectTrigger className="w-full max-w-52 min-w-36">
                     <SelectValue placeholder="Selecione um cargo" {...field} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Cargos</SelectLabel>
-                      <SelectItem value="MEMBER">Membro</SelectItem>
-                      <SelectItem value="ADMIN">Administrador</SelectItem>
-                      <SelectItem value="VIEWER">Visualizador</SelectItem>
-                      <SelectItem value="OWNER">Proprietário</SelectItem>
+                      {ROLE_MEMBER_WORKSPACE_TYPE_VALUES.map(role => (
+                        <SelectItem key={role} value={role}>
+                          {ROLE_MEMBER_WORKSPACE_LABELS[role]}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>

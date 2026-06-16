@@ -2,8 +2,10 @@ import type { ApiPaginatedResponse, ApiResponse } from '@/services/api/types'
 import { api } from '../api/client'
 import type {
   AddMemberToWorkspacePayload,
+  IMemberOfWorkspace,
   IWorkspace,
   IWorkspaceMember,
+  UpdateMemberToWorkspacePayload,
 } from './workspace.d'
 
 export class WorkspaceService {
@@ -55,6 +57,32 @@ export class WorkspaceService {
     const response = await api.post<ApiResponse<IWorkspaceMember>>(
       `/workspace/${workspaceId}/member`,
       payload
+    )
+    return response.data.data
+  }
+
+  static async UpdateMemberOfWorkspace(data: UpdateMemberToWorkspacePayload) {
+    const { memberId, workspaceId, ...payload } = data
+    const response = await api.put<ApiResponse<IWorkspaceMember>>(
+      `/workspace/${workspaceId}/member/${memberId}`,
+      payload
+    )
+    return response.data.data
+  }
+
+  static async ListMemberOfWorkspace(
+    workspaceId: string,
+    page: number,
+    limit: number
+  ) {
+    const response = await api.get<ApiPaginatedResponse<IMemberOfWorkspace>>(
+      `/workspace/${workspaceId}/member`,
+      {
+        params: {
+          page,
+          limit,
+        },
+      }
     )
     return response.data.data
   }
