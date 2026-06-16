@@ -78,7 +78,7 @@ export function TransactionFilterForm() {
               <FormItem className="relative flex flex-col gap-0 min-w-52 w-fit">
                 <FormLabel className="sr-only">Buscar Transações</FormLabel>
                 <FormControl>
-                  <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+                  <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
                     <Input
                       className="pl-0 pr-3 shadow-none border-0 focus-visible:border-0 focus-visible:ring-0"
                       placeholder="Buscar Transações..."

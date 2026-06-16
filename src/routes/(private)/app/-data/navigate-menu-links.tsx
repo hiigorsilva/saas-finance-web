@@ -1,9 +1,4 @@
-import {
-  DollarSignIcon,
-  HomeIcon,
-  LayoutDashboardIcon,
-  SettingsIcon,
-} from 'lucide-react'
+import { DollarSignIcon, HomeIcon, LayoutDashboardIcon } from 'lucide-react'
 
 export const navigateMenuLinks = [
   {
@@ -20,10 +15,5 @@ export const navigateMenuLinks = [
     icon: <DollarSignIcon />,
     title: 'Transações',
     href: '/app/$workspaceId/transaction',
-  },
-  {
-    icon: <SettingsIcon />,
-    title: 'Gerenciar',
-    href: '/app/$workspaceId/manager',
   },
 ]
