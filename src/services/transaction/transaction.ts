@@ -33,7 +33,7 @@ export class TransactionService {
       payload
     )
 
-    return response.data.data
+    return response.data
   }
 
   static async PutTransaction(
@@ -52,7 +52,7 @@ export class TransactionService {
       payload
     )
 
-    return response.data.data
+    return response.data
   }
 
   static async DeleteTransaction(workspaceId: string, transactionId: string) {
@@ -60,6 +60,6 @@ export class TransactionService {
       `/${workspaceId}/transaction/${transactionId}`
     )
 
-    return response.data.data
+    return response.data
   }
 }

@@ -114,7 +114,7 @@ export function Pagination({
     <div className="flex justify-between items-center gap-6">
       {/* LEFTSIDE */}
       <span className="inline-flex text-sm text-muted-foreground tracking-tight">
-        Mostrando {perPage} de {totalCount} itens
+        Total de {totalCount} itens
       </span>
 
       {/* RIGHTSIDE */}
