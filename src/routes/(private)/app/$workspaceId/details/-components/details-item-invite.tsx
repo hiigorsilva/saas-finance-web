@@ -1,9 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import type { IWorkspaceDetails } from '@/services/workspace/workspace.d'
 import { DetailsItemInviteMemberForm } from './details-item-invite-form'
 import { DetailsItemInviteTable } from './details-item-invite-table'
 
-export function DetailsItemInvite() {
+type DetailsItemInviteProps = {
+  workspace: IWorkspaceDetails
+}
+
+export function DetailsItemInvite({ workspace }: DetailsItemInviteProps) {
   return (
     <Card>
       <CardHeader className="flex justify-between items-center gap-6">
@@ -24,7 +29,7 @@ export function DetailsItemInvite() {
             {/* WORKSPACE NAME */}
             <div className="w-fit flex justify-center items-center bg-primary/10 border border-primary/25 rounded-full px-3 py-1">
               <span className="inline-block font-semibold text-xs text-primary uppercase leading-none tracking-widest">
-                Viagem para Gramado
+                {workspace.name}
               </span>
             </div>
 
@@ -33,7 +38,7 @@ export function DetailsItemInvite() {
 
           {/* RIGHTSIDE */}
           <div className="flex flex-col flex-1">
-            <DetailsItemInviteTable />
+            <DetailsItemInviteTable members={workspace.members} />
           </div>
         </div>
       </CardContent>

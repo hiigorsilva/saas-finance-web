@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useParams } from '@tanstack/react-router'
 import { Loader2Icon, PenIcon, Trash2Icon, UserIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -43,19 +43,20 @@ import {
   ROLE_MEMBER_WORKSPACE_TYPE_VALUES,
 } from '@/data/labels/role-member-workspace'
 import { useUpdateMemberWorkspaceMutation } from '@/hooks/mutations/use-update-member-workspace-mutation'
-import { useMembersOfWorkspaceQuery } from '@/hooks/queries/use-workspaces-query'
 import {
   type EditMemberWorkspaceType,
   editMemberWorkspaceSchema,
 } from '@/schemas/edit-member-workspace'
-import type { IMemberOfWorkspace } from '@/services/workspace/workspace.d'
+import type { IMembersOfWorkspace } from '@/services/workspace/workspace.d'
+import { dateFormat } from '@/utils/date-format'
 
-export function DetailsItemInviteTable() {
-  const { workspaceId } = useParams({ from: '/(private)/app/$workspaceId' })
+type DetailsItemInviteTableProps = {
+  members: IMembersOfWorkspace[]
+}
 
-  const { data: members } = useMembersOfWorkspaceQuery(workspaceId)
-  if (!members) return null
-
+export function DetailsItemInviteTable({
+  members,
+}: DetailsItemInviteTableProps) {
   return (
     <div className="w-full flex flex-col gap-2">
       <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
@@ -72,6 +73,7 @@ export function DetailsItemInviteTable() {
           <TableRow>
             <TableHead>Nome</TableHead>
             <TableHead className="w-30">Cargo</TableHead>
+            <TableHead className="w-26">Entrou em</TableHead>
             <TableHead className="w-26">Ações</TableHead>
           </TableRow>
         </TableHeader>
@@ -88,10 +90,10 @@ export function DetailsItemInviteTable() {
 
                   <div className="flex flex-col gap-1.5">
                     <h3 className="font-semibold text-sm text-foreground text-wrap leading-none">
-                      {member.name}
+                      {member.userName}
                     </h3>
                     <p className="font-normal text-sm text-muted-foreground leading-none">
-                      {member.email}
+                      {member.userEmail}
                     </p>
                   </div>
                 </div>
@@ -101,7 +103,16 @@ export function DetailsItemInviteTable() {
               <TableCell className="w-30">
                 <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
                   <p className="font-normal text-sm text-muted-foreground capitalize leading-none">
-                    {member.role.toLowerCase()}
+                    {ROLE_MEMBER_WORKSPACE_LABELS[member.role]}
+                  </p>
+                </div>
+              </TableCell>
+
+              {/* JOINED AT */}
+              <TableCell className="w-30">
+                <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
+                  <p className="font-normal text-sm text-muted-foreground capitalize leading-none">
+                    {dateFormat(member.joinedAt)}
                   </p>
                 </div>
               </TableCell>
@@ -140,7 +151,7 @@ export function DetailsItemInviteTable() {
 
 type DetailsInviteMemberEditProps = {
   children: React.ReactNode
-  member: IMemberOfWorkspace
+  member: IMembersOfWorkspace
 }
 
 export function DetailsInviteMemberEdit({
@@ -149,9 +160,18 @@ export function DetailsInviteMemberEdit({
 }: DetailsInviteMemberEditProps) {
   const [openModal, setOpenModal] = useState(false)
 
-  const form = useForm({
+  const form = useForm<EditMemberWorkspaceType>({
     resolver: zodResolver(editMemberWorkspaceSchema),
+    defaultValues: {
+      role: member.role,
+    },
   })
+
+  useEffect(() => {
+    if (openModal) {
+      form.reset({ role: member.role })
+    }
+  }, [form, member.role, openModal])
 
   const { workspaceId } = useParams({ from: '/(private)/app/$workspaceId' })
   const { mutateAsync: updateMemberOfWorkspace } =
@@ -205,10 +225,7 @@ export function DetailsInviteMemberEdit({
                     Tipo
                   </FormLabel>
                   <FormControl>
-                    <Select
-                      defaultValue={field.value}
-                      onValueChange={field.onChange}
-                    >
+                    <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger className="max-w-72 w-full min-h-10">
                         <SelectValue
                           {...field}

@@ -2,9 +2,9 @@ import type { ApiPaginatedResponse, ApiResponse } from '@/services/api/types'
 import { api } from '../api/client'
 import type {
   AddMemberToWorkspacePayload,
-  IMemberOfWorkspace,
+  IMembersOfWorkspace,
   IWorkspace,
-  IWorkspaceMember,
+  IWorkspaceDetails,
   UpdateMemberToWorkspacePayload,
 } from './workspace.d'
 
@@ -23,7 +23,7 @@ export class WorkspaceService {
   }
 
   static async GetWorkspaceById(workspaceId: string) {
-    const response = await api.get<ApiResponse<IWorkspace>>(
+    const response = await api.get<ApiResponse<IWorkspaceDetails>>(
       `/workspace/${workspaceId}`
     )
     return response.data.data
@@ -54,7 +54,7 @@ export class WorkspaceService {
 
   static async AddMemberToWorkspace(data: AddMemberToWorkspacePayload) {
     const { workspaceId, ...payload } = data
-    const response = await api.post<ApiResponse<IWorkspaceMember>>(
+    const response = await api.post<ApiResponse<{ id: string }>>(
       `/workspace/${workspaceId}/member`,
       payload
     )
@@ -63,7 +63,7 @@ export class WorkspaceService {
 
   static async UpdateMemberOfWorkspace(data: UpdateMemberToWorkspacePayload) {
     const { memberId, workspaceId, ...payload } = data
-    const response = await api.put<ApiResponse<IWorkspaceMember>>(
+    const response = await api.put<{ data: string }>(
       `/workspace/${workspaceId}/member/${memberId}`,
       payload
     )
@@ -75,7 +75,7 @@ export class WorkspaceService {
     page: number,
     limit: number
   ) {
-    const response = await api.get<ApiPaginatedResponse<IMemberOfWorkspace>>(
+    const response = await api.get<ApiPaginatedResponse<IMembersOfWorkspace>>(
       `/workspace/${workspaceId}/member`,
       {
         params: {

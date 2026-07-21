@@ -40,10 +40,14 @@ import {
   editWorkspaceDetailsButtonSchema,
 } from '@/schemas/edit-workspace-details-button'
 import { normalizeApiError } from '@/services/api/errors'
-import type { IWorkspace } from '@/services/workspace/workspace.d'
+import type {
+  IWorkspace,
+  IWorkspaceDetails,
+} from '@/services/workspace/workspace.d'
+import { dateFormatLong } from '@/utils/date-format'
 
 type DetailsItemInfoProps = {
-  workspace: IWorkspace
+  workspace: IWorkspaceDetails
 }
 
 export function DetailsItemInfo({ workspace }: DetailsItemInfoProps) {
@@ -65,15 +69,6 @@ export function DetailsItemInfo({ workspace }: DetailsItemInfoProps) {
       <CardContent className="flex flex-col gap-6">
         <Separator />
         {/* TITLE */}
-        {/* <div className="flex flex-col gap-1">
-          <span className="inline-block font-normal text-sm text-muted-foreground leading-none tracking-wider uppercase">
-            Slug
-          </span>
-          <p className="font-normal text-base text-foreground">
-            {workspace.slug}
-          </p>
-        </div> */}
-        {/* TITLE */}
         <div className="flex flex-col gap-1">
           <span className="inline-block font-normal text-sm text-muted-foreground leading-none tracking-wider uppercase">
             Título
@@ -82,6 +77,16 @@ export function DetailsItemInfo({ workspace }: DetailsItemInfoProps) {
             {workspace.name}
           </p>
         </div>
+
+        {/* SLUG */}
+        {/* <div className="flex flex-col gap-1">
+          <span className="inline-block font-normal text-sm text-muted-foreground leading-none tracking-wider uppercase">
+            Slug
+          </span>
+          <p className="font-normal text-base text-foreground">
+            {workspace.slug}
+          </p>
+        </div> */}
 
         {/* DESCRIPTION */}
         <div className="flex flex-col gap-1">
@@ -116,7 +121,7 @@ export function DetailsItemInfo({ workspace }: DetailsItemInfoProps) {
           </span>
           <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
             <p className="font-normal text-sm text-foreground uppercase leading-none tracking-widest">
-              15/07/2024
+              {dateFormatLong(workspace.createdAt)}
             </p>
           </div>
         </div>
@@ -128,7 +133,7 @@ export function DetailsItemInfo({ workspace }: DetailsItemInfoProps) {
           </span>
           <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
             <p className="font-normal text-sm text-foreground uppercase leading-none tracking-widest">
-              Higor Silva
+              {workspace.ownerName}
             </p>
           </div>
         </div>
@@ -162,6 +167,7 @@ export function WorkspaceDetailsInfoEdit({
     try {
       await updateWorkspace({
         workspaceId: workspace.id,
+        slug: data.title || undefined,
         description: data.description || undefined,
         name: data.title || undefined,
         type: data.type || undefined,

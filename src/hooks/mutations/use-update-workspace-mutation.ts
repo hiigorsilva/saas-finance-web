@@ -5,6 +5,7 @@ import { workspacesQueryKey } from '../queries/use-workspaces-query'
 type UpdateWorkspacePayload = {
   workspaceId: string
   name: string | undefined
+  slug: string | undefined
   type: 'PRIVATE' | 'SHARED' | undefined
   description: string | undefined
 }
@@ -16,10 +17,16 @@ export function useUpdateWorkspaceMutation() {
     mutationFn: ({
       workspaceId,
       name,
+      slug,
       type,
       description,
     }: UpdateWorkspacePayload) =>
-      WorkspaceService.PutWorkspace(workspaceId, { name, type, description }),
+      WorkspaceService.PutWorkspace(workspaceId, {
+        name,
+        slug,
+        type,
+        description,
+      }),
     onSuccess: (_response, variables) => {
       queryClient.invalidateQueries({
         queryKey: [...workspacesQueryKey, variables.workspaceId],
