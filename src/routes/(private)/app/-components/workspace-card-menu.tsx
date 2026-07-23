@@ -5,17 +5,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import type { WORKSPACE_TYPE } from '@/data/requests/workspaces'
+import type { IWorkspace } from '@/services/workspace/workspace.d'
 import { WorkspaceCardMenuDashboardOption } from './workspace-card-menu-dashboard-option'
 import { WorkspaceCardMenuDetailsOption } from './workspace-card-menu-details-option'
 
 type WorkspaceCardMenuProps = ComponentProps<'div'> & {
-  workspace: {
-    id: string
-    name: string
-    description: string
-    type: WORKSPACE_TYPE
-  }
+  workspace: IWorkspace
 }
 
 export function WorkspaceCardMenu({

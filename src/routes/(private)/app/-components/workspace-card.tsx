@@ -2,16 +2,11 @@ import { Link } from '@tanstack/react-router'
 import { EllipsisIcon, FolderOpenIcon, UserIcon, UsersIcon } from 'lucide-react'
 import type { ComponentProps } from 'react'
 import { Button } from '@/components/ui/button'
-import type { WORKSPACE_TYPE } from '@/data/requests/workspaces'
+import type { IWorkspace } from '@/services/workspace/workspace.d'
 import { WorkspaceCardMenu } from './workspace-card-menu'
 
 type WorkspaceCardProps = ComponentProps<'a'> & {
-  workspace: {
-    id: string
-    name: string
-    description: string
-    type: WORKSPACE_TYPE
-  }
+  workspace: IWorkspace
 }
 
 export function WorkspaceCard({ workspace }: WorkspaceCardProps) {

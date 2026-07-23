@@ -1,12 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import type { ExpenseByCategoryType } from '@/data/requests/expense-by-category'
+import type { ICategory } from '@/services/transaction/categories'
 import { DashboardCardExpenseByCategoryEmpty } from './dashboard-card-expense-by-category-empty'
 import { DashboardCardExpenseByCategoryItem } from './dashboard-card-expense-by-category-item'
 import { DashboardCardTip } from './dashboard-card-tip'
 
 type DashboardCardExpenseByCategoryProps = {
-  expenseByCategory: ExpenseByCategoryType[]
+  expenseByCategory: ICategory[]
 }
 
 export function DashboardCardExpenseByCategory({

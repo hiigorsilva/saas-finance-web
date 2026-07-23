@@ -6,6 +6,16 @@ import { api } from '../api/client'
 import type { ITransaction } from './transaction.d'
 
 export class TransactionService {
+  private static formatTransactionData(
+    data: AddTransactionType | EditTransactionType
+  ) {
+    const payload = {
+      ...data,
+      amount: data.amount.toFixed(2),
+      paymentDate: format(data.paymentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS"),
+    }
+    return payload
+  }
   static async GetTransactions(
     workspaceId: string,
     page: number,
@@ -22,11 +32,7 @@ export class TransactionService {
   }
 
   static async PostTransaction(workspaceId: string, data: AddTransactionType) {
-    const payload = {
-      ...data,
-      amount: Number(data.amount.toFixed(2)),
-      paymentDate: format(data.paymentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS"),
-    }
+    const payload = this.formatTransactionData(data)
 
     const response = await api.post<ApiResponse<ITransaction>>(
       `/${workspaceId}/transaction`,
@@ -41,11 +47,7 @@ export class TransactionService {
     transactionId: string,
     data: EditTransactionType
   ) {
-    const payload = {
-      ...data,
-      amount: Number(data.amount.toFixed(2)),
-      paymentDate: format(data.paymentDate, "yyyy-MM-dd'T'HH:mm:ss.SSS"),
-    }
+    const payload = this.formatTransactionData(data)
 
     const response = await api.put<ApiResponse<ITransaction>>(
       `/${workspaceId}/transaction/${transactionId}`,

@@ -35,7 +35,8 @@
       },
       "complexity": {
         "useOptionalChain": "off",
-        "noStaticOnlyClass": "off"
+        "noStaticOnlyClass": "off",
+        "noThisInStatic": "off"
       },
       "suspicious": {
         "noExplicitAny": "off",

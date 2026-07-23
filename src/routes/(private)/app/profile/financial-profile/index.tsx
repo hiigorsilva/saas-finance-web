@@ -3,7 +3,6 @@ import { ChevronLeftIcon } from 'lucide-react'
 import { useState } from 'react'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
-import { financialProfileResponse } from '@/data/requests/financial-profile'
 import { ProfileFinancialCard } from '../-components/profile-financial-card'
 import { ProfileFinancialDialogForm } from '../-components/profile-financial-dialog-form'
 
@@ -16,8 +15,6 @@ export const Route = createFileRoute(
 function ProfileFinancialPage() {
   const [openFinancialProfileForm, setOpenFinancialProfileForm] =
     useState(false)
-
-  const { data } = financialProfileResponse.body
 
   const router = Route.useNavigate()
 
@@ -44,7 +41,7 @@ function ProfileFinancialPage() {
       <div className="w-full space-y-4">
         {!openFinancialProfileForm && (
           <ProfileFinancialCard
-            profileType={data}
+            profileType={null}
             openFormClick={setOpenFinancialProfileForm}
           />
         )}
