@@ -3,6 +3,10 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import {
+  useAcceptInviteWorkspaceMutation,
+  useDeclineInviteWorkspaceMutation,
+} from '@/hooks/mutations/invite/use-accept-invite-workspace-mutation'
 import type { IInviteToWorkspace } from '@/services/notifications/notification.d'
 import { dateFormatDistanceToNow } from '@/utils/date-format'
 
@@ -17,12 +21,16 @@ export function WorkspaceNotificationItem({
 }: WorkspaceNotificationItemProps) {
   const [isLoading, setIsLoading] = useState(false)
 
+  const { mutateAsync: acceptInviteWorkspace } =
+    useAcceptInviteWorkspaceMutation()
+  const { mutateAsync: declineInviteWorkspace } =
+    useDeclineInviteWorkspaceMutation()
+
   const handleAcceptInvitation = async (inviteId: string) => {
     setIsLoading(true)
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      console.log('INVITE_ACCEPTED:', inviteId)
-      toast.success('Convite aceito com sucesso!')
+      const res = await acceptInviteWorkspace(inviteId)
+      if (res.status) toast.success('Convite aceito com sucesso!')
     } catch (error) {
       console.error('ACCEPT_INVITATION_ERROR:', error)
       toast.error('Erro ao aceitar o convite. Tente novamente.')
@@ -35,9 +43,8 @@ export function WorkspaceNotificationItem({
   const handeDeclineInvitation = async (inviteId: string) => {
     setIsLoading(true)
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      console.log('INVITE_DECLINED:', inviteId)
-      toast.success('Convite recusado com sucesso!')
+      const res = await declineInviteWorkspace(inviteId)
+      if (res.status) toast.success('Convite recusado com sucesso!')
     } catch (error) {
       console.error('DECLINE_INVITATION_ERROR:', error)
       toast.error('Erro ao recusar o convite. Tente novamente.')

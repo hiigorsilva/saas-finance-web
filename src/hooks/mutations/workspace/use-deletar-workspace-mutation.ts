@@ -16,6 +16,9 @@ export function useDeleteWorkspaceMutation() {
       queryClient.invalidateQueries({
         queryKey: [...workspacesQueryKey, variables.workspaceId],
       })
+      queryClient.invalidateQueries({
+        queryKey: [...workspacesQueryKey],
+      })
     },
   })
 }

@@ -8,4 +8,18 @@ export class NotificationService {
       await api.get<ApiResponse<IInviteToWorkspace[]>>('/workspace/invite')
     return response.data.data
   }
+
+  static async AcceptInviteWorkspace(inviteId: string) {
+    const response = await api.post<ApiResponse<{ status: string }>>(
+      `/workspace/invite/${inviteId}/accept`
+    )
+    return response.data.data
+  }
+
+  static async DeclineInviteWorkspace(inviteId: string) {
+    const response = await api.post<ApiResponse<{ status: string }>>(
+      `/workspace/invite/${inviteId}/decline`
+    )
+    return response.data.data
+  }
 }

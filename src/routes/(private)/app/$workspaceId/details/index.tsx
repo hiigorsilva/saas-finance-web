@@ -41,7 +41,9 @@ function WorkspaceDetailsPage() {
 
       <div className="flex flex-auto flex-col gap-6">
         <DetailsItemInfo workspace={workspace} />
-        <DetailsItemInvite workspace={workspace} />
+        {workspace.type === 'SHARED' && (
+          <DetailsItemInvite workspace={workspace} />
+        )}
         <DetailsItemDeleteWorkspace workspace={workspace} />
       </div>
     </Container>

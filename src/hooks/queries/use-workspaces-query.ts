@@ -5,7 +5,7 @@ export const workspacesQueryKey = ['workspaces'] as const
 
 export function useWorkspacesQuery(page = 1, limit = 50) {
   return useQuery({
-    queryKey: [...workspacesQueryKey, page, limit],
+    queryKey: [...workspacesQueryKey],
     queryFn: () => WorkspaceService.GetWorkspace(page, limit),
   })
 }
