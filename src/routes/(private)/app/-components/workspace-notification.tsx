@@ -26,9 +26,11 @@ export function WorkspaceNotification() {
         <Button className="relative" variant="ghost" size="icon">
           <BellIcon className="size-5 shrink-0 text-muted-foreground" />
 
-          <div className="absolute top-1.5 right-2 rounded-full p-0.5 bg-background">
-            <span className="block size-1.5 bg-red-500 rounded-full" />
-          </div>
+          {invites.length > 0 && (
+            <div className="absolute top-1.5 right-2 rounded-full p-0.5 bg-background">
+              <span className="block size-1.5 bg-red-500 rounded-full" />
+            </div>
+          )}
         </Button>
       </DropdownMenuTrigger>
 

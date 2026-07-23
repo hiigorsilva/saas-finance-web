@@ -28,6 +28,7 @@ import {
   PROFILE_CURRENCY_TYPE_VALUES,
   PROFILE_LANGUAGE_TYPE_VALUES,
 } from '@/data/labels/profile-preference'
+import { useRefreshUserLoggedQuery } from '@/hooks/queries/use-user-logged-query'
 import {
   type ProfilePreferencesSelectType,
   profilePreferencesSelectSchema,
@@ -42,6 +43,8 @@ import {
 } from '../-utils/language'
 
 export function ProfilePreferencesSelectCard() {
+  const refreshUserLogged = useRefreshUserLoggedQuery()
+
   const form = useForm<ProfilePreferencesSelectType>({
     resolver: zodResolver(profilePreferencesSelectSchema),
     defaultValues: {
@@ -52,6 +55,8 @@ export function ProfilePreferencesSelectCard() {
 
   const onSubmit = async (data: ProfilePreferencesSelectType) => {
     console.log('DATA_PREFERENCES', data)
+
+    await refreshUserLogged()
   }
 
   return (

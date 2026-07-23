@@ -35,6 +35,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
+import { useRefreshUserLoggedQuery } from '@/hooks/queries/use-user-logged-query'
 import {
   type ProfileUserEditType,
   profileUserEditSchema,
@@ -49,6 +50,7 @@ export function ProfileUserDataEditForm({
   userData,
   children,
 }: ProfileUserDataEditFormProps) {
+  const refreshUserLogged = useRefreshUserLoggedQuery()
   const [openModal, setOpenModal] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
@@ -64,6 +66,9 @@ export function ProfileUserDataEditForm({
 
   const onSubmit = async (data: ProfileUserEditType) => {
     console.log('EDIT_USER_DATA', data)
+
+    await refreshUserLogged()
+
     setOpenModal(false)
   }
 

@@ -1,4 +1,9 @@
 import { createContext, useContext, useState } from 'react'
+import {
+  clearUserLoggedQuery,
+  prefetchUserLoggedQuery,
+} from '@/hooks/queries/use-user-logged-query'
+import { queryClient } from '@/lib/query/query-client'
 import { AuthService } from '@/services/auth/auth'
 import type { IRegisterData, ISignInData } from '@/services/auth/auth.d'
 import {
@@ -25,6 +30,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     setStorageToken(data.accessToken)
     setToken(data.accessToken)
+
+    void prefetchUserLoggedQuery(queryClient)
   }
 
   async function register(credentials: IRegisterData) {
@@ -33,11 +40,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     setStorageToken(data.accessToken)
     setToken(data.accessToken)
+
+    void prefetchUserLoggedQuery(queryClient)
   }
 
   function signOut() {
     removeStorageToken()
     setToken(null)
+
+    void clearUserLoggedQuery(queryClient)
   }
 
   return (
