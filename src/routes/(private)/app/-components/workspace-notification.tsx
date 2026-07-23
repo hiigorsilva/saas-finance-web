@@ -9,15 +9,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { workspaceInvitationsResponse } from '@/data/requests/workspace-invitations'
+import { useInviteToWorkspaceQuery } from '@/hooks/queries/use-invite-workspace-query'
 import { WorkspaceNotificationEmpty } from './workspace-notification-empty'
 import { WorkspaceNotificationItem } from './workspace-notification-item'
 
 export function WorkspaceNotification() {
   const [isOpen, setIsOpen] = useState(false)
 
-  const { data: workspaceInvitations, totalCount } =
-    workspaceInvitationsResponse.body
+  const { data: invites } = useInviteToWorkspaceQuery()
+
+  if (!invites) return null
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={open => setIsOpen(open)}>
@@ -42,15 +43,15 @@ export function WorkspaceNotification() {
 
         <div className="max-h-[50dvh] h-fit overflow-y-auto">
           <DropdownMenuGroup className="flex flex-col gap-4 py-3">
-            {totalCount === 0 && <WorkspaceNotificationEmpty />}
-            {totalCount > 0 &&
-              workspaceInvitations.map(workspaceInvitation => (
-                <WorkspaceNotificationItem
-                  key={workspaceInvitation.id}
-                  workspaceInvitations={workspaceInvitation}
-                  setIsOpen={setIsOpen}
-                />
-              ))}
+            {invites.length === 0 && <WorkspaceNotificationEmpty />}
+
+            {invites.map(invite => (
+              <WorkspaceNotificationItem
+                key={invite.id}
+                invite={invite}
+                setIsOpen={setIsOpen}
+              />
+            ))}
           </DropdownMenuGroup>
         </div>
       </DropdownMenuContent>
