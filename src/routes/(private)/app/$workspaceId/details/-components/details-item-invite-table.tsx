@@ -42,7 +42,7 @@ import {
   ROLE_MEMBER_WORKSPACE_LABELS,
   ROLE_MEMBER_WORKSPACE_TYPE_VALUES,
 } from '@/data/labels/role-member-workspace'
-import { useUpdateMemberWorkspaceMutation } from '@/hooks/mutations/use-update-member-workspace-mutation'
+import { useUpdateMemberWorkspaceMutation } from '@/hooks/mutations/workspace/use-update-member-workspace-mutation'
 import {
   type EditMemberWorkspaceType,
   editMemberWorkspaceSchema,

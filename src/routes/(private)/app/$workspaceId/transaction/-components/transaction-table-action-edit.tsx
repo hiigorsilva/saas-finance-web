@@ -44,7 +44,7 @@ import {
   TRANSACTION_PAYMENT_METHOD_TYPE_VALUES,
 } from '@/data/labels/transaction-payment-method'
 import { TRANSACTION_TYPE_VALUES } from '@/data/labels/transaction-type'
-import { useUpdateTransactionMutation } from '@/hooks/mutations/use-update-transaction-mutation'
+import { useUpdateTransactionMutation } from '@/hooks/mutations/transaction/use-update-transaction-mutation'
 import { cn } from '@/lib/utils'
 import {
   type EditTransactionType,

@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { useDeleteTransactionMutation } from '@/hooks/mutations/use-delete-transaction-mutation'
+import { useDeleteTransactionMutation } from '@/hooks/mutations/transaction/use-delete-transaction-mutation'
 import { normalizeApiError } from '@/services/api/errors'
 import type { ITransaction } from '@/services/transaction/transaction.d'
 

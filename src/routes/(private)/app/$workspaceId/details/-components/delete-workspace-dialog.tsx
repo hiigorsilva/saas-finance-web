@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { useDeleteWorkspaceMutation } from '@/hooks/mutations/use-deletar-workspace-mutation'
+import { useDeleteWorkspaceMutation } from '@/hooks/mutations/workspace/use-deletar-workspace-mutation'
 import { normalizeApiError } from '@/services/api/errors'
 import type { IWorkspace } from '@/services/workspace/workspace.d'
 

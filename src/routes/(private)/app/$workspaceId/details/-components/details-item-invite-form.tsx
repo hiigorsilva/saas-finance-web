@@ -27,7 +27,7 @@ import {
   ROLE_MEMBER_WORKSPACE_TYPE,
   ROLE_MEMBER_WORKSPACE_TYPE_VALUES,
 } from '@/data/labels/role-member-workspace'
-import { useAddMemberToWorkspaceMutation } from '@/hooks/mutations/use-add-member-workspace-mutation'
+import { useAddMemberToWorkspaceMutation } from '@/hooks/mutations/invite/use-add-member-workspace-mutation'
 import {
   type InviteMemberFormSchemaType,
   inviteMemberFormSchema,

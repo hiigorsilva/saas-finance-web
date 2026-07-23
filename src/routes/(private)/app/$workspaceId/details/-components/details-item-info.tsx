@@ -34,7 +34,7 @@ import {
   WORKSPACE_LABELS,
   WORKSPACE_VALUES,
 } from '@/data/labels/workspace-type'
-import { useUpdateWorkspaceMutation } from '@/hooks/mutations/use-update-workspace-mutation'
+import { useUpdateWorkspaceMutation } from '@/hooks/mutations/workspace/use-update-workspace-mutation'
 import {
   type EditWorkspaceDetailsButtonType,
   editWorkspaceDetailsButtonSchema,
