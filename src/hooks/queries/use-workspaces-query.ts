@@ -28,3 +28,15 @@ export function useMembersOfWorkspaceQuery(
       WorkspaceService.ListMemberOfWorkspace(workspaceId, page, limit),
   })
 }
+
+export function useGetMemberByIdOfWorkspaceQuery(
+  workspaceId: string,
+  memberId: string
+) {
+  return useQuery({
+    queryKey: [...workspacesQueryKey, 'memberById', workspaceId, memberId],
+    queryFn: () =>
+      WorkspaceService.GetMemberByIdOfWorkspace(workspaceId, memberId),
+    enabled: !!workspaceId && !!memberId,
+  })
+}

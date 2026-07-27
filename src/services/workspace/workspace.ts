@@ -54,11 +54,20 @@ export class WorkspaceService {
     return response.data.data
   }
 
+  // MEMBERS OF WORKSPACE
+
   static async AddMemberToWorkspace(data: AddMemberToWorkspacePayload) {
     const { workspaceId, ...payload } = data
     const response = await api.post<ApiResponse<{ id: string }>>(
       `/workspace/${workspaceId}/member`,
       payload
+    )
+    return response.data.data
+  }
+
+  static async GetMemberByIdOfWorkspace(workspaceId: string, memberId: string) {
+    const response = await api.get<ApiResponse<IMembersOfWorkspace>>(
+      `/workspace/${workspaceId}/member/${memberId}`
     )
     return response.data.data
   }

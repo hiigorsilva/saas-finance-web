@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
@@ -53,100 +54,116 @@ import { dateFormat } from '@/utils/date-format'
 
 type DetailsItemInviteTableProps = {
   members: IMembersOfWorkspace[]
+  onCanUpdateMembers: boolean
 }
 
 export function DetailsItemInviteTable({
   members,
+  onCanUpdateMembers,
 }: DetailsItemInviteTableProps) {
   return (
-    <div className="w-full flex flex-col gap-2">
-      <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
-        <p className="font-semibold text-xs text-muted-foreground uppercase leading-none tracking-widest">
-          Membros ({members.length})
-        </p>
-      </div>
+    <Card className="w-full">
+      <CardHeader className="flex justify-between items-center gap-6">
+        <CardTitle>Participantes</CardTitle>
+      </CardHeader>
 
-      <Table>
-        <TableCaption className="sr-only">
-          Lista de membros do workspace
-        </TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Nome</TableHead>
-            <TableHead className="w-30">Cargo</TableHead>
-            <TableHead className="w-26">Entrou em</TableHead>
-            <TableHead className="w-26">Ações</TableHead>
-          </TableRow>
-        </TableHeader>
+      <CardContent className="flex flex-col gap-6">
+        <Separator />
 
-        <TableBody>
-          {members.map(member => (
-            <TableRow key={member.id} className="border-0">
-              {/* NAME */}
-              <TableCell>
-                <div className="flex justify-start items-center gap-2">
-                  <div className="w-fit h-fit border border-muted-foreground/25 p-2 rounded-md">
-                    <UserIcon className="size-4 shrink-0 text-muted-foreground" />
-                  </div>
+        <div className="w-full flex flex-col gap-2">
+          <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
+            <p className="font-semibold text-xs text-muted-foreground uppercase leading-none tracking-widest">
+              Membros ({members.length})
+            </p>
+          </div>
 
-                  <div className="flex flex-col gap-1.5">
-                    <h3 className="font-semibold text-sm text-foreground text-wrap leading-none">
-                      {member.userName}
-                    </h3>
-                    <p className="font-normal text-sm text-muted-foreground leading-none">
-                      {member.userEmail}
-                    </p>
-                  </div>
-                </div>
-              </TableCell>
+          <Table>
+            <TableCaption className="sr-only">
+              Lista de membros do workspace
+            </TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nome</TableHead>
+                <TableHead className="w-30">Cargo</TableHead>
+                <TableHead className="w-26">Entrou em</TableHead>
+                {onCanUpdateMembers && (
+                  <TableHead className="w-26">Ações</TableHead>
+                )}
+              </TableRow>
+            </TableHeader>
 
-              {/* ROLE */}
-              <TableCell className="w-30">
-                <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
-                  <p className="font-normal text-sm text-muted-foreground capitalize leading-none">
-                    {ROLE_MEMBER_WORKSPACE_LABELS[member.role]}
-                  </p>
-                </div>
-              </TableCell>
+            <TableBody>
+              {members.map(member => (
+                <TableRow key={member.id} className="border-0">
+                  {/* NAME */}
+                  <TableCell>
+                    <div className="flex justify-start items-center gap-2">
+                      <div className="w-fit h-fit border border-muted-foreground/25 p-2 rounded-md">
+                        <UserIcon className="size-4 shrink-0 text-muted-foreground" />
+                      </div>
 
-              {/* JOINED AT */}
-              <TableCell className="w-30">
-                <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
-                  <p className="font-normal text-sm text-muted-foreground capitalize leading-none">
-                    {dateFormat(member.joinedAt)}
-                  </p>
-                </div>
-              </TableCell>
+                      <div className="flex flex-col gap-1.5">
+                        <h3 className="font-semibold text-sm text-foreground text-wrap leading-none">
+                          {member.userName}
+                        </h3>
+                        <p className="font-normal text-sm text-muted-foreground leading-none">
+                          {member.userEmail}
+                        </p>
+                      </div>
+                    </div>
+                  </TableCell>
 
-              {/* ACTIONS */}
-              <TableCell className="w-26">
-                <div className="flex justify-between items-center gap-2">
-                  <DetailsInviteMemberEdit member={member}>
-                    <Button
-                      className="hover:border hover:bg-background"
-                      variant="ghost"
-                      size="icon"
-                    >
-                      <PenIcon className="size-4 shrink-0 text-muted-foreground" />
-                    </Button>
-                  </DetailsInviteMemberEdit>
+                  {/* ROLE */}
+                  <TableCell className="w-30">
+                    <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
+                      <p className="font-normal text-sm text-muted-foreground capitalize leading-none">
+                        {ROLE_MEMBER_WORKSPACE_LABELS[member.role]}
+                      </p>
+                    </div>
+                  </TableCell>
 
-                  <DetailsInviteMemberRemove member={member}>
-                    <Button
-                      className="border-red-500/20 hover:border hover:bg-red-500/10"
-                      variant="ghost"
-                      size="icon"
-                    >
-                      <Trash2Icon className="size-4 shrink-0 text-red-500" />
-                    </Button>
-                  </DetailsInviteMemberRemove>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+                  {/* JOINED AT */}
+                  <TableCell className="w-30">
+                    <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
+                      <p className="font-normal text-sm text-muted-foreground capitalize leading-none">
+                        {dateFormat(member.joinedAt)}
+                      </p>
+                    </div>
+                  </TableCell>
+
+                  {/* ACTIONS */}
+                  {onCanUpdateMembers && (
+                    <TableCell className="w-26">
+                      <div className="flex justify-between items-center gap-2">
+                        <DetailsInviteMemberEdit member={member}>
+                          <Button
+                            className="hover:border hover:bg-background"
+                            variant="ghost"
+                            size="icon"
+                          >
+                            <PenIcon className="size-4 shrink-0 text-muted-foreground" />
+                          </Button>
+                        </DetailsInviteMemberEdit>
+
+                        <DetailsInviteMemberRemove member={member}>
+                          <Button
+                            className="border-red-500/20 hover:border hover:bg-red-500/10"
+                            variant="ghost"
+                            size="icon"
+                          >
+                            <Trash2Icon className="size-4 shrink-0 text-red-500" />
+                          </Button>
+                        </DetailsInviteMemberRemove>
+                      </div>
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 
