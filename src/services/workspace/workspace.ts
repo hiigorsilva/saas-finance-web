@@ -72,6 +72,13 @@ export class WorkspaceService {
     return response.data.data
   }
 
+  static async RemoveMemberOfWorkspace(workspaceId: string, memberId: string) {
+    const response = await api.delete<{ data: string }>(
+      `/workspace/${workspaceId}/member/${memberId}`
+    )
+    return response.data.data
+  }
+
   static async ListMemberOfWorkspace(
     workspaceId: string,
     page: number,

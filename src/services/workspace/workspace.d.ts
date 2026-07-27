@@ -47,3 +47,8 @@ export type UpdateMemberToWorkspacePayload = {
   memberId: string
   role: RoleMemberWorkspaceValuesType
 }
+
+export type RemoveMemberToWorkspacePayload = {
+  workspaceId: string
+  memberId: string
+}

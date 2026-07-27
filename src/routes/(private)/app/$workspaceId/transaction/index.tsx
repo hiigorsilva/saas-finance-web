@@ -91,7 +91,7 @@ function TransactionPage() {
       </div>
 
       {/* TRANSACTION TABLE */}
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 flex-1">
         <TransactionTable transactions={transactions.data} />
       </div>
 

@@ -47,6 +47,7 @@ import {
   type EditMemberWorkspaceType,
   editMemberWorkspaceSchema,
 } from '@/schemas/edit-member-workspace'
+import { WorkspaceService } from '@/services/workspace/workspace'
 import type { IMembersOfWorkspace } from '@/services/workspace/workspace.d'
 import { dateFormat } from '@/utils/date-format'
 
@@ -273,15 +274,20 @@ export function DetailsInviteMemberEdit({
 
 export function DetailsInviteMemberRemove({
   children,
+  member,
 }: DetailsInviteMemberEditProps) {
   const [openModal, setOpenModal] = useState(false)
 
   const handleMemberRemove = async () => {
     try {
-      toast.success('Membro atualizado com sucesso!')
+      const res = await WorkspaceService.RemoveMemberOfWorkspace(
+        member.workspaceId,
+        member.id
+      )
+      if (res) toast.success('Membro removido com sucesso!')
     } catch (error) {
-      console.error('UPDATING_MEMBER_ERROR:', error)
-      toast.error('Erro ao atualizar membro.')
+      console.error('REMOVING_MEMBER_ERROR:', error)
+      toast.error('Erro ao remover membro.')
     } finally {
       setOpenModal(false)
     }
