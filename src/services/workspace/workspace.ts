@@ -76,7 +76,7 @@ export class WorkspaceService {
     const { memberId, workspaceId, ...payload } = data
     const response = await api.put<{ data: string }>(
       `/workspace/${workspaceId}/member/${memberId}`,
-      payload
+      { newRole: payload.role }
     )
     return response.data.data
   }
