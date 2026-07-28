@@ -65,7 +65,11 @@ export function ProfileUserDataEditForm({
   })
 
   const onSubmit = async (data: ProfileUserEditType) => {
-    console.log('EDIT_USER_DATA', data)
+    console.log('EDIT_USER_DATA', {
+      name: data.name,
+      password: data.password,
+      birthDate: data.birthDate,
+    })
 
     await refreshUserLogged()
 
@@ -125,7 +129,7 @@ export function ProfileUserDataEditForm({
                 <FormItem className="relative">
                   <FormLabel className="font-normal">Nome *</FormLabel>
                   <FormControl>
-                    <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+                    <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
                       <UserIcon
                         className="size-5 text-muted-foreground"
                         strokeWidth={1}
@@ -151,7 +155,7 @@ export function ProfileUserDataEditForm({
                 <FormItem className="relative">
                   <FormLabel className="font-normal">Email *</FormLabel>
                   <FormControl>
-                    <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+                    <div className="pointer-events-none bg-gray-400/10 text-gray-600 flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
                       <MailIcon
                         className="size-5 text-muted-foreground"
                         strokeWidth={1}
@@ -177,7 +181,7 @@ export function ProfileUserDataEditForm({
                 <FormItem className="relative">
                   <FormLabel className="font-normal">Senha *</FormLabel>
                   <FormControl>
-                    <div className="flex items-center border rounded-md pl-3 pr-0 overflow-hidden has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+                    <div className="flex items-center border rounded-md pl-3 pr-0 overflow-hidden has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
                       <LockIcon
                         className="size-5 text-muted-foreground"
                         strokeWidth={1}
