@@ -31,5 +31,6 @@ export function useTransactionsQuery(
         filters
       ),
     enabled: !!workspaceId,
+    staleTime: 1000 * 50, // 50 segundos
   })
 }
