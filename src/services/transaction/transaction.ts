@@ -1,9 +1,21 @@
 import { format } from 'date-fns'
+import type { TransactionCategoryValuesType } from '@/data/labels/transaction-category'
+import type { TransactionPaymentMethodValuesType } from '@/data/labels/transaction-payment-method'
+import type { TransactionTypeValuesType } from '@/data/labels/transaction-type'
 import type { AddTransactionType } from '@/schemas/add-transaction-button'
 import type { EditTransactionType } from '@/schemas/edit-transaction-button'
 import type { ApiPaginatedResponse, ApiResponse } from '@/services/api/types'
 import { api } from '../api/client'
 import type { ITransaction } from './transaction.d'
+
+export type TransactionListFilters = {
+  search?: string
+  typeExpense?: TransactionTypeValuesType
+  typeCategory?: TransactionCategoryValuesType
+  typePaymentMethod?: TransactionPaymentMethodValuesType
+  from?: string
+  to?: string
+}
 
 export class TransactionService {
   private static formatTransactionData(
@@ -19,12 +31,19 @@ export class TransactionService {
   static async GetTransactions(
     workspaceId: string,
     page: number,
-    limit: number
+    limit: number,
+    filters: TransactionListFilters = {}
   ) {
+    const params = {
+      page,
+      limit,
+      ...filters,
+    }
+
     const response = await api.get<ApiPaginatedResponse<ITransaction>>(
       `/${workspaceId}/transaction`,
       {
-        params: { page, limit },
+        params,
       }
     )
 

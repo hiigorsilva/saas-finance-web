@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ChevronLeftIcon, PlusIcon } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { toast } from 'sonner'
 import { Container } from '@/components/layout/container'
 import { Loading } from '@/components/layout/loading'
@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { useTransactionsQuery } from '@/hooks/queries/use-transactions-query'
 import { listTransactionSchema } from '@/schemas/pagination'
 import { normalizeApiError } from '@/services/api/errors'
+import type { TransactionListFilters } from '@/services/transaction/transaction'
 import { Pagination } from '../../-components/pagination'
 import { DashboardAddTransactionButton } from '../-components/dashboard-add-transaction-button'
 import { TransactionFilterForm } from './-components/transaction-filter-form'
@@ -43,16 +44,65 @@ function TransactionPage() {
       ? searchParams.limit
       : 50
 
+  const filters = useMemo<TransactionListFilters>(
+    () => ({
+      search: searchParams.search,
+      typeExpense: searchParams.typeExpense,
+      typeCategory: searchParams.typeCategory,
+      typePaymentMethod: searchParams.typePaymentMethod,
+      from: searchParams.from,
+      to: searchParams.to,
+    }),
+    [
+      searchParams.search,
+      searchParams.typeExpense,
+      searchParams.typeCategory,
+      searchParams.typePaymentMethod,
+      searchParams.from,
+      searchParams.to,
+    ]
+  )
+
   const {
     data: transactions,
     isPending,
     error,
-  } = useTransactionsQuery(workspaceId, page, limit)
+  } = useTransactionsQuery(workspaceId, page, limit, filters)
 
   const handleNavigateBack = () => {
     router({
       to: '/app/$workspaceId',
       params: { workspaceId: workspaceId },
+    })
+  }
+
+  const handleApplySearch = (search?: string) => {
+    router({
+      to: '.',
+      search: prev => ({
+        ...prev,
+        page: 1,
+        search,
+      }),
+      replace: true,
+    })
+  }
+
+  const handleApplyFilters = (
+    nextFilters: Omit<TransactionListFilters, 'search'>
+  ) => {
+    router({
+      to: '.',
+      search: prev => ({
+        ...prev,
+        page: 1,
+        typeExpense: nextFilters.typeExpense,
+        typeCategory: nextFilters.typeCategory,
+        typePaymentMethod: nextFilters.typePaymentMethod,
+        from: nextFilters.from,
+        to: nextFilters.to,
+      }),
+      replace: true,
     })
   }
 
@@ -79,7 +129,18 @@ function TransactionPage() {
       {/* FILTER */}
       <div className="flex justify-between items-center gap-6">
         <div className="max-w-2xs w-full">
-          <TransactionFilterForm />
+          <TransactionFilterForm
+            searchValue={searchParams.search}
+            filters={{
+              typeExpense: searchParams.typeExpense,
+              typeCategory: searchParams.typeCategory,
+              typePaymentMethod: searchParams.typePaymentMethod,
+              from: searchParams.from,
+              to: searchParams.to,
+            }}
+            onApplySearch={handleApplySearch}
+            onApplyFilters={handleApplyFilters}
+          />
         </div>
 
         <DashboardAddTransactionButton>

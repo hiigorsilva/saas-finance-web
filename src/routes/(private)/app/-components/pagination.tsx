@@ -50,7 +50,11 @@ export function Pagination({
 
     router({
       to: '.',
-      search: { page: safePage, limit: safePerPage },
+      search: prev => ({
+        ...prev,
+        page: safePage,
+        limit: safePerPage,
+      }),
       replace: true,
     })
   }, [page, perPage, router])
@@ -66,24 +70,12 @@ export function Pagination({
       if (page <= 1) return page
       return 1
     })
-
-    router({
-      to: '.',
-      search: { page: page, limit: perPage },
-      replace: true,
-    })
   }
 
   const handlePrevPage = () => {
     setPage(page => {
       if (page <= 1) return page
       return page - 1
-    })
-
-    router({
-      to: '.',
-      search: { page: page, limit: perPage },
-      replace: true,
     })
   }
 
@@ -92,22 +84,10 @@ export function Pagination({
       if (page >= totalPages) return totalPages
       return page + 1
     })
-
-    router({
-      to: '.',
-      search: { page: page, limit: perPage },
-      replace: true,
-    })
   }
 
   const handleLastPage = () => {
     setPage(totalPages)
-
-    router({
-      to: '.',
-      search: { page: page, limit: perPage },
-      replace: true,
-    })
   }
 
   return (

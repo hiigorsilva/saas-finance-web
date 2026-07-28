@@ -1,9 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { formatDate } from 'date-fns'
+import { formatDate, isValid, parseISO } from 'date-fns'
 import { SearchIcon, Settings2Icon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -18,57 +17,101 @@ import {
   type TransactionFilterType,
   transactionFilterSchema,
 } from '@/schemas/transaction-filter-form'
+import type { TransactionListFilters } from '@/services/transaction/transaction'
 import { DrawerFilterTransaction } from './transaction-filter-form-drawer'
 
-export const defaultValuesTransactionFilters = (): TransactionFilterType => ({
-  search: undefined,
-  typeExpense: undefined,
-  typeCategory: undefined,
-  typePaymentMethod: undefined,
+type AppliedFilterFields = Omit<TransactionListFilters, 'search'>
+
+type TransactionFilterFormProps = {
+  searchValue?: string
+  filters: AppliedFilterFields
+  onApplySearch: (search?: string) => void
+  onApplyFilters: (filters: AppliedFilterFields) => void
+}
+
+function parseDateParam(value?: string) {
+  if (!value) return undefined
+
+  const parsedDate = parseISO(value)
+  return isValid(parsedDate) ? parsedDate : undefined
+}
+
+export const defaultValuesTransactionFilters = (
+  search?: string,
+  filters?: AppliedFilterFields
+): TransactionFilterType => ({
+  search,
+  typeExpense: filters?.typeExpense,
+  typeCategory: filters?.typeCategory,
+  typePaymentMethod: filters?.typePaymentMethod,
   dateCreatedAt: {
-    from: undefined,
-    to: undefined,
+    from: parseDateParam(filters?.from),
+    to: parseDateParam(filters?.to),
   },
 })
 
-export function TransactionFilterForm() {
+export function TransactionFilterForm({
+  searchValue,
+  filters,
+  onApplySearch,
+  onApplyFilters,
+}: TransactionFilterFormProps) {
   const [isOpenDrawerFilter, setIsOpenDrawerFilter] = useState(false)
 
   const form = useForm<TransactionFilterType>({
     resolver: zodResolver(transactionFilterSchema),
-    defaultValues: defaultValuesTransactionFilters(),
+    defaultValues: defaultValuesTransactionFilters(searchValue, filters),
   })
 
-  async function onSubmit(data: TransactionFilterType) {
-    try {
-      const dataFormatted = {
-        dateCreatedAt: {
-          from:
-            data.dateCreatedAt?.from &&
-            formatDate(data.dateCreatedAt.from, 'yyyy-MM-dd'),
-          to:
-            data.dateCreatedAt?.to &&
-            formatDate(data.dateCreatedAt.to, 'yyyy-MM-dd'),
-        },
-        search: data.search,
-        typeExpense: data.typeExpense,
-        typeCategory: data.typeCategory,
-      }
+  useEffect(() => {
+    form.reset(defaultValuesTransactionFilters(searchValue, filters))
+  }, [filters, form, searchValue])
 
-      console.log('Filtro:', dataFormatted)
-    } catch (error) {
-      toast.error('Erro ao filtrar transações.')
-      console.error('TRANSACTION_FILTER_ERROR:', error)
-    } finally {
-      setIsOpenDrawerFilter(false)
-    }
+  function handleSearchSubmit() {
+    const nextSearch = form.getValues('search')?.trim()
+    onApplySearch(nextSearch || undefined)
+  }
+
+  const handleApplyFilters = form.handleSubmit(data => {
+    onApplyFilters({
+      typeExpense: data.typeExpense,
+      typeCategory: data.typeCategory,
+      typePaymentMethod: data.typePaymentMethod,
+      from:
+        data.dateCreatedAt?.from &&
+        formatDate(data.dateCreatedAt.from, 'yyyy-MM-dd'),
+      to:
+        data.dateCreatedAt?.to &&
+        formatDate(data.dateCreatedAt.to, 'yyyy-MM-dd'),
+    })
+
+    setIsOpenDrawerFilter(false)
+  })
+
+  function handleResetFilters() {
+    const currentSearch = form.getValues('search')
+
+    form.reset(defaultValuesTransactionFilters(currentSearch, undefined))
+
+    onApplyFilters({
+      typeExpense: undefined,
+      typeCategory: undefined,
+      typePaymentMethod: undefined,
+      from: undefined,
+      to: undefined,
+    })
+
+    setIsOpenDrawerFilter(false)
   }
 
   return (
     <FormProvider {...form}>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={event => {
+            event.preventDefault()
+            handleSearchSubmit()
+          }}
           className="flex items-center gap-6"
         >
           <FormField
@@ -97,10 +140,10 @@ export function TransactionFilterForm() {
           />
 
           <DrawerFilterTransaction
-            form={form}
             isOpen={isOpenDrawerFilter}
             onOpenChange={setIsOpenDrawerFilter}
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmitFilters={handleApplyFilters}
+            onResetFilters={handleResetFilters}
           >
             <Button
               variant="outline"
