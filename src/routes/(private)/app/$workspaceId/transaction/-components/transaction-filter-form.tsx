@@ -25,6 +25,7 @@ type AppliedFilterFields = Omit<TransactionListFilters, 'search'>
 type TransactionFilterFormProps = {
   searchValue?: string
   filters: AppliedFilterFields
+  hasAppliedFilters: boolean
   onApplySearch: (search?: string) => void
   onApplyFilters: (filters: AppliedFilterFields) => void
 }
@@ -53,6 +54,7 @@ export const defaultValuesTransactionFilters = (
 export function TransactionFilterForm({
   searchValue,
   filters,
+  hasAppliedFilters,
   onApplySearch,
   onApplyFilters,
 }: TransactionFilterFormProps) {
@@ -148,11 +150,14 @@ export function TransactionFilterForm({
             <Button
               variant="outline"
               type="button"
-              className="font-normal"
+              className="relative font-normal gap-2"
               onClick={() => setIsOpenDrawerFilter(true)}
             >
               Filtros
               <Settings2Icon strokeWidth={1.4} />
+              {hasAppliedFilters && (
+                <div className="absolute size-2.5 -top-1 -right-1 rounded-full bg-primary" />
+              )}
             </Button>
           </DrawerFilterTransaction>
         </form>

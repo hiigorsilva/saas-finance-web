@@ -63,6 +63,14 @@ function TransactionPage() {
     ]
   )
 
+  const hasAppliedFilters = Boolean(
+    searchParams.typeExpense ||
+      searchParams.typeCategory ||
+      searchParams.typePaymentMethod ||
+      searchParams.from ||
+      searchParams.to
+  )
+
   const {
     data: transactions,
     isPending,
@@ -138,6 +146,7 @@ function TransactionPage() {
               from: searchParams.from,
               to: searchParams.to,
             }}
+            hasAppliedFilters={hasAppliedFilters}
             onApplySearch={handleApplySearch}
             onApplyFilters={handleApplyFilters}
           />
