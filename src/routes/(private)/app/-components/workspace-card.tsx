@@ -4,6 +4,7 @@ import type { ComponentProps } from 'react'
 import { Button } from '@/components/ui/button'
 import { WORKSPACE_LABELS, WORKSPACE_TYPE } from '@/data/labels/workspace-type'
 import type { IWorkspace } from '@/services/workspace/workspace.d'
+import { BadgeTagInfo } from './badge-tag-info'
 import { WorkspaceCardMenu } from './workspace-card-menu'
 
 type WorkspaceCardProps = ComponentProps<'a'> & {
@@ -59,25 +60,33 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
         </p>
       </div>
 
-      {/* TYPE */}
-      <div className="w-fit h-fit flex justify-start items-center gap-2 border rounded-sm px-2 py-1">
-        {workspace.type === WORKSPACE_TYPE.PRIVATE ? (
-          <UserIcon
-            className="size-4 shrink-0 text-muted-foreground"
-            strokeWidth={1.5}
-          />
-        ) : (
-          <UsersIcon
-            className="size-4 shrink-0 text-muted-foreground"
-            strokeWidth={1.5}
-          />
-        )}
+      <div className="flex flex-wrap justify-between items-center gap-1">
+        {/* TYPE */}
+        <BadgeTagInfo>
+          {workspace.type === WORKSPACE_TYPE.PRIVATE ? (
+            <UserIcon
+              className="size-3.5 shrink-0 text-muted-foreground"
+              strokeWidth={1.5}
+            />
+          ) : (
+            <UsersIcon
+              className="size-3.5 shrink-0 text-muted-foreground"
+              strokeWidth={1.5}
+            />
+          )}
 
-        <span className="font-normal text-base text-muted-foreground leading-none capitalize">
-          {workspace.type === WORKSPACE_TYPE.PRIVATE
-            ? WORKSPACE_LABELS[WORKSPACE_TYPE.PRIVATE]
-            : WORKSPACE_LABELS[WORKSPACE_TYPE.SHARED]}
-        </span>
+          <span className="font-normal text-sm text-muted-foreground leading-none capitalize">
+            {workspace.type === WORKSPACE_TYPE.PRIVATE
+              ? WORKSPACE_LABELS[WORKSPACE_TYPE.PRIVATE]
+              : WORKSPACE_LABELS[WORKSPACE_TYPE.SHARED]}
+          </span>
+        </BadgeTagInfo>
+
+        <BadgeTagInfo>
+          <span className="font-normal text-sm text-muted-foreground leading-none capitalize">
+            11 membros {/* TODO: Implementar endpoint */}
+          </span>
+        </BadgeTagInfo>
       </div>
     </Link>
   )
