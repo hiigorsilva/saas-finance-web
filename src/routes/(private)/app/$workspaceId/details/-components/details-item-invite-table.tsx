@@ -65,103 +65,100 @@ export function DetailsItemInviteTable({
     <Card className="w-full">
       <CardHeader className="flex justify-between items-center gap-6">
         <CardTitle>Participantes</CardTitle>
+        <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-full border">
+          <p className="font-semibold text-xs text-muted-foreground uppercase leading-none tracking-widest">
+            Membros ({members.length})
+          </p>
+        </div>
       </CardHeader>
 
       <CardContent className="flex flex-col gap-6">
         <Separator />
 
-        <div className="w-full flex flex-col gap-2">
-          <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
-            <p className="font-semibold text-xs text-muted-foreground uppercase leading-none tracking-widest">
-              Membros ({members.length})
-            </p>
-          </div>
+        <Table>
+          <TableCaption className="sr-only">
+            Lista de membros do workspace
+          </TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nome</TableHead>
+              <TableHead className="w-30">Cargo</TableHead>
+              <TableHead className="w-26">Entrou em</TableHead>
+              {onCanUpdateMembers && (
+                <TableHead className="w-26">Ações</TableHead>
+              )}
+            </TableRow>
+          </TableHeader>
 
-          <Table>
-            <TableCaption className="sr-only">
-              Lista de membros do workspace
-            </TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nome</TableHead>
-                <TableHead className="w-30">Cargo</TableHead>
-                <TableHead className="w-26">Entrou em</TableHead>
+          <TableBody>
+            {members.map(member => (
+              <TableRow key={member.id} className="border-0">
+                {/* NAME */}
+                <TableCell>
+                  <div className="flex justify-start items-center gap-2">
+                    <div className="w-fit h-fit border border-muted-foreground/25 p-2 rounded-md">
+                      <UserIcon className="size-4 shrink-0 text-muted-foreground" />
+                    </div>
+
+                    <div className="flex flex-col gap-1.5">
+                      <h3 className="font-semibold text-sm text-foreground text-wrap leading-none">
+                        {member.userName}
+                      </h3>
+                      <p className="font-normal text-sm text-muted-foreground leading-none">
+                        {member.userEmail}
+                      </p>
+                    </div>
+                  </div>
+                </TableCell>
+
+                {/* ROLE */}
+                <TableCell className="w-30">
+                  <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
+                    <p className="font-normal text-sm text-muted-foreground capitalize leading-none">
+                      {ROLE_MEMBER_WORKSPACE_LABELS[member.role]}
+                    </p>
+                  </div>
+                </TableCell>
+
+                {/* JOINED AT */}
+                <TableCell className="w-30">
+                  <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
+                    <p className="font-normal text-sm text-muted-foreground capitalize leading-none">
+                      {dateFormat(member.joinedAt)}
+                    </p>
+                  </div>
+                </TableCell>
+
+                {/* ACTIONS */}
                 {onCanUpdateMembers && (
-                  <TableHead className="w-26">Ações</TableHead>
+                  <TableCell className="w-26">
+                    <div className="flex justify-between items-center gap-2">
+                      <DetailsInviteMemberEdit member={member}>
+                        <Button
+                          className="hover:border hover:bg-background"
+                          variant="ghost"
+                          size="icon"
+                        >
+                          <PenIcon className="size-4 shrink-0 text-muted-foreground" />
+                        </Button>
+                      </DetailsInviteMemberEdit>
+
+                      <DetailsInviteMemberRemove member={member}>
+                        <Button
+                          className="border-red-500/20 hover:border hover:bg-red-500/10"
+                          variant="ghost"
+                          size="icon"
+                        >
+                          <Trash2Icon className="size-4 shrink-0 text-red-500" />
+                        </Button>
+                      </DetailsInviteMemberRemove>
+                    </div>
+                  </TableCell>
                 )}
               </TableRow>
-            </TableHeader>
-
-            <TableBody>
-              {members.map(member => (
-                <TableRow key={member.id} className="border-0">
-                  {/* NAME */}
-                  <TableCell>
-                    <div className="flex justify-start items-center gap-2">
-                      <div className="w-fit h-fit border border-muted-foreground/25 p-2 rounded-md">
-                        <UserIcon className="size-4 shrink-0 text-muted-foreground" />
-                      </div>
-
-                      <div className="flex flex-col gap-1.5">
-                        <h3 className="font-semibold text-sm text-foreground text-wrap leading-none">
-                          {member.userName}
-                        </h3>
-                        <p className="font-normal text-sm text-muted-foreground leading-none">
-                          {member.userEmail}
-                        </p>
-                      </div>
-                    </div>
-                  </TableCell>
-
-                  {/* ROLE */}
-                  <TableCell className="w-30">
-                    <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
-                      <p className="font-normal text-sm text-muted-foreground capitalize leading-none">
-                        {ROLE_MEMBER_WORKSPACE_LABELS[member.role]}
-                      </p>
-                    </div>
-                  </TableCell>
-
-                  {/* JOINED AT */}
-                  <TableCell className="w-30">
-                    <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
-                      <p className="font-normal text-sm text-muted-foreground capitalize leading-none">
-                        {dateFormat(member.joinedAt)}
-                      </p>
-                    </div>
-                  </TableCell>
-
-                  {/* ACTIONS */}
-                  {onCanUpdateMembers && (
-                    <TableCell className="w-26">
-                      <div className="flex justify-between items-center gap-2">
-                        <DetailsInviteMemberEdit member={member}>
-                          <Button
-                            className="hover:border hover:bg-background"
-                            variant="ghost"
-                            size="icon"
-                          >
-                            <PenIcon className="size-4 shrink-0 text-muted-foreground" />
-                          </Button>
-                        </DetailsInviteMemberEdit>
-
-                        <DetailsInviteMemberRemove member={member}>
-                          <Button
-                            className="border-red-500/20 hover:border hover:bg-red-500/10"
-                            variant="ghost"
-                            size="icon"
-                          >
-                            <Trash2Icon className="size-4 shrink-0 text-red-500" />
-                          </Button>
-                        </DetailsInviteMemberRemove>
-                      </div>
-                    </TableCell>
-                  )}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+            ))}
+          </TableBody>
+        </Table>
       </CardContent>
     </Card>
   )

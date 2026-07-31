@@ -25,7 +25,9 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import {
+  PROFILE_CURRENCY_TYPE,
   PROFILE_CURRENCY_TYPE_VALUES,
+  PROFILE_LANGUAGE_TYPE,
   PROFILE_LANGUAGE_TYPE_VALUES,
 } from '@/data/labels/profile-preference'
 import { useRefreshUserLoggedQuery } from '@/hooks/queries/use-user-logged-query'
@@ -48,8 +50,8 @@ export function ProfilePreferencesSelectCard() {
   const form = useForm<ProfilePreferencesSelectType>({
     resolver: zodResolver(profilePreferencesSelectSchema),
     defaultValues: {
-      currency: 'BRL',
-      language: 'PT_BR',
+      currency: PROFILE_CURRENCY_TYPE.BRL,
+      language: PROFILE_LANGUAGE_TYPE.PT_BR,
     },
   })
 

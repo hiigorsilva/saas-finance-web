@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { EllipsisIcon, FolderOpenIcon, UserIcon, UsersIcon } from 'lucide-react'
 import type { ComponentProps } from 'react'
 import { Button } from '@/components/ui/button'
+import { WORKSPACE_LABELS, WORKSPACE_TYPE } from '@/data/labels/workspace-type'
 import type { IWorkspace } from '@/services/workspace/workspace.d'
 import { WorkspaceCardMenu } from './workspace-card-menu'
 
@@ -60,31 +61,23 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
 
       {/* TYPE */}
       <div className="w-fit h-fit flex justify-start items-center gap-2 border rounded-sm px-2 py-1">
-        {workspace.type === 'PRIVATE' && (
-          <>
-            <UserIcon
-              className="size-4 shrink-0 text-muted-foreground"
-              strokeWidth={1.5}
-            />
-
-            <span className="font-normal text-base text-muted-foreground leading-none capitalize">
-              Privado
-            </span>
-          </>
+        {workspace.type === WORKSPACE_TYPE.PRIVATE ? (
+          <UserIcon
+            className="size-4 shrink-0 text-muted-foreground"
+            strokeWidth={1.5}
+          />
+        ) : (
+          <UsersIcon
+            className="size-4 shrink-0 text-muted-foreground"
+            strokeWidth={1.5}
+          />
         )}
 
-        {workspace.type === 'SHARED' && (
-          <>
-            <UsersIcon
-              className="size-4 shrink-0 text-muted-foreground"
-              strokeWidth={1.5}
-            />
-
-            <span className="font-normal text-base text-muted-foreground leading-none capitalize">
-              Compartilhado
-            </span>
-          </>
-        )}
+        <span className="font-normal text-base text-muted-foreground leading-none capitalize">
+          {workspace.type === WORKSPACE_TYPE.PRIVATE
+            ? WORKSPACE_LABELS[WORKSPACE_TYPE.PRIVATE]
+            : WORKSPACE_LABELS[WORKSPACE_TYPE.SHARED]}
+        </span>
       </div>
     </Link>
   )
