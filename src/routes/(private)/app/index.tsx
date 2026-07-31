@@ -21,7 +21,7 @@ export const Route = createFileRoute('/(private)/app/')({
   head: () => ({
     meta: [
       {
-        title: 'Overview | Luna',
+        title: 'Início | Luna',
       },
     ],
   }),

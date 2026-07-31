@@ -3,7 +3,7 @@ import { DollarSignIcon, HomeIcon, LayoutDashboardIcon } from 'lucide-react'
 export const navigateMenuLinks = [
   {
     icon: <HomeIcon />,
-    title: 'Overview',
+    title: 'Início',
     href: '/app',
   },
   {

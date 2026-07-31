@@ -11,26 +11,15 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
   type WorkspaceSearchFilterType,
   workspaceSearchFilterSchema,
 } from '@/schemas/workspace-search-form-filter'
-import { optionsTypeWorkspace } from '../-data/options-select'
 
 export function WorkspaceSearchFilterForm() {
   const form = useForm<WorkspaceSearchFilterType>({
     resolver: zodResolver(workspaceSearchFilterSchema),
     defaultValues: {
       searchWorkspace: '',
-      typeWorkspace: 'all',
     },
   })
 
@@ -65,33 +54,6 @@ export function WorkspaceSearchFilterForm() {
                 </div>
               </FormControl>
               <FormMessage className="absolute -bottom-5 left-0" />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="typeWorkspace"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="sr-only">Tipo de Workspace</FormLabel>
-              <FormControl>
-                <Select defaultValue={optionsTypeWorkspace[0].value}>
-                  <SelectTrigger className="w-full max-w-48">
-                    <SelectValue placeholder="Selecione o tipo" {...field} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Tipo de Workspace</SelectLabel>
-                      {optionsTypeWorkspace.map(option => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
             </FormItem>
           )}
         />
