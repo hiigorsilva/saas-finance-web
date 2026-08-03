@@ -84,7 +84,8 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
 
         <BadgeTagInfo>
           <span className="font-normal text-sm text-muted-foreground leading-none capitalize">
-            11 membros {/* TODO: Implementar endpoint */}
+            {workspace.totalMembers} membro
+            {workspace.totalMembers > 1 ? 's' : ''}
           </span>
         </BadgeTagInfo>
       </div>

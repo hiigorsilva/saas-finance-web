@@ -28,10 +28,12 @@ export interface IMembersOfWorkspace {
 export interface IWorkspace {
   id: string
   ownerId: string
+  ownerName: string
   name: string
   slug: string
   description: string
   type: WorkspaceType
+  totalMembers: number
   createdAt: string
   updatedAt: string
 }
