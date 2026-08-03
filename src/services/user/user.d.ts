@@ -3,6 +3,8 @@ export interface IUserLogged {
   name: string
   email: string
   financialProfile: string | null
+  active: boolean
+  birthDate: string
   createdAt: string
   updatedAt: string
 }

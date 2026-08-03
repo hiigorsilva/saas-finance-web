@@ -40,10 +40,24 @@ import {
   type ProfileUserEditType,
   profileUserEditSchema,
 } from '@/schemas/profile-user-data-edit-form'
+import type { IUserLogged } from '@/services/user/user.d'
 import { dateFormatLong } from '@/utils/date-format'
 
+type ProfileUserDataEditFormUserData = Pick<
+  IUserLogged,
+  'name' | 'email' | 'birthDate'
+>
+
 type ProfileUserDataEditFormProps = ComponentProps<'button'> & {
-  userData: Omit<ProfileUserEditType, 'id' | 'password'>
+  userData: ProfileUserDataEditFormUserData
+}
+
+function parseBirthDate(birthDate: string | null | undefined) {
+  if (!birthDate) return undefined
+
+  const parsedBirthDate = new Date(birthDate)
+
+  return Number.isNaN(parsedBirthDate.getTime()) ? undefined : parsedBirthDate
 }
 
 export function ProfileUserDataEditForm({
@@ -60,7 +74,7 @@ export function ProfileUserDataEditForm({
       name: userData.name,
       email: userData.email,
       // password: userData.password,
-      birthDate: userData.birthDate ?? undefined,
+      birthDate: parseBirthDate(userData.birthDate),
     },
   })
 
@@ -96,7 +110,7 @@ export function ProfileUserDataEditForm({
       name: userData.name,
       email: userData.email,
       // password: userData.password,
-      birthDate: userData.birthDate ? new Date(userData.birthDate) : undefined,
+      birthDate: parseBirthDate(userData.birthDate),
     })
   }, [userData])
 

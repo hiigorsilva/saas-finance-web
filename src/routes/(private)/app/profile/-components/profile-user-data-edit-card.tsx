@@ -37,9 +37,23 @@ export function ProfileUserDataEditCard() {
     name: '',
     email: '',
     financialProfile: null,
+    birthDate: '',
     createdAt: '',
     updatedAt: '',
   }
+
+  const birthDateValue = (() => {
+    if (!userData.birthDate) return ''
+
+    const parsedBirthDate = new Date(userData.birthDate)
+    if (Number.isNaN(parsedBirthDate.getTime())) return ''
+
+    return Intl.DateTimeFormat('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }).format(parsedBirthDate)
+  })()
 
   return (
     <Card>
@@ -130,11 +144,7 @@ export function ProfileUserDataEditCard() {
               />
               <Input
                 className="w-full border-0 focus-visible:border-0 focus-visible:ring-0"
-                value={Intl.DateTimeFormat('pt-BR', {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: 'numeric',
-                }).format(new Date())}
+                value={birthDateValue}
                 placeholder="Insira sua data de nascimento"
                 disabled
               />
