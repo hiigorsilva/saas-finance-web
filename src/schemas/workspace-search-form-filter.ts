@@ -8,7 +8,7 @@ const normalizeWorkspaceSearchParam = z.preprocess(value => {
 }, z.string().optional().catch(undefined))
 
 export const workspaceListSearchSchema = z.object({
-  searchWorkspace: normalizeWorkspaceSearchParam,
+  search: normalizeWorkspaceSearchParam,
 })
 
 export type WorkspaceListSearchType = z.infer<typeof workspaceListSearchSchema>

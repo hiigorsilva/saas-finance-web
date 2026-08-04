@@ -9,18 +9,14 @@ import type {
 } from './workspace.d'
 
 export class WorkspaceService {
-  static async GetWorkspace(
-    page: number,
-    limit: number,
-    searchWorkspace?: string
-  ) {
+  static async GetWorkspace(page: number, limit: number, search?: string) {
     const response = await api.get<ApiPaginatedResponse<IWorkspace>>(
       '/workspace',
       {
         params: {
           page,
           limit,
-          searchWorkspace,
+          searchWorkspace: search,
         },
       }
     )

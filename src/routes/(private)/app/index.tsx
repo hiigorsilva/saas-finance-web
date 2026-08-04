@@ -34,34 +34,34 @@ function WorkspacesPage() {
   const navigate = Route.useNavigate()
   const searchParams = Route.useSearch()
   const [searchWorkspace, setSearchWorkspace] = useState(
-    searchParams.searchWorkspace ?? ''
+    searchParams.search ?? ''
   )
   const debouncedSearchWorkspace = useDebouncedValue(searchWorkspace, 500)
 
   useEffect(() => {
-    setSearchWorkspace(searchParams.searchWorkspace ?? '')
-  }, [searchParams.searchWorkspace])
+    setSearchWorkspace(searchParams.search ?? '')
+  }, [searchParams.search])
 
   useEffect(() => {
     const normalizedSearchWorkspace =
       debouncedSearchWorkspace.trim() || undefined
 
-    if (normalizedSearchWorkspace === searchParams.searchWorkspace) return
+    if (normalizedSearchWorkspace === searchParams.search) return
 
     navigate({
       to: '.',
       search: prev => ({
         ...prev,
-        searchWorkspace: normalizedSearchWorkspace,
+        search: normalizedSearchWorkspace,
       }),
       replace: true,
     })
-  }, [debouncedSearchWorkspace, navigate, searchParams.searchWorkspace])
+  }, [debouncedSearchWorkspace, navigate, searchParams.search])
 
   const { data: workspaces, error } = useWorkspacesQuery(
     1,
     20,
-    searchParams.searchWorkspace
+    searchParams.search
   )
 
   useEffect(() => {
@@ -86,7 +86,7 @@ function WorkspacesPage() {
         <div className="flex justify-between items-center gap-6">
           <div className="max-w-72 w-full">
             <WorkspaceSearchFilterForm
-              value={searchWorkspace}
+              searchValue={searchWorkspace}
               onSearchChange={setSearchWorkspace}
             />
           </div>

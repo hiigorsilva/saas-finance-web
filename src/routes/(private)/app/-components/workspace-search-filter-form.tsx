@@ -1,12 +1,12 @@
 import { SearchInput } from '@/components/ui/search-input'
 
 type WorkspaceSearchFilterFormProps = {
-  value: string
+  searchValue: string
   onSearchChange: (value: string) => void
 }
 
 export function WorkspaceSearchFilterForm({
-  value,
+  searchValue,
   onSearchChange,
 }: WorkspaceSearchFilterFormProps) {
   return (
@@ -14,7 +14,7 @@ export function WorkspaceSearchFilterForm({
       <SearchInput
         label="Buscar Workspaces"
         placeholder="Buscar Workspaces..."
-        value={value}
+        value={searchValue}
         onValueChange={onSearchChange}
       />
     </div>
