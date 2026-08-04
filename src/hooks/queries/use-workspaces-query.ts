@@ -3,10 +3,18 @@ import { WorkspaceService } from '@/services/workspace/workspace'
 
 export const workspacesQueryKey = ['workspaces'] as const
 
-export function useWorkspacesQuery(page = 1, limit = 50) {
+export function useWorkspacesQuery(
+  page = 1,
+  limit = 50,
+  searchWorkspace?: string
+) {
+  const parsedSearchWorkspace = searchWorkspace?.trim() || undefined
+
   return useQuery({
-    queryKey: [...workspacesQueryKey],
-    queryFn: () => WorkspaceService.GetWorkspace(page, limit),
+    queryKey: [...workspacesQueryKey, page, limit, parsedSearchWorkspace],
+    queryFn: () =>
+      WorkspaceService.GetWorkspace(page, limit, parsedSearchWorkspace),
+    placeholderData: previousData => previousData,
   })
 }
 

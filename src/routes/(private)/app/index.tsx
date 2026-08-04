@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { PlusIcon } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Container } from '@/components/layout/container'
 import { TitlePage } from '@/components/layout/title-page'
@@ -28,7 +28,22 @@ export const Route = createFileRoute('/(private)/app/')({
 })
 
 function WorkspacesPage() {
-  const { data: workspaces, error } = useWorkspacesQuery(1, 20)
+  const [searchWorkspace, setSearchWorkspace] = useState('')
+  const [debouncedSearchWorkspace, setDebouncedSearchWorkspace] = useState('')
+
+  useEffect(() => {
+    const debounceTimeout = setTimeout(() => {
+      setDebouncedSearchWorkspace(searchWorkspace)
+    }, 500)
+
+    return () => clearTimeout(debounceTimeout)
+  }, [searchWorkspace])
+
+  const { data: workspaces, error } = useWorkspacesQuery(
+    1,
+    20,
+    debouncedSearchWorkspace
+  )
 
   useEffect(() => {
     if (!error) return
@@ -51,7 +66,10 @@ function WorkspacesPage() {
         {/* ACTIONS */}
         <div className="flex justify-between items-center gap-6">
           <div className="max-w-72 w-full">
-            <WorkspaceSearchFilterForm />
+            <WorkspaceSearchFilterForm
+              value={searchWorkspace}
+              onSearchChange={setSearchWorkspace}
+            />
           </div>
 
           <AddWorkspaceButton>
