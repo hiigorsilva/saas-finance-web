@@ -1,13 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { PlusIcon } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Container } from '@/components/layout/container'
 import { TitlePage } from '@/components/layout/title-page'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { useWorkspacesQuery } from '@/hooks/queries/use-workspaces-query'
+import { useDebouncedValue } from '@/hooks/use-debounced-value'
+import { workspaceListSearchSchema } from '@/schemas/workspace-search-form-filter'
 import { normalizeApiError } from '@/services/api/errors'
+import { validateSearchTerm } from '@/utils/search'
 import { SkeletonHomePage } from '../-components/skeleton-home-page'
 import { AddWorkspaceButton } from './-components/add-workspace-button'
 import { Header } from './-components/header'
@@ -17,28 +20,51 @@ import { WorkspaceSearchFilterForm } from './-components/workspace-search-filter
 
 export const Route = createFileRoute('/(private)/app/')({
   component: WorkspacesPage,
+  validateSearch: workspaceListSearchSchema,
   loader: SkeletonHomePage,
   head: () => ({
     meta: [
       {
-        title: 'Overview | Luna',
+        title: 'Início | Luna',
       },
     ],
   }),
 })
 
 function WorkspacesPage() {
-  const { data, error } = useWorkspacesQuery(1, 20)
+  const navigate = Route.useNavigate()
+  const searchParams = Route.useSearch()
+  const [searchWorkspace, setSearchWorkspace] = useState(
+    searchParams.search ?? ''
+  )
+  const debouncedSearchWorkspace = useDebouncedValue(searchWorkspace, 500)
 
-  const workspaces = data ?? {
-    data: [],
-    props: {
-      currentPage: 1,
-      limit: 20,
-      totalCount: 0,
-      totalPages: 0,
-    },
-  }
+  useEffect(() => {
+    setSearchWorkspace(searchParams.search ?? '')
+  }, [searchParams.search])
+
+  useEffect(() => {
+    const normalizedSearchWorkspace = validateSearchTerm(
+      debouncedSearchWorkspace
+    )
+
+    if (normalizedSearchWorkspace === searchParams.search) return
+
+    navigate({
+      to: '.',
+      search: prev => ({
+        ...prev,
+        search: normalizedSearchWorkspace,
+      }),
+      replace: true,
+    })
+  }, [debouncedSearchWorkspace, navigate, searchParams.search])
+
+  const { data: workspaces, error } = useWorkspacesQuery(
+    1,
+    20,
+    searchParams.search
+  )
 
   useEffect(() => {
     if (!error) return
@@ -46,6 +72,8 @@ function WorkspacesPage() {
     const apiError = normalizeApiError(error)
     toast.error(apiError.message)
   }, [error])
+
+  if (!workspaces) return <SkeletonHomePage />
 
   return (
     <>
@@ -59,7 +87,10 @@ function WorkspacesPage() {
         {/* ACTIONS */}
         <div className="flex justify-between items-center gap-6">
           <div className="max-w-72 w-full">
-            <WorkspaceSearchFilterForm />
+            <WorkspaceSearchFilterForm
+              searchValue={searchWorkspace}
+              onSearchChange={setSearchWorkspace}
+            />
           </div>
 
           <AddWorkspaceButton>

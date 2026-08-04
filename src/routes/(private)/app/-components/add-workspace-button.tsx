@@ -29,7 +29,7 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
-import { useCreateWorkspaceMutation } from '@/hooks/mutations/use-create-workspace-mutation'
+import { useCreateWorkspaceMutation } from '@/hooks/mutations/workspace/use-create-workspace-mutation'
 import {
   type AddWorkspaceFormType,
   addWorkspaceFormSchema,

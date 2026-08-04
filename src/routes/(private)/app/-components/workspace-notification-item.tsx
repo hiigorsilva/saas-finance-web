@@ -3,27 +3,34 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import type { WorkspaceInvitationType } from '@/data/requests/workspace-invitations'
+import {
+  useAcceptInviteWorkspaceMutation,
+  useDeclineInviteWorkspaceMutation,
+} from '@/hooks/mutations/invite/use-accept-invite-workspace-mutation'
+import type { IInviteToWorkspace } from '@/services/notifications/notification.d'
+import { dateFormatDistanceToNow } from '@/utils/date-format'
 
 type WorkspaceNotificationItemProps = {
-  workspaceInvitations: WorkspaceInvitationType
+  invite: IInviteToWorkspace
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export function WorkspaceNotificationItem({
-  workspaceInvitations,
+  invite,
   setIsOpen,
 }: WorkspaceNotificationItemProps) {
   const [isLoading, setIsLoading] = useState(false)
 
-  const { inviterName, workspaceName, id } = workspaceInvitations
+  const { mutateAsync: acceptInviteWorkspace } =
+    useAcceptInviteWorkspaceMutation()
+  const { mutateAsync: declineInviteWorkspace } =
+    useDeclineInviteWorkspaceMutation()
 
-  const handleAcceptInvitation = async (id: string) => {
+  const handleAcceptInvitation = async (inviteId: string) => {
     setIsLoading(true)
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      console.log('INVITE_ACCEPTED:', id)
-      toast.success('Convite aceito com sucesso!')
+      const res = await acceptInviteWorkspace(inviteId)
+      if (res.status) toast.success('Convite aceito com sucesso!')
     } catch (error) {
       console.error('ACCEPT_INVITATION_ERROR:', error)
       toast.error('Erro ao aceitar o convite. Tente novamente.')
@@ -33,12 +40,11 @@ export function WorkspaceNotificationItem({
     }
   }
 
-  const handeDeclineInvitation = async (id: string) => {
+  const handeDeclineInvitation = async (inviteId: string) => {
     setIsLoading(true)
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      console.log('INVITE_DECLINED:', id)
-      toast.success('Convite recusado com sucesso!')
+      const res = await declineInviteWorkspace(inviteId)
+      if (res.status) toast.success('Convite recusado com sucesso!')
     } catch (error) {
       console.error('DECLINE_INVITATION_ERROR:', error)
       toast.error('Erro ao recusar o convite. Tente novamente.')
@@ -68,13 +74,19 @@ export function WorkspaceNotificationItem({
       <div className="flex flex-col gap-3">
         {/* DETAILS */}
         <div className="flex flex-col gap-2">
-          <h3 className="font-semibold text-base text-foreground leading-none">
-            Convite para workspace
-          </h3>
+          <div className="flex justify-between items-center gap-1">
+            <h3 className="font-semibold text-base text-foreground leading-none">
+              Novo convite
+            </h3>
+
+            <div className="w-fit text-xs text-muted-foreground leading-none px-2 py-1 rounded-full border">
+              Expira {dateFormatDistanceToNow(invite.expiresAt)}
+            </div>
+          </div>
           <p className="text-sm text-muted-foreground text-wrap line-clamp-2 truncate">
-            {inviterName} te convidou para integrar-se ao worksapce{' '}
+            {invite.inviterName} te convidou para integrar-se ao workspace{' '}
             <strong className="font-semibold text-sm text-muted-foreground uppercase">
-              {workspaceName}
+              {invite.workspaceName}
             </strong>
           </p>
         </div>
@@ -86,7 +98,7 @@ export function WorkspaceNotificationItem({
             variant="gradient"
             size="sm"
             disabled={isLoading}
-            onClick={() => handleAcceptInvitation(id)}
+            onClick={() => handleAcceptInvitation(invite.id)}
           >
             Aceitar
           </Button>
@@ -96,7 +108,7 @@ export function WorkspaceNotificationItem({
             variant="outline"
             size="sm"
             disabled={isLoading}
-            onClick={() => handeDeclineInvitation(id)}
+            onClick={() => handeDeclineInvitation(invite.id)}
           >
             Recusar
           </Button>

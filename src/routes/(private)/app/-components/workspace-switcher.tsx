@@ -24,6 +24,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
+import { WORKSPACE_TYPE } from '@/data/labels/workspace-type'
 import { useWorkspacesQuery } from '@/hooks/queries/use-workspaces-query'
 import { normalizeApiError } from '@/services/api/errors'
 import { AddWorkspaceButton } from './add-workspace-button'
@@ -139,14 +140,14 @@ export function WorkspaceSwitcher() {
                   >
                     {/* ICON */}
                     <div className="w-fit h-fit rounded-md bg-primary/10 border border-primary/25 p-2">
-                      {workspace.type === 'PRIVATE' && (
+                      {workspace.type === WORKSPACE_TYPE.PRIVATE && (
                         <UserIcon
                           className="size-5 shrink-0 text-primary"
                           strokeWidth={1}
                         />
                       )}
 
-                      {workspace.type === 'SHARED' && (
+                      {workspace.type === WORKSPACE_TYPE.SHARED && (
                         <UsersIcon
                           className="size-5 shrink-0 text-primary"
                           strokeWidth={1}
@@ -160,8 +161,10 @@ export function WorkspaceSwitcher() {
                         {workspace.name}
                       </h3>
                       <span className="inline-block font-normal text-sm text-muted-foreground">
-                        {workspace.type === 'PRIVATE' && 'Somente você'}
-                        {workspace.type === 'SHARED' && 'X usuários'}
+                        {workspace.type === WORKSPACE_TYPE.PRIVATE &&
+                          'Somente você'}
+                        {workspace.type === WORKSPACE_TYPE.SHARED &&
+                          `${workspace.totalMembers} membro${workspace.totalMembers > 1 ? 's' : ''}`}
                       </span>
                     </div>
 

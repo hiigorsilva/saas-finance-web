@@ -15,3 +15,6 @@ export const ROLE_MEMBER_WORKSPACE_LABELS = {
 export const ROLE_MEMBER_WORKSPACE_TYPE_VALUES = Object.values(
   ROLE_MEMBER_WORKSPACE_TYPE
 )
+
+export type RoleMemberWorkspaceValuesType =
+  (typeof ROLE_MEMBER_WORKSPACE_TYPE)[keyof typeof ROLE_MEMBER_WORKSPACE_TYPE]

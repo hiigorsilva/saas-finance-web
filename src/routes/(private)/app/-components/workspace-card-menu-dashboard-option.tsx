@@ -1,15 +1,10 @@
 import { useNavigate } from '@tanstack/react-router'
 import { ChevronRightIcon, LayoutDashboardIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import type { WORKSPACE_TYPE } from '@/data/requests/workspaces'
+import type { IWorkspace } from '@/services/workspace/workspace.d'
 
 type WorkspaceCardMenuDashboardOptionProps = {
-  workspace: {
-    id: string
-    name: string
-    description: string
-    type: WORKSPACE_TYPE
-  }
+  workspace: IWorkspace
 }
 
 export function WorkspaceCardMenuDashboardOption({

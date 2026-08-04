@@ -45,7 +45,7 @@ export const transactionTypeTranslate = (transactionType: string) => {
       return TRANSACTION_TYPE_LABELS[TRANSACTION_TYPE.INVESTMENT]
 
     default:
-      return 'Outro'
+      return TRANSACTION_TYPE_LABELS[TRANSACTION_TYPE.EXPENSE]
   }
 }
 
@@ -136,8 +136,8 @@ export const transactionCategoryTranslate = (transactionCategory: string) => {
     case TRANSACTION_CATEGORY_TYPE.HEALTH:
       return TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.HEALTH]
 
-    case TRANSACTION_CATEGORY_TYPE.UTILITY:
-      return TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.UTILITY]
+    case TRANSACTION_CATEGORY_TYPE.GIFTS:
+      return TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.GIFTS]
 
     case TRANSACTION_CATEGORY_TYPE.SALARY:
       return TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.SALARY]
@@ -146,7 +146,7 @@ export const transactionCategoryTranslate = (transactionCategory: string) => {
       return TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.OTHER]
 
     default:
-      return 'Outro'
+      return TRANSACTION_CATEGORY_LABELS[TRANSACTION_CATEGORY_TYPE.OTHER]
   }
 }
 

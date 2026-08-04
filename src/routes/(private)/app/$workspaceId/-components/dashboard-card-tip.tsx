@@ -17,7 +17,7 @@ export function DashboardCardTip({
   return (
     <Tooltip>
       <TooltipTrigger>
-        <CircleHelpIcon className="size-4 shrink-0" strokeWidth={2} />
+        <CircleHelpIcon className="size-4 shrink-0" strokeWidth={1.4} />
       </TooltipTrigger>
 
       <TooltipContent

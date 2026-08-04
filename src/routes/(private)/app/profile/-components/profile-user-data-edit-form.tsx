@@ -35,20 +35,36 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
+import { useRefreshUserLoggedQuery } from '@/hooks/queries/use-user-logged-query'
 import {
   type ProfileUserEditType,
   profileUserEditSchema,
 } from '@/schemas/profile-user-data-edit-form'
+import type { IUserLogged } from '@/services/user/user.d'
 import { dateFormatLong } from '@/utils/date-format'
 
+type ProfileUserDataEditFormUserData = Pick<
+  IUserLogged,
+  'name' | 'email' | 'birthDate'
+>
+
 type ProfileUserDataEditFormProps = ComponentProps<'button'> & {
-  userData: Omit<ProfileUserEditType, 'id' | 'password'>
+  userData: ProfileUserDataEditFormUserData
+}
+
+function parseBirthDate(birthDate: string | null | undefined) {
+  if (!birthDate) return undefined
+
+  const parsedBirthDate = new Date(birthDate)
+
+  return Number.isNaN(parsedBirthDate.getTime()) ? undefined : parsedBirthDate
 }
 
 export function ProfileUserDataEditForm({
   userData,
   children,
 }: ProfileUserDataEditFormProps) {
+  const refreshUserLogged = useRefreshUserLoggedQuery()
   const [openModal, setOpenModal] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
@@ -58,12 +74,19 @@ export function ProfileUserDataEditForm({
       name: userData.name,
       email: userData.email,
       // password: userData.password,
-      birthDate: userData.birthDate ?? undefined,
+      birthDate: parseBirthDate(userData.birthDate),
     },
   })
 
   const onSubmit = async (data: ProfileUserEditType) => {
-    console.log('EDIT_USER_DATA', data)
+    console.log('EDIT_USER_DATA', {
+      name: data.name,
+      password: data.password,
+      birthDate: data.birthDate,
+    })
+
+    await refreshUserLogged()
+
     setOpenModal(false)
   }
 
@@ -87,7 +110,7 @@ export function ProfileUserDataEditForm({
       name: userData.name,
       email: userData.email,
       // password: userData.password,
-      birthDate: userData.birthDate ? new Date(userData.birthDate) : undefined,
+      birthDate: parseBirthDate(userData.birthDate),
     })
   }, [userData])
 
@@ -120,7 +143,7 @@ export function ProfileUserDataEditForm({
                 <FormItem className="relative">
                   <FormLabel className="font-normal">Nome *</FormLabel>
                   <FormControl>
-                    <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+                    <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
                       <UserIcon
                         className="size-5 text-muted-foreground"
                         strokeWidth={1}
@@ -146,7 +169,7 @@ export function ProfileUserDataEditForm({
                 <FormItem className="relative">
                   <FormLabel className="font-normal">Email *</FormLabel>
                   <FormControl>
-                    <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+                    <div className="pointer-events-none bg-gray-400/10 text-gray-600 flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
                       <MailIcon
                         className="size-5 text-muted-foreground"
                         strokeWidth={1}
@@ -172,7 +195,7 @@ export function ProfileUserDataEditForm({
                 <FormItem className="relative">
                   <FormLabel className="font-normal">Senha *</FormLabel>
                   <FormControl>
-                    <div className="flex items-center border rounded-md pl-3 pr-0 overflow-hidden has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-[2px]">
+                    <div className="flex items-center border rounded-md pl-3 pr-0 overflow-hidden has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
                       <LockIcon
                         className="size-5 text-muted-foreground"
                         strokeWidth={1}

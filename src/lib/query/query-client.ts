@@ -13,6 +13,10 @@ export const queryClient = new QueryClient({
 
         return failureCount < 2
       },
+      gcTime: 1000 * 60 * 5, // 5 minutos
+      staleTime: 1000 * 60 * 1, // 1 minuto
+      refetchOnWindowFocus: false, // desabilita o refetch automático ao voltar para a aba do navegador
+      refetchOnReconnect: true, // habilita o refetch automático ao reconectar à internet
     },
     mutations: {
       retry: false,

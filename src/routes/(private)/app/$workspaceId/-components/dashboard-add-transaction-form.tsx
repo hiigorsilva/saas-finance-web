@@ -38,7 +38,7 @@ import {
   TRANSACTION_TYPE,
   TRANSACTION_TYPE_VALUES,
 } from '@/data/labels/transaction-type'
-import { useCreateTransactionMutation } from '@/hooks/mutations/use-create-transaction-mutation'
+import { useCreateTransactionMutation } from '@/hooks/mutations/transaction/use-create-transaction-mutation'
 import { cn } from '@/lib/utils'
 import type { AddTransactionType } from '@/schemas/add-transaction-button'
 import { normalizeApiError } from '@/services/api/errors'

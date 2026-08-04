@@ -30,28 +30,40 @@ export function Pagination({
   totalPages,
 }: PaginationProps) {
   const router = useNavigate()
+  const defaultPage = 1
+  const defaultLimit = 50
+  const perPageOptions = [20, 50, 100]
 
-  const [page, setPage] = useState(Math.max(1, currentPage))
+  const [page, setPage] = useState(Math.max(defaultPage, currentPage))
   const [perPage, setPerPage] = useState(Math.max(1, limit))
 
-  useEffect(() => {
-    setPage(Math.max(1, currentPage))
-    setPerPage(Math.max(1, limit))
-  }, [currentPage, limit])
+  const selectPerPageValue = perPageOptions.includes(perPage)
+    ? String(perPage)
+    : '50'
 
   useEffect(() => {
-    const safePage = Math.max(1, page)
+    setPage(Math.max(defaultPage, currentPage))
+    setPerPage(Math.max(1, limit))
+  }, [currentPage, defaultPage, limit])
+
+  useEffect(() => {
+    const safePage = Math.max(defaultPage, page)
     const safePerPage = Math.max(1, perPage)
 
     router({
       to: '.',
-      search: { page: safePage, limit: safePerPage },
+      search: prev => ({
+        ...prev,
+        page: safePage === defaultPage ? undefined : safePage,
+        limit: safePerPage === defaultLimit ? undefined : safePerPage,
+      }),
       replace: true,
     })
-  }, [page, perPage, router])
+  }, [defaultLimit, defaultPage, page, perPage, router])
 
   const setSelectItemPerPage = (perPage: string) => {
     const limitFormatted = Number(perPage)
+    setPage(1)
     setPerPage(limitFormatted)
   }
 
@@ -60,24 +72,12 @@ export function Pagination({
       if (page <= 1) return page
       return 1
     })
-
-    router({
-      to: '.',
-      search: { page: page, limit: perPage },
-      replace: true,
-    })
   }
 
   const handlePrevPage = () => {
     setPage(page => {
       if (page <= 1) return page
       return page - 1
-    })
-
-    router({
-      to: '.',
-      search: { page: page, limit: perPage },
-      replace: true,
     })
   }
 
@@ -86,29 +86,17 @@ export function Pagination({
       if (page >= totalPages) return totalPages
       return page + 1
     })
-
-    router({
-      to: '.',
-      search: { page: page, limit: perPage },
-      replace: true,
-    })
   }
 
   const handleLastPage = () => {
     setPage(totalPages)
-
-    router({
-      to: '.',
-      search: { page: page, limit: perPage },
-      replace: true,
-    })
   }
 
   return (
     <div className="flex justify-between items-center gap-6">
       {/* LEFTSIDE */}
       <span className="inline-flex text-sm text-muted-foreground tracking-tight">
-        Mostrando {perPage} de {totalCount} itens
+        Total de {totalCount} itens
       </span>
 
       {/* RIGHTSIDE */}
@@ -119,20 +107,23 @@ export function Pagination({
             Itens por página
           </span>
 
-          <Select defaultValue="10" onValueChange={setSelectItemPerPage}>
+          <Select
+            value={selectPerPageValue}
+            onValueChange={setSelectItemPerPage}
+          >
             <SelectTrigger className="text-foreground">
               <SelectValue placeholder="Selecione" />
             </SelectTrigger>
 
             <SelectContent align="end">
-              <SelectItem value="10" className="text-foreground">
-                10
-              </SelectItem>
               <SelectItem value="20" className="text-foreground">
                 20
               </SelectItem>
-              <SelectItem value="30" className="text-foreground">
-                30
+              <SelectItem value="50" className="text-foreground">
+                50
+              </SelectItem>
+              <SelectItem value="100" className="text-foreground">
+                100
               </SelectItem>
             </SelectContent>
           </Select>

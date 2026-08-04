@@ -1,16 +1,42 @@
 import { useQuery } from '@tanstack/react-query'
-import { TransactionService } from '@/services/transaction/transaction'
+import {
+  type TransactionListFilters,
+  TransactionService,
+} from '@/services/transaction/transaction'
+import { validateSearchTerm } from '@/utils/search'
 
 export const transactionsQueryKey = ['transactions'] as const
 
 export function useTransactionsQuery(
   workspaceId: string,
   page = 1,
-  limit = 50
+  limit = 50,
+  filters: TransactionListFilters = {}
 ) {
+  const safePage = Number.isFinite(page) && page > 0 ? page : 1
+  const safeLimit = Number.isFinite(limit) && limit > 0 ? limit : 50
+  const normalizedFilters = {
+    ...filters,
+    search: validateSearchTerm(filters.search),
+  }
+
   return useQuery({
-    queryKey: [...transactionsQueryKey, workspaceId, page, limit],
-    queryFn: () => TransactionService.GetTransactions(workspaceId, page, limit),
+    queryKey: [
+      ...transactionsQueryKey,
+      workspaceId,
+      safePage,
+      safeLimit,
+      normalizedFilters,
+    ],
+    queryFn: () =>
+      TransactionService.GetTransactions(
+        workspaceId,
+        safePage,
+        safeLimit,
+        normalizedFilters
+      ),
     enabled: !!workspaceId,
+    placeholderData: previousData => previousData,
+    staleTime: 1000 * 50, // 50 segundos
   })
 }

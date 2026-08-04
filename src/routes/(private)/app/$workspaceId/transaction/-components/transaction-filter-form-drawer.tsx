@@ -3,7 +3,7 @@ import { ptBR } from 'date-fns/locale'
 import { CalendarIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import type { DateRange } from 'react-day-picker'
-import { type useForm, useFormContext } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import {
@@ -44,31 +44,30 @@ import {
   optionsTransactionPaymentMethod,
   optionsTypeTransaction,
 } from '../../../-data/options-select'
-import { defaultValuesTransactionFilters } from './transaction-filter-form'
 
 type DrawerFilterTransactionProps = {
   children: ReactNode
-  form: ReturnType<typeof useForm<TransactionFilterType>>
   isOpen: boolean
   onOpenChange: (open: boolean) => void
-  onSubmit: () => void
+  onSubmitFilters: () => void
+  onResetFilters: () => void
 }
 
 export function DrawerFilterTransaction({
   children,
   isOpen,
   onOpenChange,
-  onSubmit,
+  onSubmitFilters,
+  onResetFilters,
 }: DrawerFilterTransactionProps) {
   const form = useFormContext<TransactionFilterType>()
 
-  async function handleSubmitChildren() {
-    onSubmit()
-    onOpenChange(false)
+  function handleSubmitChildren() {
+    onSubmitFilters()
   }
 
   function handleResetFilters() {
-    form.reset(defaultValuesTransactionFilters())
+    onResetFilters()
   }
 
   return (

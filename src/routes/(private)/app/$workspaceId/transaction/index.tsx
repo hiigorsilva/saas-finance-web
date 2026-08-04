@@ -1,14 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ChevronLeftIcon, PlusIcon } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { toast } from 'sonner'
 import { Container } from '@/components/layout/container'
+import { Loading } from '@/components/layout/loading'
 import { TitleIconPage } from '@/components/layout/title-icon-page'
 import { TitlePage } from '@/components/layout/title-page'
 import { Button } from '@/components/ui/button'
 import { useTransactionsQuery } from '@/hooks/queries/use-transactions-query'
 import { listTransactionSchema } from '@/schemas/pagination'
 import { normalizeApiError } from '@/services/api/errors'
+import type { TransactionListFilters } from '@/services/transaction/transaction'
 import { Pagination } from '../../-components/pagination'
 import { DashboardAddTransactionButton } from '../-components/dashboard-add-transaction-button'
 import { TransactionFilterForm } from './-components/transaction-filter-form'
@@ -31,23 +33,86 @@ export const Route = createFileRoute(
 function TransactionPage() {
   const { workspaceId } = Route.useParams()
   const router = Route.useNavigate()
+  const searchParams = Route.useSearch()
+  const defaultPage = 1
+  const defaultLimit = 50
 
-  const { data, error } = useTransactionsQuery(workspaceId, 1, 50)
+  const page =
+    Number.isFinite(searchParams.page) && searchParams.page > 0
+      ? searchParams.page
+      : defaultPage
+  const limit =
+    Number.isFinite(searchParams.limit) && searchParams.limit > 0
+      ? searchParams.limit
+      : defaultLimit
 
-  const transactions = data ?? {
-    data: [],
-    props: {
-      currentPage: 1,
-      limit: 10,
-      totalCount: 0,
-      totalPages: 0,
-    },
-  }
+  const filters = useMemo<TransactionListFilters>(
+    () => ({
+      search: searchParams.search,
+      typeExpense: searchParams.typeExpense,
+      typeCategory: searchParams.typeCategory,
+      typePaymentMethod: searchParams.typePaymentMethod,
+      from: searchParams.from,
+      to: searchParams.to,
+    }),
+    [
+      searchParams.search,
+      searchParams.typeExpense,
+      searchParams.typeCategory,
+      searchParams.typePaymentMethod,
+      searchParams.from,
+      searchParams.to,
+    ]
+  )
+
+  const hasAppliedFilters = Boolean(
+    searchParams.typeExpense ||
+      searchParams.typeCategory ||
+      searchParams.typePaymentMethod ||
+      searchParams.from ||
+      searchParams.to
+  )
+
+  const {
+    data: transactions,
+    isPending,
+    error,
+  } = useTransactionsQuery(workspaceId, page, limit, filters)
 
   const handleNavigateBack = () => {
     router({
       to: '/app/$workspaceId',
       params: { workspaceId: workspaceId },
+    })
+  }
+
+  const handleApplySearch = (search?: string) => {
+    router({
+      to: '.',
+      search: prev => ({
+        ...prev,
+        page: undefined,
+        search,
+      }),
+      replace: true,
+    })
+  }
+
+  const handleApplyFilters = (
+    nextFilters: Omit<TransactionListFilters, 'search'>
+  ) => {
+    router({
+      to: '.',
+      search: prev => ({
+        ...prev,
+        page: undefined,
+        typeExpense: nextFilters.typeExpense,
+        typeCategory: nextFilters.typeCategory,
+        typePaymentMethod: nextFilters.typePaymentMethod,
+        from: nextFilters.from,
+        to: nextFilters.to,
+      }),
+      replace: true,
     })
   }
 
@@ -57,6 +122,9 @@ function TransactionPage() {
     const apiError = normalizeApiError(error)
     toast.error(apiError.message)
   }, [error])
+
+  if (isPending) return <Loading />
+  if (!transactions) return null
 
   return (
     <Container className="gap-6 py-6">
@@ -71,7 +139,19 @@ function TransactionPage() {
       {/* FILTER */}
       <div className="flex justify-between items-center gap-6">
         <div className="max-w-2xs w-full">
-          <TransactionFilterForm />
+          <TransactionFilterForm
+            searchValue={searchParams.search}
+            filters={{
+              typeExpense: searchParams.typeExpense,
+              typeCategory: searchParams.typeCategory,
+              typePaymentMethod: searchParams.typePaymentMethod,
+              from: searchParams.from,
+              to: searchParams.to,
+            }}
+            hasAppliedFilters={hasAppliedFilters}
+            onApplySearch={handleApplySearch}
+            onApplyFilters={handleApplyFilters}
+          />
         </div>
 
         <DashboardAddTransactionButton>
@@ -83,7 +163,7 @@ function TransactionPage() {
       </div>
 
       {/* TRANSACTION TABLE */}
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 flex-1">
         <TransactionTable transactions={transactions.data} />
       </div>
 

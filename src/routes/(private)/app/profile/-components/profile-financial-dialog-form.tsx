@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/form'
 import { Progress } from '@/components/ui/progress'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { useRefreshUserLoggedQuery } from '@/hooks/queries/use-user-logged-query'
 import {
   type FinancialProfileAnswerType,
   financialProfileAnswerSchema,
@@ -33,6 +34,7 @@ type ProfileFinancialDialogFormProps = {
 export function ProfileFinancialDialogForm({
   openFormClick,
 }: ProfileFinancialDialogFormProps) {
+  const refreshUserLogged = useRefreshUserLoggedQuery()
   const [currentStep, setCurrentStep] = useState(0)
 
   const form = useForm<FinancialProfileAnswerType>({
@@ -76,6 +78,7 @@ export function ProfileFinancialDialogForm({
     console.log('FINANCIAL_PROFILE', data)
 
     await new Promise(resolve => setTimeout(resolve, 1000))
+    await refreshUserLogged()
 
     openFormClick(false)
   }

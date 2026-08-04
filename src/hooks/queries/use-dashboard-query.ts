@@ -12,5 +12,6 @@ export function useDashboardQuery(
     queryKey: [...dashboardQueryKey, workspaceId, month, year],
     queryFn: () => DashboardService.GetDashboard(workspaceId, month, year),
     enabled: !!workspaceId,
+    staleTime: 1000 * 30, // 30 segundos
   })
 }

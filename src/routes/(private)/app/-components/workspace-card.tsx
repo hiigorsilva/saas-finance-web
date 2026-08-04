@@ -2,16 +2,13 @@ import { Link } from '@tanstack/react-router'
 import { EllipsisIcon, FolderOpenIcon, UserIcon, UsersIcon } from 'lucide-react'
 import type { ComponentProps } from 'react'
 import { Button } from '@/components/ui/button'
-import type { WORKSPACE_TYPE } from '@/data/requests/workspaces'
+import { WORKSPACE_LABELS, WORKSPACE_TYPE } from '@/data/labels/workspace-type'
+import type { IWorkspace } from '@/services/workspace/workspace.d'
+import { BadgeTagInfo } from './badge-tag-info'
 import { WorkspaceCardMenu } from './workspace-card-menu'
 
 type WorkspaceCardProps = ComponentProps<'a'> & {
-  workspace: {
-    id: string
-    name: string
-    description: string
-    type: WORKSPACE_TYPE
-  }
+  workspace: IWorkspace
 }
 
 export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
@@ -63,33 +60,34 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
         </p>
       </div>
 
-      {/* TYPE */}
-      <div className="w-fit h-fit flex justify-start items-center gap-2 border rounded-sm px-2 py-1">
-        {workspace.type === 'PRIVATE' && (
-          <>
+      <div className="flex flex-wrap justify-between items-center gap-1">
+        {/* TYPE */}
+        <BadgeTagInfo>
+          {workspace.type === WORKSPACE_TYPE.PRIVATE ? (
             <UserIcon
-              className="size-4 shrink-0 text-muted-foreground"
+              className="size-3.5 shrink-0 text-muted-foreground"
               strokeWidth={1.5}
             />
-
-            <span className="font-normal text-base text-muted-foreground leading-none capitalize">
-              Privado
-            </span>
-          </>
-        )}
-
-        {workspace.type === 'SHARED' && (
-          <>
+          ) : (
             <UsersIcon
-              className="size-4 shrink-0 text-muted-foreground"
+              className="size-3.5 shrink-0 text-muted-foreground"
               strokeWidth={1.5}
             />
+          )}
 
-            <span className="font-normal text-base text-muted-foreground leading-none capitalize">
-              Compartilhado
-            </span>
-          </>
-        )}
+          <span className="font-normal text-sm text-muted-foreground leading-none capitalize">
+            {workspace.type === WORKSPACE_TYPE.PRIVATE
+              ? WORKSPACE_LABELS[WORKSPACE_TYPE.PRIVATE]
+              : WORKSPACE_LABELS[WORKSPACE_TYPE.SHARED]}
+          </span>
+        </BadgeTagInfo>
+
+        <BadgeTagInfo>
+          <span className="font-normal text-sm text-muted-foreground leading-none capitalize">
+            {workspace.totalMembers} membro
+            {workspace.totalMembers > 1 ? 's' : ''}
+          </span>
+        </BadgeTagInfo>
       </div>
     </Link>
   )

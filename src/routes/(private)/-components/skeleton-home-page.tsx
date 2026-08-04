@@ -29,7 +29,7 @@ export function SkeletonHomePage() {
           <SkeletonWorkspaceCard />
         </ul>
 
-        <div className="absolute inset-0 z-50 bg-gradient-to-b from-transparent to-background to-80%" />
+        <div className="absolute inset-0 z-50 bg-linear-to-b from-transparent to-background to-80%" />
       </Container>
     </>
   )

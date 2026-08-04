@@ -25,7 +25,7 @@ function MetricChangeItem({
   const isPositive = value >= 0
   const isStable = value === 0
   const isFavorable = lowerIsBetter ? value <= 0 : value >= 0
-  const badgeLabel = isStable ? 'Estavel' : isFavorable ? 'Melhor' : 'Pior'
+  const badgeLabel = isStable ? 'Estável' : isFavorable ? 'Melhor' : 'Pior'
 
   return (
     <div className="flex flex-col gap-2">
@@ -70,8 +70,8 @@ function MetricChangeItem({
 
       <p className="text-[11px] text-muted-foreground leading-snug">
         {lowerIsBetter
-          ? 'Quando esse numero cai, o resultado tende a melhorar.'
-          : 'Quando esse numero sobe, o resultado tende a melhorar.'}
+          ? 'Quando esse número cai, o resultado tende a melhorar.'
+          : 'Quando esse número sobe, o resultado tende a melhorar.'}
       </p>
     </div>
   )
@@ -87,7 +87,7 @@ export function DashboardCardMetricsTrend({
           <CardTitle className="text-center">Tendência mensal</CardTitle>
           <DashboardCardTip
             label="Tendência mensal"
-            description="Mostra para onde seu mes esta indo: saldo esperado no fim do periodo e evolucao de entradas e gastos em relacao ao mes anterior."
+            description="Mostra para onde seu mes esta indo: saldo esperado no fim do periodo e evolução de entradas e gastos em relacao ao mes anterior."
           />
         </div>
         <Separator />
@@ -108,11 +108,11 @@ export function DashboardCardMetricsTrend({
         </div>
 
         <MetricChangeItem
-          label="Evolucao das entradas"
+          label="Evolução das entradas"
           value={metrics.incomeChange}
         />
         <MetricChangeItem
-          label="Evolucao dos gastos"
+          label="Evolução dos gastos"
           value={metrics.expenseChange}
           lowerIsBetter
         />

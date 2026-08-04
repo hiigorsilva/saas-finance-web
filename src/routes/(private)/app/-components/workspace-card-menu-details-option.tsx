@@ -1,15 +1,10 @@
 import { useNavigate } from '@tanstack/react-router'
 import { AlertCircleIcon, ChevronRightIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import type { WORKSPACE_TYPE } from '@/data/requests/workspaces'
+import type { IWorkspace } from '@/services/workspace/workspace.d'
 
 type WorkspaceCardMenuDetailsOptionProps = {
-  workspace: {
-    id: string
-    name: string
-    description: string
-    type: WORKSPACE_TYPE
-  }
+  workspace: IWorkspace
 }
 
 export function WorkspaceCardMenuDetailsOption({

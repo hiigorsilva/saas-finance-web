@@ -1,10 +1,10 @@
 import { TRANSACTION_CATEGORY_LABELS } from '@/data/labels/transaction-category'
-import type { ExpenseByCategoryType } from '@/data/requests/expense-by-category'
+import type { ICategory } from '@/services/transaction/categories'
 import { currencyFormat } from '@/utils/currency-format'
 import { percentFormat } from '@/utils/percent-format'
 
 type DashboardCardExpenseByCategoryItemProps = {
-  item: ExpenseByCategoryType
+  item: ICategory
 }
 
 export function DashboardCardExpenseByCategoryItem({
@@ -15,11 +15,7 @@ export function DashboardCardExpenseByCategoryItem({
       {/* TITLE AND PERCENT */}
       <div className="flex justify-between items-center gap-6">
         <h3 className="font-semibold text-base text-foreground leading-none">
-          {
-            TRANSACTION_CATEGORY_LABELS[
-              item.name as keyof typeof TRANSACTION_CATEGORY_LABELS
-            ]
-          }
+          {TRANSACTION_CATEGORY_LABELS[item.name]}
         </h3>
         <span className="inline-block font-semibold text-base text-foreground leading-none">
           {percentFormat(item.progress, 0)}

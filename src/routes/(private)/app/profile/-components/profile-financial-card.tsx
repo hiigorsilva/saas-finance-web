@@ -9,14 +9,14 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import type { UserFinancialProfileType } from '@/schemas/user-financial-profile'
+import type { FinancialProfileType } from '@/data/labels/financial-profile'
 import {
   financialProfileDescritionTypeTranslate,
   financialProfileTypeTranslate,
 } from '../-utils/financial-profile'
 
 type ProfileFinancialCardProps = {
-  profileType: UserFinancialProfileType
+  profileType: FinancialProfileType | null
   openFormClick: (open: boolean) => void
 }
 
@@ -24,8 +24,6 @@ export function ProfileFinancialCard({
   profileType,
   openFormClick,
 }: ProfileFinancialCardProps) {
-  const { financialProfile } = profileType
-
   const handleOpenFinancialProfileForm = () => {
     openFormClick(true)
   }
@@ -51,14 +49,14 @@ export function ProfileFinancialCard({
           <h3 className="font-normal text-base text-foreground">
             Seu perfil:{' '}
             <strong className="font-semibold text-foreground">
-              {financialProfileTypeTranslate(financialProfile)}
+              {financialProfileTypeTranslate(profileType)}
             </strong>
           </h3>
 
           <Separator className="border border-primary/25" />
 
           <p className="text-sm text-muted-foreground text-pretty">
-            {financialProfileDescritionTypeTranslate(financialProfile)}
+            {financialProfileDescritionTypeTranslate(profileType)}
           </p>
         </div>
       </CardContent>
@@ -73,8 +71,8 @@ export function ProfileFinancialCard({
             className="size-4 shrink-0 text-foreground"
             strokeWidth={1.5}
           />
-          {financialProfile && 'Refazer teste'}
-          {!financialProfile && 'Iniciar teste'}
+          {profileType && 'Refazer teste'}
+          {!profileType && 'Iniciar teste'}
         </Button>
       </CardFooter>
     </Card>

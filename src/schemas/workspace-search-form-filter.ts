@@ -1,11 +1,12 @@
 import z from 'zod'
+import { validateSearchTerm } from '@/utils/search'
 
-export const workspaceSearchFilterSchema = z.object({
-  searchWorkspace: z.string().min(3, 'Você deve digitar ao menos 3 caracteres'),
-  typeWorkspace: z.enum(['all', 'private', 'shared'], {
-    error: 'Tipo de workspace inválido',
-  }),
+const normalizeWorkspaceSearchParam = z.preprocess(value => {
+  return validateSearchTerm(typeof value === 'string' ? value : undefined)
+}, z.string().optional().catch(undefined))
+
+export const workspaceListSearchSchema = z.object({
+  search: normalizeWorkspaceSearchParam,
 })
-export type WorkspaceSearchFilterType = z.infer<
-  typeof workspaceSearchFilterSchema
->
+
+export type WorkspaceListSearchType = z.infer<typeof workspaceListSearchSchema>

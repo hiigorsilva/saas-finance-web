@@ -38,7 +38,7 @@ export function ProfileDropdownMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className="w-fit px-2" variant="ghost">
-          <ProfileImage />
+          <ProfileImage userName={user?.name} />
 
           <ChevronDownIcon
             className="size-4 shrink-0 text-foreground"

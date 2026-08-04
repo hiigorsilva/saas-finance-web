@@ -1,11 +1,11 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import type { IWorkspace } from '@/services/workspace/workspace.d'
+import type { IWorkspaceDetails } from '@/services/workspace/workspace.d'
 import { DeleteWorkspaceDialog } from './delete-workspace-dialog'
 
 type DetailsItemDeleteWorkspaceProps = {
-  workspace: IWorkspace
+  workspace: IWorkspaceDetails
 }
 
 export function DetailsItemDeleteWorkspace({
