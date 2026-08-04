@@ -30,9 +30,11 @@ export function Pagination({
   totalPages,
 }: PaginationProps) {
   const router = useNavigate()
+  const defaultPage = 1
+  const defaultLimit = 50
   const perPageOptions = [20, 50, 100]
 
-  const [page, setPage] = useState(Math.max(1, currentPage))
+  const [page, setPage] = useState(Math.max(defaultPage, currentPage))
   const [perPage, setPerPage] = useState(Math.max(1, limit))
 
   const selectPerPageValue = perPageOptions.includes(perPage)
@@ -40,24 +42,24 @@ export function Pagination({
     : '50'
 
   useEffect(() => {
-    setPage(Math.max(1, currentPage))
+    setPage(Math.max(defaultPage, currentPage))
     setPerPage(Math.max(1, limit))
-  }, [currentPage, limit])
+  }, [currentPage, defaultPage, limit])
 
   useEffect(() => {
-    const safePage = Math.max(1, page)
+    const safePage = Math.max(defaultPage, page)
     const safePerPage = Math.max(1, perPage)
 
     router({
       to: '.',
       search: prev => ({
         ...prev,
-        page: safePage,
-        limit: safePerPage,
+        page: safePage === defaultPage ? undefined : safePage,
+        limit: safePerPage === defaultLimit ? undefined : safePerPage,
       }),
       replace: true,
     })
-  }, [page, perPage, router])
+  }, [defaultLimit, defaultPage, page, perPage, router])
 
   const setSelectItemPerPage = (perPage: string) => {
     const limitFormatted = Number(perPage)

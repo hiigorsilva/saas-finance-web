@@ -1,10 +1,8 @@
 import z from 'zod'
+import { validateSearchTerm } from '@/utils/search'
 
 const normalizeWorkspaceSearchParam = z.preprocess(value => {
-  if (typeof value !== 'string') return undefined
-
-  const normalized = value.trim()
-  return normalized.length ? normalized : undefined
+  return validateSearchTerm(typeof value === 'string' ? value : undefined)
 }, z.string().optional().catch(undefined))
 
 export const workspaceListSearchSchema = z.object({

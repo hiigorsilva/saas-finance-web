@@ -34,15 +34,17 @@ function TransactionPage() {
   const { workspaceId } = Route.useParams()
   const router = Route.useNavigate()
   const searchParams = Route.useSearch()
+  const defaultPage = 1
+  const defaultLimit = 50
 
   const page =
     Number.isFinite(searchParams.page) && searchParams.page > 0
       ? searchParams.page
-      : 1
+      : defaultPage
   const limit =
     Number.isFinite(searchParams.limit) && searchParams.limit > 0
       ? searchParams.limit
-      : 50
+      : defaultLimit
 
   const filters = useMemo<TransactionListFilters>(
     () => ({
@@ -89,7 +91,7 @@ function TransactionPage() {
       to: '.',
       search: prev => ({
         ...prev,
-        page: 1,
+        page: undefined,
         search,
       }),
       replace: true,
@@ -103,7 +105,7 @@ function TransactionPage() {
       to: '.',
       search: prev => ({
         ...prev,
-        page: 1,
+        page: undefined,
         typeExpense: nextFilters.typeExpense,
         typeCategory: nextFilters.typeCategory,
         typePaymentMethod: nextFilters.typePaymentMethod,

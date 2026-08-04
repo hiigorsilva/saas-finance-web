@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { WorkspaceService } from '@/services/workspace/workspace'
+import { validateSearchTerm } from '@/utils/search'
 
 export const workspacesQueryKey = ['workspaces'] as const
 
 export function useWorkspacesQuery(page = 1, limit = 50, search?: string) {
-  const parsedSearchWorkspace = search?.trim() || undefined
+  const parsedSearchWorkspace = validateSearchTerm(search)
 
   return useQuery({
     queryKey: [...workspacesQueryKey, page, limit, parsedSearchWorkspace],

@@ -10,6 +10,7 @@ import { useWorkspacesQuery } from '@/hooks/queries/use-workspaces-query'
 import { useDebouncedValue } from '@/hooks/use-debounced-value'
 import { workspaceListSearchSchema } from '@/schemas/workspace-search-form-filter'
 import { normalizeApiError } from '@/services/api/errors'
+import { validateSearchTerm } from '@/utils/search'
 import { SkeletonHomePage } from '../-components/skeleton-home-page'
 import { AddWorkspaceButton } from './-components/add-workspace-button'
 import { Header } from './-components/header'
@@ -43,8 +44,9 @@ function WorkspacesPage() {
   }, [searchParams.search])
 
   useEffect(() => {
-    const normalizedSearchWorkspace =
-      debouncedSearchWorkspace.trim() || undefined
+    const normalizedSearchWorkspace = validateSearchTerm(
+      debouncedSearchWorkspace
+    )
 
     if (normalizedSearchWorkspace === searchParams.search) return
 

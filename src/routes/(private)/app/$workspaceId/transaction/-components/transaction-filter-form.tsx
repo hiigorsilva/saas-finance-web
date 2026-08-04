@@ -12,6 +12,7 @@ import {
   transactionFilterSchema,
 } from '@/schemas/transaction-filter-form'
 import type { TransactionListFilters } from '@/services/transaction/transaction'
+import { validateSearchTerm } from '@/utils/search'
 import { DrawerFilterTransaction } from './transaction-filter-form-drawer'
 
 type AppliedFilterFields = Omit<TransactionListFilters, 'search'>
@@ -69,8 +70,8 @@ export function TransactionFilterForm({
   }, [filters, form, searchValue])
 
   useEffect(() => {
-    const nextSearchValue = debouncedSearchValue?.trim() || undefined
-    const currentSearchValue = searchValue?.trim() || undefined
+    const nextSearchValue = validateSearchTerm(debouncedSearchValue)
+    const currentSearchValue = validateSearchTerm(searchValue)
 
     if (nextSearchValue === currentSearchValue) return
 

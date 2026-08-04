@@ -3,6 +3,7 @@ import {
   type TransactionListFilters,
   TransactionService,
 } from '@/services/transaction/transaction'
+import { validateSearchTerm } from '@/utils/search'
 
 export const transactionsQueryKey = ['transactions'] as const
 
@@ -14,6 +15,10 @@ export function useTransactionsQuery(
 ) {
   const safePage = Number.isFinite(page) && page > 0 ? page : 1
   const safeLimit = Number.isFinite(limit) && limit > 0 ? limit : 50
+  const normalizedFilters = {
+    ...filters,
+    search: validateSearchTerm(filters.search),
+  }
 
   return useQuery({
     queryKey: [
@@ -21,14 +26,14 @@ export function useTransactionsQuery(
       workspaceId,
       safePage,
       safeLimit,
-      filters,
+      normalizedFilters,
     ],
     queryFn: () =>
       TransactionService.GetTransactions(
         workspaceId,
         safePage,
         safeLimit,
-        filters
+        normalizedFilters
       ),
     enabled: !!workspaceId,
     placeholderData: previousData => previousData,

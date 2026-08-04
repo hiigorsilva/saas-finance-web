@@ -2,14 +2,12 @@ import z from 'zod'
 import { TRANSACTION_CATEGORY_TYPE_VALUES } from '@/data/labels/transaction-category'
 import { TRANSACTION_PAYMENT_METHOD_TYPE_VALUES } from '@/data/labels/transaction-payment-method'
 import { TRANSACTION_TYPE_VALUES } from '@/data/labels/transaction-type'
+import { validateSearchTerm } from '@/utils/search'
 
 const dateYmdRegex = /^\d{4}-\d{2}-\d{2}$/
 
 const normalizeSearchParam = z.preprocess(value => {
-  if (typeof value !== 'string') return undefined
-
-  const normalized = value.trim()
-  return normalized.length ? normalized : undefined
+  return validateSearchTerm(typeof value === 'string' ? value : undefined)
 }, z.string().optional().catch(undefined))
 
 const normalizeEnumTypeExpense = z.preprocess(value => {
