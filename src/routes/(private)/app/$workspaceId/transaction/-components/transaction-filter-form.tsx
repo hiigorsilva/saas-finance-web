@@ -1,18 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { formatDate, isValid, parseISO } from 'date-fns'
-import { SearchIcon, Settings2Icon } from 'lucide-react'
+import { Settings2Icon } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+import { Form, FormField } from '@/components/ui/form'
+import { SearchInput } from '@/components/ui/search-input'
+import { useDebouncedValue } from '@/hooks/use-debounced-value'
 import {
   type TransactionFilterType,
   transactionFilterSchema,
@@ -64,15 +58,24 @@ export function TransactionFilterForm({
     resolver: zodResolver(transactionFilterSchema),
     defaultValues: defaultValuesTransactionFilters(searchValue, filters),
   })
+  const searchFieldValue = useWatch({
+    control: form.control,
+    name: 'search',
+  })
+  const debouncedSearchValue = useDebouncedValue(searchFieldValue, 500)
 
   useEffect(() => {
     form.reset(defaultValuesTransactionFilters(searchValue, filters))
   }, [filters, form, searchValue])
 
-  function handleSearchSubmit() {
-    const nextSearch = form.getValues('search')?.trim()
-    onApplySearch(nextSearch || undefined)
-  }
+  useEffect(() => {
+    const nextSearchValue = debouncedSearchValue?.trim() || undefined
+    const currentSearchValue = searchValue?.trim() || undefined
+
+    if (nextSearchValue === currentSearchValue) return
+
+    onApplySearch(nextSearchValue)
+  }, [debouncedSearchValue, onApplySearch, searchValue])
 
   const handleApplyFilters = form.handleSubmit(data => {
     onApplyFilters({
@@ -110,34 +113,19 @@ export function TransactionFilterForm({
     <FormProvider {...form}>
       <Form {...form}>
         <form
-          onSubmit={event => {
-            event.preventDefault()
-            handleSearchSubmit()
-          }}
+          onSubmit={event => event.preventDefault()}
           className="flex items-center gap-6"
         >
           <FormField
             control={form.control}
             name="search"
             render={({ field }) => (
-              <FormItem className="relative flex flex-col gap-0 min-w-52 w-fit">
-                <FormLabel className="sr-only">Buscar Transações</FormLabel>
-                <FormControl>
-                  <div className="flex items-center border rounded-md px-3 has-[input:focus-within]:border-ring has-[input:focus-within]:ring-ring/50 has-[input:focus-within]:ring-2">
-                    <Input
-                      className="pl-0 pr-3 shadow-none border-0 focus-visible:border-0 focus-visible:ring-0"
-                      placeholder="Buscar Transações..."
-                      autoComplete="off"
-                      {...field}
-                    />
-                    <SearchIcon
-                      className="size-5 text-muted-foreground"
-                      strokeWidth={1}
-                    />
-                  </div>
-                </FormControl>
-                <FormMessage className="" />
-              </FormItem>
+              <SearchInput
+                label="Buscar Transações"
+                placeholder="Buscar Transações..."
+                value={field.value ?? ''}
+                onValueChange={field.onChange}
+              />
             )}
           />
 

@@ -31,6 +31,7 @@ export function useTransactionsQuery(
         filters
       ),
     enabled: !!workspaceId,
+    placeholderData: previousData => previousData,
     staleTime: 1000 * 50, // 50 segundos
   })
 }

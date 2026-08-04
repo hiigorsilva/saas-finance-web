@@ -1,8 +1,14 @@
 import z from 'zod'
 
-export const workspaceSearchFilterSchema = z.object({
-  searchWorkspace: z.string().min(3, 'Você deve digitar ao menos 3 caracteres'),
+const normalizeWorkspaceSearchParam = z.preprocess(value => {
+  if (typeof value !== 'string') return undefined
+
+  const normalized = value.trim()
+  return normalized.length ? normalized : undefined
+}, z.string().optional().catch(undefined))
+
+export const workspaceListSearchSchema = z.object({
+  searchWorkspace: normalizeWorkspaceSearchParam,
 })
-export type WorkspaceSearchFilterType = z.infer<
-  typeof workspaceSearchFilterSchema
->
+
+export type WorkspaceListSearchType = z.infer<typeof workspaceListSearchSchema>

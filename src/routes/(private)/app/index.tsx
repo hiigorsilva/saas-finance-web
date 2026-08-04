@@ -7,6 +7,8 @@ import { TitlePage } from '@/components/layout/title-page'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { useWorkspacesQuery } from '@/hooks/queries/use-workspaces-query'
+import { useDebouncedValue } from '@/hooks/use-debounced-value'
+import { workspaceListSearchSchema } from '@/schemas/workspace-search-form-filter'
 import { normalizeApiError } from '@/services/api/errors'
 import { SkeletonHomePage } from '../-components/skeleton-home-page'
 import { AddWorkspaceButton } from './-components/add-workspace-button'
@@ -17,6 +19,7 @@ import { WorkspaceSearchFilterForm } from './-components/workspace-search-filter
 
 export const Route = createFileRoute('/(private)/app/')({
   component: WorkspacesPage,
+  validateSearch: workspaceListSearchSchema,
   loader: SkeletonHomePage,
   head: () => ({
     meta: [
@@ -28,21 +31,37 @@ export const Route = createFileRoute('/(private)/app/')({
 })
 
 function WorkspacesPage() {
-  const [searchWorkspace, setSearchWorkspace] = useState('')
-  const [debouncedSearchWorkspace, setDebouncedSearchWorkspace] = useState('')
+  const navigate = Route.useNavigate()
+  const searchParams = Route.useSearch()
+  const [searchWorkspace, setSearchWorkspace] = useState(
+    searchParams.searchWorkspace ?? ''
+  )
+  const debouncedSearchWorkspace = useDebouncedValue(searchWorkspace, 500)
 
   useEffect(() => {
-    const debounceTimeout = setTimeout(() => {
-      setDebouncedSearchWorkspace(searchWorkspace)
-    }, 500)
+    setSearchWorkspace(searchParams.searchWorkspace ?? '')
+  }, [searchParams.searchWorkspace])
 
-    return () => clearTimeout(debounceTimeout)
-  }, [searchWorkspace])
+  useEffect(() => {
+    const normalizedSearchWorkspace =
+      debouncedSearchWorkspace.trim() || undefined
+
+    if (normalizedSearchWorkspace === searchParams.searchWorkspace) return
+
+    navigate({
+      to: '.',
+      search: prev => ({
+        ...prev,
+        searchWorkspace: normalizedSearchWorkspace,
+      }),
+      replace: true,
+    })
+  }, [debouncedSearchWorkspace, navigate, searchParams.searchWorkspace])
 
   const { data: workspaces, error } = useWorkspacesQuery(
     1,
     20,
-    debouncedSearchWorkspace
+    searchParams.searchWorkspace
   )
 
   useEffect(() => {
