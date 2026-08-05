@@ -1,4 +1,4 @@
-import { useNavigate } from '@tanstack/react-router'
+import { useLocation, useNavigate } from '@tanstack/react-router'
 import {
   ChevronRightIcon,
   ChevronsUpDownIcon,
@@ -7,7 +7,7 @@ import {
   UserIcon,
   UsersIcon,
 } from 'lucide-react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
@@ -26,41 +26,72 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { WORKSPACE_TYPE } from '@/data/labels/workspace-type'
 import { useWorkspacesQuery } from '@/hooks/queries/use-workspaces-query'
+import { useDebouncedValue } from '@/hooks/use-debounced-value'
 import { normalizeApiError } from '@/services/api/errors'
+import { validateSearchTerm } from '@/utils/search'
+import { SkeletonHomePage } from '../../-components/skeleton-home-page'
 import { AddWorkspaceButton } from './add-workspace-button'
 
 export function WorkspaceSwitcher() {
   const [open, setOpen] = React.useState(false)
+  const navigate = useNavigate()
+  const location = useLocation()
 
-  const { data, error } = useWorkspacesQuery(1, 20)
+  const searchWorkspaceValue = React.useMemo(
+    () => location.search.search ?? '',
+    [location.search.search]
+  )
 
-  const workspaces = data ?? {
-    data: [],
-    props: {
-      currentPage: 1,
-      limit: 20,
-      totalCount: 0,
-      totalPages: 0,
-    },
-  }
+  const [searchWorkspace, setSearchWorkspace] = useState(searchWorkspaceValue)
+  const debouncedSearchWorkspace = useDebouncedValue(searchWorkspace, 500)
 
-  const initialValue =
-    workspaces.props.totalCount > 0 ? workspaces.data[0].id : ''
-  const [workspaceActive, setWorkspaceActive] = React.useState(initialValue)
+  useEffect(() => {
+    setSearchWorkspace(searchWorkspaceValue)
+  }, [searchWorkspaceValue])
 
-  const route = useNavigate()
+  useEffect(() => {
+    const searchWorkspaceNormalized = validateSearchTerm(
+      debouncedSearchWorkspace
+    )
+
+    if (searchWorkspaceNormalized === searchWorkspaceValue) return
+
+    navigate({
+      to: '.',
+      search: prev => ({
+        ...prev,
+        search: searchWorkspaceNormalized,
+      }),
+      replace: true,
+    })
+  }, [debouncedSearchWorkspace, navigate, searchWorkspaceValue])
+
+  const { data: workspaces, error } = useWorkspacesQuery(
+    1,
+    20,
+    searchWorkspaceValue
+  )
+
+  const workspaceIdSelected = React.useMemo(() => {
+    const [, app, workspaceId] = location.pathname.split('/')
+
+    if (app !== 'app') {
+      return null
+    }
+
+    return workspaceId ?? null
+  }, [location.pathname])
+
+  const workspaceSelectedName = workspaceIdSelected
+    ? workspaces?.data.find(workspace => workspace.id === workspaceIdSelected)
+        ?.name
+    : undefined
 
   const handleRedirectToDashboard = (currentWorkspace: string) => {
-    route({
+    navigate({
       to: `/app/${currentWorkspace}`,
     })
   }
-
-  useEffect(() => {
-    if (workspaceActive || workspaces.data.length === 0) return
-
-    setWorkspaceActive(workspaces.data[0].id)
-  }, [workspaces.data, workspaceActive])
 
   useEffect(() => {
     if (!error) return
@@ -68,6 +99,8 @@ export function WorkspaceSwitcher() {
     const apiError = normalizeApiError(error)
     toast.error(apiError.message)
   }, [error])
+
+  if (!workspaces) return <SkeletonHomePage />
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -78,18 +111,18 @@ export function WorkspaceSwitcher() {
           aria-expanded={open}
           className="min-w-40 w-fit justify-between text-foreground"
         >
-          {workspaceActive
-            ? workspaces.data.find(
-                workspace => workspace.id === workspaceActive
-              )?.name
-            : 'Selecionar Workspace'}
+          {workspaceSelectedName ?? 'Selecionar Workspace'}
           <ChevronsUpDownIcon className="size-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
 
       <PopoverContent align="start" className="min-w-80 w-fit">
         <Command className="p-0">
-          <CommandInput placeholder="Buscar..." />
+          <CommandInput
+            placeholder="Buscar..."
+            value={searchWorkspace}
+            onValueChange={setSearchWorkspace}
+          />
 
           <CommandList className="p-0">
             <CommandEmpty asChild>
@@ -124,11 +157,6 @@ export function WorkspaceSwitcher() {
                   key={workspace.id}
                   value={workspace.id}
                   onSelect={currentWorkspace => {
-                    setWorkspaceActive(
-                      currentWorkspace === workspaceActive
-                        ? workspaceActive
-                        : currentWorkspace
-                    )
                     handleRedirectToDashboard(currentWorkspace)
                     setOpen(false)
                   }}
