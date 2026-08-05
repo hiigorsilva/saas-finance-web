@@ -36,40 +36,17 @@ export function WorkspaceSwitcher() {
   const [open, setOpen] = React.useState(false)
   const navigate = useNavigate()
   const location = useLocation()
-
-  const searchWorkspaceValue = React.useMemo(
-    () => location.search.search ?? '',
-    [location.search.search]
-  )
-
-  const [searchWorkspace, setSearchWorkspace] = useState(searchWorkspaceValue)
+  const [searchWorkspace, setSearchWorkspace] = useState('')
   const debouncedSearchWorkspace = useDebouncedValue(searchWorkspace, 500)
-
-  useEffect(() => {
-    setSearchWorkspace(searchWorkspaceValue)
-  }, [searchWorkspaceValue])
-
-  useEffect(() => {
-    const searchWorkspaceNormalized = validateSearchTerm(
-      debouncedSearchWorkspace
-    )
-
-    if (searchWorkspaceNormalized === searchWorkspaceValue) return
-
-    navigate({
-      to: '.',
-      search: prev => ({
-        ...prev,
-        search: searchWorkspaceNormalized,
-      }),
-      replace: true,
-    })
-  }, [debouncedSearchWorkspace, navigate, searchWorkspaceValue])
+  const searchWorkspaceNormalized = React.useMemo(
+    () => validateSearchTerm(debouncedSearchWorkspace),
+    [debouncedSearchWorkspace]
+  )
 
   const { data: workspaces, error } = useWorkspacesQuery(
     1,
     20,
-    searchWorkspaceValue
+    searchWorkspaceNormalized
   )
 
   const workspaceIdSelected = React.useMemo(() => {
@@ -151,60 +128,62 @@ export function WorkspaceSwitcher() {
               </div>
             </div>
 
-            <CommandGroup className="p-0">
-              {workspaces.data.map(workspace => (
-                <CommandItem
-                  key={workspace.id}
-                  value={workspace.id}
-                  onSelect={currentWorkspace => {
-                    handleRedirectToDashboard(currentWorkspace)
-                    setOpen(false)
-                  }}
-                  className="w-full justify-between bg-transparent p-0"
-                >
-                  <Button
-                    className="w-full justify-start bg-background px-0 hover:px-2"
-                    variant="ghost"
+            {workspaces.props.totalCount > 0 && (
+              <CommandGroup className="p-0">
+                {workspaces.data.map(workspace => (
+                  <CommandItem
+                    key={workspace.id}
+                    value={workspace.id}
+                    onSelect={currentWorkspace => {
+                      handleRedirectToDashboard(currentWorkspace)
+                      setOpen(false)
+                    }}
+                    className="w-full justify-between bg-transparent p-0"
                   >
-                    {/* ICON */}
-                    <div className="w-fit h-fit rounded-md bg-primary/10 border border-primary/25 p-2">
-                      {workspace.type === WORKSPACE_TYPE.PRIVATE && (
-                        <UserIcon
-                          className="size-5 shrink-0 text-primary"
-                          strokeWidth={1}
-                        />
-                      )}
+                    <Button
+                      className="w-full justify-start bg-background px-0 hover:px-2"
+                      variant="ghost"
+                    >
+                      {/* ICON */}
+                      <div className="w-fit h-fit rounded-md bg-primary/10 border border-primary/25 p-2">
+                        {workspace.type === WORKSPACE_TYPE.PRIVATE && (
+                          <UserIcon
+                            className="size-5 shrink-0 text-primary"
+                            strokeWidth={1}
+                          />
+                        )}
 
-                      {workspace.type === WORKSPACE_TYPE.SHARED && (
-                        <UsersIcon
-                          className="size-5 shrink-0 text-primary"
-                          strokeWidth={1}
-                        />
-                      )}
-                    </div>
+                        {workspace.type === WORKSPACE_TYPE.SHARED && (
+                          <UsersIcon
+                            className="size-5 shrink-0 text-primary"
+                            strokeWidth={1}
+                          />
+                        )}
+                      </div>
 
-                    {/* WORKSPACE */}
-                    <div className="w-full flex flex-col justify-center items-start">
-                      <h3 className="font-semibold text-foreground">
-                        {workspace.name}
-                      </h3>
-                      <span className="inline-block font-normal text-sm text-muted-foreground">
-                        {workspace.type === WORKSPACE_TYPE.PRIVATE &&
-                          'Somente você'}
-                        {workspace.type === WORKSPACE_TYPE.SHARED &&
-                          `${workspace.totalMembers} membro${workspace.totalMembers > 1 ? 's' : ''}`}
-                      </span>
-                    </div>
+                      {/* WORKSPACE */}
+                      <div className="w-full flex flex-col justify-center items-start">
+                        <h3 className="font-semibold text-foreground">
+                          {workspace.name}
+                        </h3>
+                        <span className="inline-block font-normal text-sm text-muted-foreground">
+                          {workspace.type === WORKSPACE_TYPE.PRIVATE &&
+                            'Somente você'}
+                          {workspace.type === WORKSPACE_TYPE.SHARED &&
+                            `${workspace.totalMembers} membro${workspace.totalMembers > 1 ? 's' : ''}`}
+                        </span>
+                      </div>
 
-                    {/* ICON SECONDARY */}
-                    <ChevronRightIcon
-                      className="size-4 shrink-0 text-muted-foreground"
-                      strokeWidth={1.5}
-                    />
-                  </Button>
-                </CommandItem>
-              ))}
-            </CommandGroup>
+                      {/* ICON SECONDARY */}
+                      <ChevronRightIcon
+                        className="size-4 shrink-0 text-muted-foreground"
+                        strokeWidth={1.5}
+                      />
+                    </Button>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
           </CommandList>
 
           <Separator className="mt-2 mb-4" />
