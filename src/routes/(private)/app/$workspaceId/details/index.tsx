@@ -65,6 +65,11 @@ function WorkspaceDetailsPage() {
     return false
   }
 
+  function handleCanUpdateWorkspace(roleMember: string) {
+    if (roleMember === ROLE_MEMBER_WORKSPACE_TYPE.OWNER) return true
+    return false
+  }
+
   return (
     <Container className="gap-6 pb-8">
       {/* TITLE PAGE */}
@@ -76,7 +81,10 @@ function WorkspaceDetailsPage() {
       </div>
 
       <div className="flex flex-auto flex-col gap-6">
-        <DetailsItemInfo workspace={workspace} />
+        <DetailsItemInfo
+          workspace={workspace}
+          onCanUpdateWorkspace={handleCanUpdateWorkspace(member?.role ?? '')}
+        />
         <div className="flex justify-between items-start gap-3">
           <DetailsItemInviteTable
             members={workspace.members}

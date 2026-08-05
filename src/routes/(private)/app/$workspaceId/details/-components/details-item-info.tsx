@@ -48,22 +48,28 @@ import { dateFormatLong } from '@/utils/date-format'
 
 type DetailsItemInfoProps = {
   workspace: IWorkspaceDetails
+  onCanUpdateWorkspace: boolean
 }
 
-export function DetailsItemInfo({ workspace }: DetailsItemInfoProps) {
+export function DetailsItemInfo({
+  workspace,
+  onCanUpdateWorkspace,
+}: DetailsItemInfoProps) {
   return (
     <Card>
       <CardHeader className="flex justify-between items-center gap-6">
         <CardTitle>Informações do workspace</CardTitle>
 
-        <WorkspaceDetailsInfoEdit workspace={workspace}>
-          <Button variant="ghost" size="icon">
-            <PenIcon
-              className="size-4 shrink-0 text-foreground"
-              strokeWidth={1}
-            />
-          </Button>
-        </WorkspaceDetailsInfoEdit>
+        {onCanUpdateWorkspace && (
+          <WorkspaceDetailsInfoEdit workspace={workspace}>
+            <Button variant="ghost" size="icon">
+              <PenIcon
+                className="size-4 shrink-0 text-foreground"
+                strokeWidth={1}
+              />
+            </Button>
+          </WorkspaceDetailsInfoEdit>
+        )}
       </CardHeader>
 
       <CardContent className="flex flex-col gap-6">
@@ -117,7 +123,7 @@ export function DetailsItemInfo({ workspace }: DetailsItemInfoProps) {
         {/* CREATED BY */}
         <div className="flex flex-col gap-1.5">
           <span className="inline-block font-normal text-sm text-muted-foreground leading-none tracking-wider uppercase">
-            Criado por
+            Criado em
           </span>
           <div className="w-fit flex items-center gap-1 px-2 py-1 rounded-md border">
             <p className="font-normal text-sm text-foreground uppercase leading-none tracking-widest">
