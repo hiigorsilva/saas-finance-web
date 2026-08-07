@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import { type ComponentProps, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import {
@@ -35,6 +36,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
+import { useUpdateUserLoggedMutation } from '@/hooks/mutations/user/use-update-user-mutation'
 import { useRefreshUserLoggedQuery } from '@/hooks/queries/use-user-logged-query'
 import {
   type ProfileUserEditType,
@@ -80,29 +82,34 @@ export function ProfileUserDataEditForm({
   const refreshUserLogged = useRefreshUserLoggedQuery()
   const [openModal, setOpenModal] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const { mutateAsync: updateUserLogged, isPending } =
+    useUpdateUserLoggedMutation()
 
   const form = useForm<ProfileUserEditType>({
     resolver: zodResolver(profileUserEditSchema),
     defaultValues: {
       name: userData.name,
       email: userData.email,
-      // password: userData.password,
       birthDate: parseBirthDate(userData.birthDate),
     },
   })
 
   const onSubmit = async (data: ProfileUserEditType) => {
+    if (isPending) return
     const birthDatePayload = birthDateToPayload(data.birthDate)
 
-    console.log('EDIT_USER_DATA', {
-      name: data.name,
-      password: data.password,
-      birthDate: birthDatePayload,
+    const res = await updateUserLogged({
+      payload: {
+        ...data,
+        birthDate: birthDatePayload,
+      },
     })
 
-    await refreshUserLogged()
-
-    setOpenModal(false)
+    if (res) {
+      await refreshUserLogged()
+      toast.success('Dados do usuário atualizados com sucesso!')
+      setOpenModal(false)
+    }
   }
 
   const handleCancelForm = () => {
@@ -124,7 +131,6 @@ export function ProfileUserDataEditForm({
     form.reset({
       name: userData.name,
       email: userData.email,
-      // password: userData.password,
       birthDate: parseBirthDate(userData.birthDate),
     })
   }, [userData])
@@ -299,11 +305,17 @@ export function ProfileUserDataEditForm({
                 type="button"
                 variant="outline"
                 onClick={handleCancelForm}
+                disabled={isPending}
               >
                 Cancelar
               </Button>
 
-              <Button className="flex-1" type="submit" variant="gradient">
+              <Button
+                className="flex-1"
+                type="submit"
+                variant="gradient"
+                disabled={isPending}
+              >
                 Salvar dados
               </Button>
             </div>

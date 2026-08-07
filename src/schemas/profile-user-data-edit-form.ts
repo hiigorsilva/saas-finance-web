@@ -1,9 +1,13 @@
 import z from 'zod'
 
 export const profileUserEditSchema = z.object({
-  name: z.string().min(2, 'Nome deve ter no mínimo 2 caracteres'),
+  name: z
+    .string({ error: 'Nome inválido' })
+    .min(2, 'Nome deve ter no mínimo 2 caracteres'),
   email: z.email({ error: 'Email inválido' }),
-  password: z.string().min(8, 'Senha deve ter no mínimo 8 caracteres'),
+  password: z
+    .string({ error: 'Senha inválida' })
+    .min(8, 'Senha deve ter no mínimo 8 caracteres'),
   birthDate: z.date({ error: 'Data de nascimento inválida' }).optional(),
 })
 

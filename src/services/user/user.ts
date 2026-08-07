@@ -8,4 +8,10 @@ export class UserService {
 
     return response.data.data
   }
+
+  static async UpdateUserLogged(payload: Partial<IUserLogged>) {
+    const response = await api.put<ApiResponse<IUserLogged>>('/me', payload)
+
+    return response.data.data
+  }
 }
