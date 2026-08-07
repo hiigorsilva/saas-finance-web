@@ -55,9 +55,22 @@ type ProfileUserDataEditFormProps = ComponentProps<'button'> & {
 function parseBirthDate(birthDate: string | null | undefined) {
   if (!birthDate) return undefined
 
-  const parsedBirthDate = new Date(birthDate)
+  const [year, month, day] = birthDate.split('-').map(Number)
+  if (!year || !month || !day) return undefined
+
+  const parsedBirthDate = new Date(year, month - 1, day)
 
   return Number.isNaN(parsedBirthDate.getTime()) ? undefined : parsedBirthDate
+}
+
+function birthDateToPayload(birthDate: Date | undefined) {
+  if (!birthDate) return undefined
+
+  const year = birthDate.getFullYear()
+  const month = String(birthDate.getMonth() + 1).padStart(2, '0')
+  const day = String(birthDate.getDate()).padStart(2, '0')
+
+  return `${year}-${month}-${day}`
 }
 
 export function ProfileUserDataEditForm({
@@ -79,10 +92,12 @@ export function ProfileUserDataEditForm({
   })
 
   const onSubmit = async (data: ProfileUserEditType) => {
+    const birthDatePayload = birthDateToPayload(data.birthDate)
+
     console.log('EDIT_USER_DATA', {
       name: data.name,
       password: data.password,
-      birthDate: data.birthDate,
+      birthDate: birthDatePayload,
     })
 
     await refreshUserLogged()

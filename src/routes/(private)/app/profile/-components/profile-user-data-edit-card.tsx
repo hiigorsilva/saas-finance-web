@@ -45,14 +45,10 @@ export function ProfileUserDataEditCard() {
   const birthDateValue = (() => {
     if (!userData.birthDate) return ''
 
-    const parsedBirthDate = new Date(userData.birthDate)
-    if (Number.isNaN(parsedBirthDate.getTime())) return ''
+    const [year, month, day] = userData.birthDate.split('-')
+    if (!year || !month || !day) return ''
 
-    return Intl.DateTimeFormat('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    }).format(parsedBirthDate)
+    return `${day}/${month}/${year}`
   })()
 
   return (
