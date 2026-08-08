@@ -86,7 +86,7 @@ export function DrawerFilterTransaction({
         <div className="flex flex-col gap-6 px-4">
           <FormField
             control={form.control}
-            name="typeExpense"
+            name="type"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Tipo de Transação</FormLabel>
@@ -115,7 +115,7 @@ export function DrawerFilterTransaction({
 
           <FormField
             control={form.control}
-            name="typeCategory"
+            name="category"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Tipo de Categoria</FormLabel>
@@ -144,7 +144,7 @@ export function DrawerFilterTransaction({
 
           <FormField
             control={form.control}
-            name="typePaymentMethod"
+            name="paymentMethod"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Tipo de Pagamento</FormLabel>

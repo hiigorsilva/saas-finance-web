@@ -49,28 +49,28 @@ function TransactionPage() {
   const filters = useMemo<TransactionListFilters>(
     () => ({
       search: searchParams.search,
-      typeExpense: searchParams.typeExpense,
-      typeCategory: searchParams.typeCategory,
-      typePaymentMethod: searchParams.typePaymentMethod,
-      from: searchParams.from,
-      to: searchParams.to,
+      type: searchParams.type,
+      category: searchParams.category,
+      paymentMethod: searchParams.paymentMethod,
+      startDate: searchParams.startDate,
+      endDate: searchParams.endDate,
     }),
     [
       searchParams.search,
-      searchParams.typeExpense,
-      searchParams.typeCategory,
-      searchParams.typePaymentMethod,
-      searchParams.from,
-      searchParams.to,
+      searchParams.type,
+      searchParams.category,
+      searchParams.paymentMethod,
+      searchParams.startDate,
+      searchParams.endDate,
     ]
   )
 
   const hasAppliedFilters = Boolean(
-    searchParams.typeExpense ||
-      searchParams.typeCategory ||
-      searchParams.typePaymentMethod ||
-      searchParams.from ||
-      searchParams.to
+    searchParams.type ||
+      searchParams.category ||
+      searchParams.paymentMethod ||
+      searchParams.startDate ||
+      searchParams.endDate
   )
 
   const {
@@ -106,11 +106,11 @@ function TransactionPage() {
       search: prev => ({
         ...prev,
         page: undefined,
-        typeExpense: nextFilters.typeExpense,
-        typeCategory: nextFilters.typeCategory,
-        typePaymentMethod: nextFilters.typePaymentMethod,
-        from: nextFilters.from,
-        to: nextFilters.to,
+        type: nextFilters.type,
+        category: nextFilters.category,
+        paymentMethod: nextFilters.paymentMethod,
+        startDate: nextFilters.startDate,
+        endDate: nextFilters.endDate,
       }),
       replace: true,
     })
@@ -142,11 +142,11 @@ function TransactionPage() {
           <TransactionFilterForm
             searchValue={searchParams.search}
             filters={{
-              typeExpense: searchParams.typeExpense,
-              typeCategory: searchParams.typeCategory,
-              typePaymentMethod: searchParams.typePaymentMethod,
-              from: searchParams.from,
-              to: searchParams.to,
+              type: searchParams.type,
+              category: searchParams.category,
+              paymentMethod: searchParams.paymentMethod,
+              startDate: searchParams.startDate,
+              endDate: searchParams.endDate,
             }}
             hasAppliedFilters={hasAppliedFilters}
             onApplySearch={handleApplySearch}

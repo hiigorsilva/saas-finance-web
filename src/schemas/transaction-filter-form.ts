@@ -5,9 +5,9 @@ import { TRANSACTION_TYPE_VALUES } from '@/data/labels/transaction-type'
 
 export const transactionFilterSchema = z.object({
   search: z.string().optional(),
-  typeExpense: z.enum(TRANSACTION_TYPE_VALUES).optional(),
-  typeCategory: z.enum(TRANSACTION_CATEGORY_TYPE_VALUES).optional(),
-  typePaymentMethod: z.enum(TRANSACTION_PAYMENT_METHOD_TYPE_VALUES).optional(),
+  type: z.enum(TRANSACTION_TYPE_VALUES).optional(),
+  category: z.enum(TRANSACTION_CATEGORY_TYPE_VALUES).optional(),
+  paymentMethod: z.enum(TRANSACTION_PAYMENT_METHOD_TYPE_VALUES).optional(),
   dateCreatedAt: z.object(
     {
       from: z

@@ -43,19 +43,19 @@ export const listTransactionSchema = z
     page: z.coerce.number().int().positive().catch(1).default(1),
     limit: z.coerce.number().int().positive().max(100).catch(50).default(50),
     search: normalizeSearchParam,
-    typeExpense: normalizeEnumTypeExpense,
-    typeCategory: normalizeEnumTypeCategory,
-    typePaymentMethod: normalizeEnumTypePaymentMethod,
-    from: normalizeDateParam,
-    to: normalizeDateParam,
+    type: normalizeEnumTypeExpense,
+    category: normalizeEnumTypeCategory,
+    paymentMethod: normalizeEnumTypePaymentMethod,
+    startDate: normalizeDateParam,
+    endDate: normalizeDateParam,
   })
   .transform(data => {
-    const hasRange = Boolean(data.from && data.to)
+    const hasRange = Boolean(data.startDate && data.endDate)
 
     return {
       ...data,
-      from: hasRange ? data.from : undefined,
-      to: hasRange ? data.to : undefined,
+      startDate: hasRange ? data.startDate : undefined,
+      endDate: hasRange ? data.endDate : undefined,
     }
   })
 

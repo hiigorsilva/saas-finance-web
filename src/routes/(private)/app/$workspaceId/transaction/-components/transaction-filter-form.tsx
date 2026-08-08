@@ -37,12 +37,12 @@ export const defaultValuesTransactionFilters = (
   filters?: AppliedFilterFields
 ): TransactionFilterType => ({
   search,
-  typeExpense: filters?.typeExpense,
-  typeCategory: filters?.typeCategory,
-  typePaymentMethod: filters?.typePaymentMethod,
+  type: filters?.type,
+  category: filters?.category,
+  paymentMethod: filters?.paymentMethod,
   dateCreatedAt: {
-    from: parseDateParam(filters?.from),
-    to: parseDateParam(filters?.to),
+    from: parseDateParam(filters?.startDate),
+    to: parseDateParam(filters?.endDate),
   },
 })
 
@@ -80,13 +80,13 @@ export function TransactionFilterForm({
 
   const handleApplyFilters = form.handleSubmit(data => {
     onApplyFilters({
-      typeExpense: data.typeExpense,
-      typeCategory: data.typeCategory,
-      typePaymentMethod: data.typePaymentMethod,
-      from:
+      type: data.type,
+      category: data.category,
+      paymentMethod: data.paymentMethod,
+      startDate:
         data.dateCreatedAt?.from &&
         formatDate(data.dateCreatedAt.from, 'yyyy-MM-dd'),
-      to:
+      endDate:
         data.dateCreatedAt?.to &&
         formatDate(data.dateCreatedAt.to, 'yyyy-MM-dd'),
     })
@@ -100,11 +100,11 @@ export function TransactionFilterForm({
     form.reset(defaultValuesTransactionFilters(currentSearch, undefined))
 
     onApplyFilters({
-      typeExpense: undefined,
-      typeCategory: undefined,
-      typePaymentMethod: undefined,
-      from: undefined,
-      to: undefined,
+      type: undefined,
+      category: undefined,
+      paymentMethod: undefined,
+      startDate: undefined,
+      endDate: undefined,
     })
 
     setIsOpenDrawerFilter(false)

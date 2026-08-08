@@ -10,11 +10,11 @@ import type { ITransaction } from './transaction.d'
 
 export type TransactionListFilters = {
   search?: string
-  typeExpense?: TransactionTypeValuesType
-  typeCategory?: TransactionCategoryValuesType
-  typePaymentMethod?: TransactionPaymentMethodValuesType
-  from?: string
-  to?: string
+  type?: TransactionTypeValuesType
+  category?: TransactionCategoryValuesType
+  paymentMethod?: TransactionPaymentMethodValuesType
+  startDate?: string
+  endDate?: string
 }
 
 export class TransactionService {

@@ -15,7 +15,7 @@ export function useTransactionsQuery(
 ) {
   const safePage = Number.isFinite(page) && page > 0 ? page : 1
   const safeLimit = Number.isFinite(limit) && limit > 0 ? limit : 50
-  const normalizedFilters = {
+  const filtersFormatted = {
     ...filters,
     search: validateSearchTerm(filters.search),
   }
@@ -26,14 +26,14 @@ export function useTransactionsQuery(
       workspaceId,
       safePage,
       safeLimit,
-      normalizedFilters,
+      filtersFormatted,
     ],
     queryFn: () =>
       TransactionService.GetTransactions(
         workspaceId,
         safePage,
         safeLimit,
-        normalizedFilters
+        filtersFormatted
       ),
     enabled: !!workspaceId,
     placeholderData: previousData => previousData,
