@@ -92,7 +92,7 @@ export function DrawerFilterTransaction({
                 <FormLabel>Tipo de Transação</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  value={field.value || ''}
+                  value={field.value ?? undefined}
                 >
                   <FormControl>
                     <SelectTrigger className="w-full">
@@ -121,7 +121,7 @@ export function DrawerFilterTransaction({
                 <FormLabel>Tipo de Categoria</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  value={field.value || ''}
+                  value={field.value ?? undefined}
                 >
                   <FormControl>
                     <SelectTrigger className="w-full">
@@ -150,7 +150,7 @@ export function DrawerFilterTransaction({
                 <FormLabel>Tipo de Pagamento</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  value={field.value || ''}
+                  value={field.value ?? undefined}
                 >
                   <FormControl>
                     <SelectTrigger className="w-full">

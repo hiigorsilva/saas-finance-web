@@ -1,6 +1,5 @@
 import {
   CalendarDaysIcon,
-  CalendarIcon,
   CircleDollarSignIcon,
   PenIcon,
   TagIcon,
@@ -20,7 +19,6 @@ import { TableCell, TableRow } from '@/components/ui/table'
 import type { ITransaction } from '@/services/transaction/transaction.d'
 import { currencyFormat } from '@/utils/currency-format'
 import { dateFormat } from '@/utils/date-format'
-import { BadgeTagInfo } from '../../../-components/badge-tag-info'
 import {
   transactionCategoryTranslate,
   transactionPaymentMethodTranslate,
@@ -192,16 +190,6 @@ function TransactionRowDetails({
                 {transactionPaymentMethod}
               </p>
             </div>
-          </div>
-
-          <div className="flex items-center justify-end gap-1 capitalize">
-            <CalendarIcon
-              className="size-5 shrink-0 text-muted-foreground"
-              strokeWidth={1.4}
-            />
-            <BadgeTagInfo className="text-sm">
-              {dateFormat(transaction.createdAt)}
-            </BadgeTagInfo>
           </div>
         </div>
       </DialogContent>

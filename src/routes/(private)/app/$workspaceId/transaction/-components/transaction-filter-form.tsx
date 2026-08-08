@@ -37,12 +37,12 @@ export const defaultValuesTransactionFilters = (
   filters?: AppliedFilterFields
 ): TransactionFilterType => ({
   search,
-  type: filters?.type,
-  category: filters?.category,
-  paymentMethod: filters?.paymentMethod,
+  type: filters?.type ?? undefined,
+  category: filters?.category ?? undefined,
+  paymentMethod: filters?.paymentMethod ?? undefined,
   dateCreatedAt: {
-    from: parseDateParam(filters?.startDate),
-    to: parseDateParam(filters?.endDate),
+    from: parseDateParam(filters?.startDate) ?? undefined,
+    to: parseDateParam(filters?.endDate) ?? undefined,
   },
 })
 
@@ -95,9 +95,20 @@ export function TransactionFilterForm({
   })
 
   function handleResetFilters() {
-    const currentSearch = form.getValues('search')
+    const currentSearch = validateSearchTerm(form.getValues('search'))
 
-    form.reset(defaultValuesTransactionFilters(currentSearch, undefined))
+    form.setValues({
+      search: currentSearch,
+      type: undefined,
+      category: undefined,
+      paymentMethod: undefined,
+      dateCreatedAt: {
+        from: undefined,
+        to: undefined,
+      },
+    })
+
+    form.clearErrors('dateCreatedAt')
 
     onApplyFilters({
       type: undefined,
@@ -107,6 +118,7 @@ export function TransactionFilterForm({
       endDate: undefined,
     })
 
+    onApplySearch(currentSearch)
     setIsOpenDrawerFilter(false)
   }
 
